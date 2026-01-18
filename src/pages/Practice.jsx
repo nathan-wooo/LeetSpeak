@@ -826,7 +826,6 @@ export default function Practice() {
                   <span className="rounded-full bg-emerald-500/10 px-2 py-1 text-emerald-200">
                     {problem.difficulty}
                   </span>
-                  <span className="text-slate-500">•</span>
                 </div>
               </div>
               <div className="flex gap-1 rounded-md border border-slate-700/50 bg-slate-800/50 p-1 text-sm">
