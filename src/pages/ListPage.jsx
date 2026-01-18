@@ -32,16 +32,8 @@ const ListPage = () => {
     }
   };
 
-  const getTopicColor = (topic) => {
-    const colors = {
-      "Array": "bg-blue-500/10 text-blue-400 border-blue-500/30",
-      "String": "bg-purple-500/10 text-purple-400 border-purple-500/30",
-      "Linked List": "bg-cyan-500/10 text-cyan-400 border-cyan-500/30",
-      "Math": "bg-orange-500/10 text-orange-400 border-orange-500/30",
-      "Dynamic Programming": "bg-pink-500/10 text-pink-400 border-pink-500/30",
-      "Hash Table": "bg-emerald-500/10 text-emerald-400 border-emerald-500/30",
-    };
-    return colors[topic] || "bg-slate-500/10 text-slate-400 border-slate-500/30";
+  const getTopicColor = () => {
+    return "bg-slate-500/10 text-slate-400 border-slate-500/30";
   };
 
   const handleStartQuestion = (questionId) => {
@@ -174,14 +166,14 @@ const ListPage = () => {
               </div>
 
               {/* Topic Badge */}
-              <div className="hidden sm:block">
+              <div className="hidden text-center min-w-[80px] sm:block">
                 <span className={`px-3 py-1 rounded-full text-xs font-medium border ${getTopicColor(question.topic)}`}>
                   {question.topic}
                 </span>
               </div>
 
               {/* Difficulty */}
-              <div className="hidden md:block text-right min-w-[80px]">
+              <div className="hidden md:block text-center min-w-[80px]">
                 <span className={`text-sm font-semibold ${getDifficultyColor(question.difficulty)}`}>
                   {question.difficulty}
                 </span>
