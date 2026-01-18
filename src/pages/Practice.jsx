@@ -207,12 +207,11 @@ export default function Practice() {
   const [isListening, setIsListening] = useState(false);
   const [inCodingPhase, setInCodingPhase] = useState(false); // Track if mic stopped due to optimal approach
   const [runState, setRunState] = useState({ status: 'idle', output: null });
-  const [coach, setCoach] = useState({ level: 'neutral', title: 'Thinking…', message: 'Share your thoughts and I\'ll guide you!' });
+  const [coach, setCoach] = useState({ level: 'neutral', title: 'Thinking…', message: 'Share your thoughts and I\'ll guide you!', progress: 0 });
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [chatMessages, setChatMessages] = useState([]); // Chat history
   const [chatInput, setChatInput] = useState(''); // Current chat input
   const [isChatting, setIsChatting] = useState(false); // Track if chat AI is responding
-  const [pendingCodeSuggestion, setPendingCodeSuggestion] = useState(null); // Code suggestion from chat
   const [isCoachTextBlurred, setIsCoachTextBlurred] = useState(false); // Track if coach text is blurred
   const recognitionRef = useRef(null);
   const lastAnalyzedRef = useRef({ transcript: '', code: '' });
@@ -315,20 +314,36 @@ export default function Practice() {
             setConversationHistory(trimmedHistory);
             conversationHistoryRef.current = trimmedHistory; // Keep ref in sync
 
-            // Auto-stop mic if optimal approach detected
-            if (response.shouldStopMic && isListening) {
+            // Unlock coding phase if optimal approach detected OR progress is high (>= 60)
+            const hasOptimalApproach = response.shouldStopMic || (response.progress !== undefined && response.progress >= 60);
+            
+            // Debug logging
+            console.log('Unlock check:', {
+              shouldStopMic: response.shouldStopMic,
+              progress: response.progress,
+              hasOptimalApproach,
+              inCodingPhase,
+              message: response.message?.substring(0, 50)
+            });
+            
+            if (hasOptimalApproach && !inCodingPhase) {
+              console.log('Unlocking coding phase!');
               setInCodingPhase(true);
-              stopListening();
-              setCoach({
+              // Stop mic if it's currently listening
+              if (isListening) {
+                stopListening();
+              }
+              setCoach(prevCoach => ({
                 ...response,
                 title: 'Ready to Code!',
                 message: 'You have the optimal approach! Start implementing. I\'ll watch your code and help if needed.',
-              });
+                progress: response.progress !== undefined ? response.progress : (prevCoach.progress || 0),
+              }));
             }
 
             // Speak the response using Inworld API (or browser fallback)
             // Only speak if it's a new, meaningful message
-            if (response.message !== lastSpokenRef.current &&
+            if (response.message && response.message !== lastSpokenRef.current &&
                 response.message.length > 10) {
               lastSpokenRef.current = response.message;
               
@@ -397,16 +412,17 @@ export default function Practice() {
                 currentAudioRef.current = null;
               });
             }
-          }
         }
+      }
       } catch (error) {
         if (currentAnalysisRef.current === analysisId) {
           console.error('Analysis error:', error);
-          setCoach({
+          setCoach(prevCoach => ({
             level: 'neutral',
             title: 'Error',
             message: 'Could not analyze. Try again.',
-          });
+            progress: prevCoach.progress || 0,
+          }));
         }
       } finally {
         if (currentAnalysisRef.current === analysisId) {
@@ -463,11 +479,13 @@ export default function Practice() {
 
         if (currentAnalysisRef.current === analysisId && response.message) {
           // Update progress bar based on code analysis (but don't speak)
-          setCoach({
+          // Don't override progress if tests already passed (keep at 100%)
+          setCoach(prevCoach => ({
             level: response.level,
             title: response.title,
             message: response.message,
-          });
+            progress: prevCoach.progress >= 100 ? 100 : (response.progress || prevCoach.progress || 0),
+          }));
           lastAnalyzedRef.current.code = code;
         }
       } catch (error) {
@@ -629,15 +647,14 @@ export default function Practice() {
         problemTitle: PROBLEM.title,
       });
 
-      setChatMessages(prev => [...prev, { role: 'assistant', content: response.message }]);
-
-      // If code suggestion provided, show it for user to accept/decline
+      // Include code suggestion in message if provided
+      let messageContent = response.message;
       if (response.suggestedCode) {
-        setPendingCodeSuggestion({
-          code: response.suggestedCode,
-          originalCode: code,
-        });
+        // Add code suggestion to message as a code block
+        messageContent += `\n\n\`\`\`${language === 'C++' ? 'cpp' : 'javascript'}\n${response.suggestedCode}\n\`\`\``;
       }
+      
+      setChatMessages(prev => [...prev, { role: 'assistant', content: messageContent }]);
     } catch (error) {
       console.error('Chat error:', error);
       setChatMessages(prev => [...prev, { role: 'assistant', content: 'Sorry, I couldn\'t process your question. Please try again.' }]);
@@ -646,109 +663,48 @@ export default function Practice() {
     }
   };
 
-  // Accept code suggestion
-  const acceptCodeSuggestion = () => {
-    if (!pendingCodeSuggestion) return;
-    
-    // Use current code state, not the original from suggestion
-    const suggestion = pendingCodeSuggestion.code.trim();
-    const current = code; // Use current code state
-    
-    // Clean up suggestion (remove markdown code fence markers if present)
-    const cleanSuggestion = suggestion.replace(/^```\w*\n?/g, '').replace(/```\s*$/g, '').trim();
-    
-    if (language === 'C++') {
-      // Check if it's an include statement
-      if (cleanSuggestion.startsWith('#include')) {
-        // For C++, add include at top if not already present
-        if (!current.includes(cleanSuggestion)) {
-          const lines = current.split('\n');
-          const firstNonIncludeIdx = lines.findIndex(line => {
-            const trimmed = line.trim();
-            return trimmed && !trimmed.startsWith('#include') && !trimmed.startsWith('//');
-          });
-          if (firstNonIncludeIdx === -1) {
-            // All lines are includes or comments, append at end
-            setCode(current + '\n' + cleanSuggestion + '\n');
-          } else {
-            setCode([...lines.slice(0, firstNonIncludeIdx), cleanSuggestion, ...lines.slice(firstNonIncludeIdx)].join('\n'));
-          }
-        }
-      } else {
-        // For other C++ code, try to insert intelligently
-        // If it looks like a variable declaration, insert after includes but before class/function
-        const lines = current.split('\n');
-        const classOrFunctionIdx = lines.findIndex(line => 
-          line.trim().startsWith('class ') || 
-          line.trim().startsWith('void ') ||
-          line.trim().startsWith('int ') ||
-          line.trim().startsWith('bool ')
-        );
-        if (classOrFunctionIdx > 0) {
-          // Insert before class/function
-          lines.splice(classOrFunctionIdx, 0, cleanSuggestion);
-        } else {
-          // Append at end
-          lines.push(cleanSuggestion);
-        }
-        setCode(lines.join('\n'));
-      }
-    } else if (language === 'JavaScript') {
-      // Check if it's an import/require
-      if (cleanSuggestion.includes('import') || cleanSuggestion.includes('require')) {
-        // For JS, add import at top if not already present
-        if (!current.includes(cleanSuggestion)) {
-          const lines = current.split('\n');
-          const firstCodeIdx = lines.findIndex(line => {
-            const trimmed = line.trim();
-            return trimmed && !trimmed.startsWith('//') && !trimmed.startsWith('/*') && !trimmed.startsWith('import') && !trimmed.startsWith('const ') && !trimmed.startsWith('let ') && !trimmed.startsWith('var ');
-          });
-          if (firstCodeIdx === -1) {
-            setCode(current + '\n' + cleanSuggestion + '\n');
-          } else {
-            setCode([...lines.slice(0, firstCodeIdx), cleanSuggestion, ...lines.slice(firstCodeIdx)].join('\n'));
-          }
-        }
-      } else {
-        // For other JS code, append or insert before function
-        const lines = current.split('\n');
-        const functionIdx = lines.findIndex(line => line.trim().startsWith('function ') || line.trim().match(/^(const|let|var)\s+\w+\s*=\s*(\(|async\s*\(|function)/));
-        if (functionIdx > 0) {
-          lines.splice(functionIdx, 0, cleanSuggestion);
-        } else {
-          lines.push(cleanSuggestion);
-        }
-        setCode(lines.join('\n'));
-      }
-    }
-    
-    setPendingCodeSuggestion(null);
-  };
-
-  // Decline code suggestion
-  const declineCodeSuggestion = () => {
-    setPendingCodeSuggestion(null);
-  };
 
   const run = async () => {
     setRunState({ status: 'running', output: null });
 
+    let output;
     if (language === 'JavaScript') {
-      const output = runJavaScriptSolution(code, PROBLEM.tests);
+      output = runJavaScriptSolution(code, PROBLEM.tests);
       setRunState({ status: 'done', output });
     } else if (language === 'C++') {
-      const output = await runCppSolution(code, PROBLEM.tests);
+      output = await runCppSolution(code, PROBLEM.tests);
       setRunState({ status: 'done', output });
     } else {
-      setRunState({
-        status: 'done',
-        output: {
-          ok: false,
-          error: `${language} runtime not connected yet.`,
-          logs: [],
-          results: [],
-        },
-      });
+      output = {
+        ok: false,
+        error: `${language} runtime not connected yet.`,
+        logs: [],
+        results: [],
+      };
+      setRunState({ status: 'done', output });
+    }
+
+    // Update progress based on test results
+    // Only set to 100% if all tests pass
+    if (output?.ok === true && output?.results?.every(r => r.pass === true)) {
+      setCoach(prevCoach => ({
+        ...prevCoach,
+        level: 'good',
+        title: 'Solution Complete!',
+        message: 'All tests passed! Great job solving this problem.',
+        progress: 100,
+      }));
+    } else if (output?.results && output.results.length > 0) {
+      // Calculate progress based on passing tests
+      const passedTests = output.results.filter(r => r.pass === true).length;
+      const totalTests = output.results.length;
+      const testProgress = Math.round((passedTests / totalTests) * 85); // Max 85% from tests, 100% only when all pass
+      
+      // Update progress if it's higher than current, but don't go below current
+      setCoach(prevCoach => ({
+        ...prevCoach,
+        progress: Math.max(prevCoach.progress || 0, testProgress),
+      }));
     }
   };
 
@@ -808,22 +764,22 @@ export default function Practice() {
             {/* Progress bar showing if user is on the right track */}
             <div className="space-y-2">
               <div className="flex items-center justify-between text-xs">
-                <span className="text-zinc-400">Progress</span>
-                <span className={coach.level === 'good' ? 'text-emerald-300' : coach.level === 'warn' ? 'text-amber-300' : 'text-zinc-400'}>
-                  {coach.level === 'good' ? 'On Track ✓' : coach.level === 'warn' ? 'Needs Attention' : 'Thinking…'}
+                <span className="text-zinc-400">Progress to Solution</span>
+                <span className={coach.progress >= 95 ? 'text-emerald-300' : coach.progress >= 60 ? 'text-amber-300' : 'text-zinc-400'}>
+                  {coach.progress >= 95 ? 'Almost Complete!' : coach.progress >= 60 ? 'Making Progress' : coach.progress >= 20 ? 'Getting Started' : 'Just Starting'}
                 </span>
               </div>
               <div className="h-2 w-full overflow-hidden rounded-full bg-zinc-900">
                 <div
                   className={`h-full transition-all duration-500 ${
-                    coach.level === 'good'
+                    coach.progress >= 95
                       ? 'bg-emerald-500'
-                      : coach.level === 'warn'
+                      : coach.progress >= 60
                       ? 'bg-amber-500'
                       : 'bg-zinc-600'
                   }`}
                   style={{
-                    width: coach.level === 'good' ? '100%' : coach.level === 'warn' ? '60%' : '30%',
+                    width: `${Math.min(100, Math.max(0, coach.progress || 0))}%`,
                   }}
                 />
               </div>
@@ -992,28 +948,6 @@ export default function Practice() {
                       <div className="flex items-center gap-2 text-sm text-zinc-400">
                         <div className="h-2 w-2 animate-pulse rounded-full bg-zinc-400"></div>
                         <span>Thinking…</span>
-                      </div>
-                    )}
-                    {pendingCodeSuggestion && (
-                      <div className="rounded-md border border-emerald-500/30 bg-emerald-500/10 p-3">
-                        <div className="mb-2 text-sm font-semibold text-emerald-200">Suggested code:</div>
-                        <pre className="mb-3 overflow-x-auto rounded-md border border-zinc-700 bg-black/60 p-3 font-mono text-xs text-zinc-200">
-                          <code>{pendingCodeSuggestion.code}</code>
-                        </pre>
-                        <div className="flex gap-2">
-                          <button
-                            onClick={acceptCodeSuggestion}
-                            className="rounded-md bg-emerald-500/20 px-3 py-1.5 text-sm text-emerald-200 hover:bg-emerald-500/30"
-                          >
-                            Accept
-                          </button>
-                          <button
-                            onClick={declineCodeSuggestion}
-                            className="rounded-md bg-zinc-800 px-3 py-1.5 text-sm text-zinc-300 hover:bg-zinc-700"
-                          >
-                            Decline
-                          </button>
-                        </div>
                       </div>
                     )}
                   </div>

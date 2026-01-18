@@ -6,7 +6,7 @@
 const INWORLD_API_KEY = import.meta.env.VITE_INWORLD_API_KEY;
 // Use a basic voice name (like "Ronald", "Nova", "Adam") or a custom voiceId
 // Basic voices: Ronald, Nova, Adam, Ashley, Dennis, Alex (and others)
-const INWORLD_VOICE_ID = "Alex"; 
+const INWORLD_VOICE_ID = "Timothy"; 
 // Support both VITE_INWORLD_VOICE_ID and VITE_INWORLD_VOICE_NAME for flexibility
 const INWORLD_API_URL = 'https://api.inworld.ai';
 
