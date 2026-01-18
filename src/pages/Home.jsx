@@ -46,8 +46,7 @@ const Home = () => {
         
         {/* Background Effects */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-purple-600/10 blur-[120px] rounded-full"></div>
-          <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-cyan-600/5 blur-[100px] rounded-full"></div>
+        <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-cyan-600/5 blur-[100px] rounded-full"></div>
         </div>
         
         <div className="relative z-10 w-full max-w-7xl mx-auto">
@@ -97,8 +96,8 @@ const Home = () => {
 
             {/* Right Side Image */}
             <div className="hidden lg:block flex-shrink-0 opacity-0 animate-[fadeInUp_0.8s_ease-out_1s_forwards]">
-              <div className="relative w-64 h-64">
-                <div className="absolute inset-0 bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-4 shadow-2xl">
+              <div className="relative w-64 h-64 transition-all duration-300 hover:scale-105 cursor-pointer">
+                <div className="absolute inset-0 bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-4 shadow-2xl hover:shadow-purple-500/40 transition-all duration-300">
                   <div className="flex gap-2 mb-4">
                     <div className="w-3 h-3 rounded-full bg-red-500/50"></div>
                     <div className="w-3 h-3 rounded-full bg-yellow-500/50"></div>
@@ -126,7 +125,7 @@ const Home = () => {
           </div>
 
           {/* How It Works */}
-          <div className="mt-80 text-center opacity-0 animate-[fadeInUp_0.8s_ease-out_3.0s_forwards]">
+          <div className="mt-80 text-center opacity-0 animate-[fadeInUp_0.8s_ease-out_2.4s_forwards]">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
               How It Works
             </h2>
