@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import Editor from '@monaco-editor/react';
 import { analyzeWithGemini, chatWithGemini } from '../utils/gemini';
-import { speakText, stopSpeech } from '../utils/inworld';
+import { speakText, stopSpeech } from '../utils/elevenlabs';
 
 function analyze({ transcript, code }) {
   const t = (transcript || '').toLowerCase();
@@ -448,26 +448,35 @@ export default function Practice() {
               message: response.message?.substring(0, 50)
             });
             
+            // Track if we're unlocking to speak the unlock message instead
+            let isUnlocking = false;
             if (hasOptimalApproach && !inCodingPhase) {
               console.log('Unlocking coding phase!');
+              isUnlocking = true;
               setInCodingPhase(true);
               // Stop mic if it's currently listening
               if (isListening) {
                 stopListening();
               }
+              const unlockMessage = 'You have the optimal approach! Start implementing. I\'ll watch your code and help if needed.';
               setCoach(prevCoach => ({
                 ...response,
                 title: 'Ready to Code!',
-                message: 'You have the optimal approach! Start implementing. I\'ll watch your code and help if needed.',
+                message: unlockMessage,
                 progress: response.progress !== undefined ? response.progress : (prevCoach.progress || 0),
               }));
             }
 
             // Speak the response using Inworld API (or browser fallback)
             // Only speak if it's a new, meaningful message
-            if (response.message && response.message !== lastSpokenRef.current &&
-                response.message.length > 10) {
-              lastSpokenRef.current = response.message;
+            // If unlocking, speak the unlock message; otherwise speak the response
+            const messageToSpeak = isUnlocking 
+              ? 'You have the optimal approach! Start implementing. I\'ll watch your code and help if needed.'
+              : response.message;
+              
+            if (messageToSpeak && messageToSpeak !== lastSpokenRef.current &&
+                messageToSpeak.length > 10) {
+              lastSpokenRef.current = messageToSpeak;
               
               // Stop any ongoing TTS first (both Inworld and browser TTS)
               if (isTTSPlayingRef.current) {
@@ -498,7 +507,7 @@ export default function Practice() {
               
               isTTSPlayingRef.current = true;
               
-              speakText(response.message, {
+              speakText(messageToSpeak, {
                 onStart: () => {
                   // Mic is already stopped, just ensure flag is set
                   isPausedForTTSRef.current = true;

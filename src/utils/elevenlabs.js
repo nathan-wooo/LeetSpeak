@@ -1,22 +1,21 @@
 /**
- * Inworld AI API integration for text-to-speech
+ * ElevenLabs TTS API integration for text-to-speech
  * Converts AI coach responses to spoken audio
  */
 
-const INWORLD_API_KEY = import.meta.env.VITE_INWORLD_API_KEY;
-// Use a basic voice name (like "Ronald", "Nova", "Adam") or a custom voiceId
-// Basic voices: Ronald, Nova, Adam, Ashley, Dennis, Alex (and others)
-const INWORLD_VOICE_ID = "Timothy"; 
-// Support both VITE_INWORLD_VOICE_ID and VITE_INWORLD_VOICE_NAME for flexibility
-const INWORLD_API_URL = 'https://api.inworld.ai';
+const ELEVENLABS_API_KEY = import.meta.env.VITE_ELEVENLABS_API_KEY;
+// ElevenLabs voice ID - get from https://elevenlabs.io/voices
+// Default to a common voice, but you can set VITE_ELEVENLABS_VOICE_ID in .env
+const ELEVENLABS_VOICE_ID = import.meta.env.VITE_ELEVENLABS_VOICE_ID || '21m00Tcm4TlvDq8ikWAM'; // Default: Rachel
+const ELEVENLABS_API_URL = 'https://api.elevenlabs.io/v1/text-to-speech';
 
 /**
- * Convert text to speech using Inworld API
+ * Convert text to speech using ElevenLabs API
  * @param {string} text - Text to convert to speech
  * @returns {Promise<{audioData: ArrayBuffer}|null>} - Audio data or null if failed
  */
 export async function textToSpeech(text) {
-  if (!INWORLD_API_KEY) {
+  if (!ELEVENLABS_API_KEY) {
     // Silently fall back to browser TTS
     return null;
   }
@@ -25,38 +24,25 @@ export async function textToSpeech(text) {
     return null;
   }
 
-  // voiceId is required by Inworld API
-  // You can use basic voice names like "Ronald", "Nova", "Adam", "Ashley", "Dennis", "Alex"
-  // Or use a custom voiceId from your Inworld character
-  if (!INWORLD_VOICE_ID) {
-    // If no voice is set, fall back to browser TTS
-    return null;
-  }
-
   try {
-    // Inworld TTS API endpoint: POST /tts/v1/voice
-    // Docs: https://docs.inworld.ai/docs/node/templates/tts
-    // Basic voices you can use: Ronald, Nova, Adam, Ashley, Dennis, Alex
-    // These can be used directly as voice_id in the API call
-    const requestBody = {
-      text: text.trim(),
-      voice_id: INWORLD_VOICE_ID, // Can be a basic voice name like "Ronald" or a custom voiceId
-      audio_config: {
-        audio_encoding: 'MP3',
-        speaking_rate: 1,
-      },
-      temperature: 1.1,
-      model_id: 'inworld-tts-1', // Default Inworld TTS model (or 'inworld-tts-1-max' for better quality)
-    };
-
-    const response = await fetch(`${INWORLD_API_URL}/tts/v1/voice`, {
+    // ElevenLabs TTS API endpoint: POST /v1/text-to-speech/{voice_id}
+    // Docs: https://elevenlabs.io/docs/api-reference/text-to-speech
+    const response = await fetch(`${ELEVENLABS_API_URL}/${ELEVENLABS_VOICE_ID}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        // Inworld uses Basic auth (not Bearer) - API key should be Base64 encoded
-        'Authorization': `Basic ${INWORLD_API_KEY}`,
+        'xi-api-key': ELEVENLABS_API_KEY,
       },
-      body: JSON.stringify(requestBody),
+      body: JSON.stringify({
+        text: text.trim(),
+        model_id: 'eleven_turbo_v2_5', // Can be 'eleven_monolingual_v1' or 'eleven_multilingual_v1'
+        voice_settings: {
+          stability: 0.5,
+          similarity_boost: 0.75,
+          style: 0.0,
+          use_speaker_boost: true,
+        },
+      }),
     });
 
     if (!response.ok) {
@@ -68,77 +54,29 @@ export async function textToSpeech(text) {
         errorData = { message: errorText, error: errorText };
       }
       
-      console.error('Inworld TTS API error:', {
+      console.error('ElevenLabs TTS API error:', {
         status: response.status,
         statusText: response.statusText,
         error: errorData,
       });
       
-      // Check for invalid voice ID error
-      if (response.status === 400 || response.status === 404) {
-        const errorMsg = errorData.message || errorData.error || '';
-        if (errorMsg.includes('voice') || errorMsg.includes('Voice') || errorMsg.includes('not found')) {
-          console.warn('Inworld: Invalid voice ID. Please check VITE_INWORLD_VOICE_ID in your .env file.');
-        }
-      }
-      
       // Fall back to browser TTS
       return null;
     }
 
-    // Inworld TTS returns audio data
-    // Check content type to see how to handle it
-    const contentType = response.headers.get('content-type') || '';
-    console.log('Inworld TTS response content-type:', contentType);
-
-    if (contentType.includes('audio')) {
-      // Direct audio response (MP3, WAV, etc.)
-      const audioData = await response.arrayBuffer();
-      console.log('Inworld: Received audio data, size:', audioData.byteLength);
-      return { audioData };
-    } else {
-      // Inworld returns JSON with base64-encoded audio in audioContent field
-      const text = await response.text();
-      
-      // Try to parse as JSON
-      try {
-        const data = JSON.parse(text);
-        
-        // Inworld API returns audioContent as base64-encoded string
-        if (data.audioContent) {
-          // Decode base64 to binary data
-          const base64Audio = data.audioContent;
-          const binaryString = atob(base64Audio);
-          const bytes = new Uint8Array(binaryString.length);
-          for (let i = 0; i < binaryString.length; i++) {
-            bytes[i] = binaryString.charCodeAt(i);
-          }
-          const audioData = bytes.buffer;
-          console.log('Inworld: Decoded audio from base64, size:', audioData.byteLength);
-          return { audioData };
-        }
-        
-        // Legacy support for other field names
-        if (data.audioData || data.audio) {
-          return { audioData: data.audioData || data.audio };
-        }
-        
-        console.warn('Inworld: JSON response does not contain audioContent field:', data);
-      } catch (parseError) {
-        console.warn('Inworld: Failed to parse response as JSON:', parseError);
-      }
-      
-      return null;
-    }
+    // ElevenLabs returns audio as MP3 directly
+    const audioData = await response.arrayBuffer();
+    console.log('ElevenLabs: Received audio data, size:', audioData.byteLength);
+    return { audioData };
   } catch (error) {
-    console.error('Inworld TTS request failed:', error);
+    console.error('ElevenLabs TTS request failed:', error);
     // Fall back to browser TTS
     return null;
   }
 }
 
 /**
- * Play text as speech using Inworld API or browser fallback
+ * Play text as speech using ElevenLabs API or browser fallback
  * @param {string} text - Text to speak
  * @param {Object} options - Options for speech
  * @param {Function} options.onStart - Called when speech starts (pause mic here)
@@ -149,6 +87,9 @@ let currentAudioElement = null;
 
 export async function speakText(text, options = {}) {
   if (!text || !text.trim()) return;
+
+  // Remove backticks from text before TTS (TTS will speak them out loud)
+  text = text.replace(/`/g, '');
 
   const { onStart, onEnd } = options;
 
@@ -162,8 +103,8 @@ export async function speakText(text, options = {}) {
     }
   }
 
-  // Try Inworld first (if API key is set)
-  if (INWORLD_API_KEY) {
+  // Try ElevenLabs first (if API key is set)
+  if (ELEVENLABS_API_KEY) {
     const result = await textToSpeech(text);
     
     if (result?.audioData) {
@@ -193,7 +134,7 @@ export async function speakText(text, options = {}) {
             currentAudioElement = null;
           }
           if (onEnd) onEnd();
-          // If Inworld audio fails, fall back to browser TTS
+          // If ElevenLabs audio fails, fall back to browser TTS
           fallbackToBrowserTTS(text, options);
         };
         
