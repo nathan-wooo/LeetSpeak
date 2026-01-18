@@ -1,0 +1,8 @@
+node_modules/
+temp/
+*.cpp
+*.exe
+*.out
+*.o
+.env
+.DS_Store
