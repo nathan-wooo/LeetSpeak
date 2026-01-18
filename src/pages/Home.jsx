@@ -1,12 +1,18 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, Terminal, Users, MessageSquare, BookOpen, Mic, Zap } from 'lucide-react';
+import { ArrowRight, Terminal, Users, MessageSquare, BookOpen, Mic, Zap, LogIn } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
 
 const Home = () => {
   const navigate = useNavigate();
+  const { currentUser } = useAuth();
 
   const handleStartCoding = () => {
-    navigate('/list');
+    if (currentUser) {
+      navigate('/list');
+    } else {
+      navigate('/login');
+    }
   };
 
   const stats = [
@@ -34,10 +40,20 @@ const Home = () => {
             <span className="text-xl font-bold text-white">Leet<span className="text-purple-400">Speak</span></span>
           </div>
         </div>
-        <div className="pr-6 md:pr-8">
-          <span className="text-sm text-slate-400 px-3 py-1.5 border border-purple-500/30 rounded-full bg-purple-500/5">
-            Hacker
-          </span>
+        <div className="pr-6 md:pr-8 flex items-center gap-3">
+          {currentUser ? (
+            <span className="text-sm text-slate-400 px-3 py-1.5 border border-purple-500/30 rounded-full bg-purple-500/5">
+              {currentUser.email}
+            </span>
+          ) : (
+            <button
+              onClick={() => navigate('/login')}
+              className="flex items-center gap-2 px-4 py-2 text-sm text-slate-200 hover:text-white border border-purple-500/30 hover:border-purple-500/50 rounded-lg bg-purple-500/5 hover:bg-purple-500/10 transition-all"
+            >
+              <LogIn className="w-4 h-4" />
+              Sign In
+            </button>
+          )}
         </div>
       </nav>
 

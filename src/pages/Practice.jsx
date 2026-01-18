@@ -1,9 +1,12 @@
 import React, { useMemo, useRef, useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, LogOut } from 'lucide-react';
 import Editor from '@monaco-editor/react';
 import { analyzeWithGemini, chatWithGemini } from '../utils/gemini';
 import { speakText, stopSpeech } from '../utils/elevenlabs';
+import { useAuth } from '../contexts/AuthContext';
+import { db } from '../utils/firebase';
+import { doc, setDoc } from 'firebase/firestore';
 
 function analyze({ transcript, code }) {
   const t = (transcript || '').toLowerCase();
@@ -290,6 +293,7 @@ async function runCppSolution(code, tests) {
 
 export default function Practice() {
   const navigate = useNavigate();
+  const { currentUser, logout } = useAuth();
   const [searchParams] = useSearchParams();
   const problemId = searchParams.get('problem') || 'contains-duplicate';
   
@@ -828,6 +832,21 @@ export default function Practice() {
         message: 'All tests passed! Great job solving this problem.',
         progress: 100,
       }));
+      
+      // Save completion to Firestore
+      if (currentUser) {
+        try {
+          const completionRef = doc(db, 'users', currentUser.uid, 'completions', problemId);
+          await setDoc(completionRef, {
+            problemId,
+            completedAt: new Date().toISOString(),
+            language,
+          }, { merge: true });
+        } catch (error) {
+          console.error('Error saving completion:', error);
+        }
+      }
+      
       // Show congratulations modal
       setShowCongratulations(true);
     } else if (output?.results && output.results.length > 0) {
@@ -927,10 +946,10 @@ export default function Practice() {
       )}
 
       {/* Navbar with back button */}
-      <nav className="w-full h-16 flex items-center border-b border-white/10 bg-gray-900/80 backdrop-blur-sm sticky top-0 z-50 px-6 md:px-8">
+      <nav className="w-full h-16 flex items-center justify-between border-b border-white/10 bg-gray-900/80 backdrop-blur-sm sticky top-0 z-50 px-6 md:px-8">
         <button 
           onClick={() => navigate('/list')}
-          className="mr-4 text-slate-400 hover:text-white transition-colors flex items-center gap-2"
+          className="text-slate-400 hover:text-white transition-colors flex items-center gap-2"
         >
           <ArrowLeft className="w-5 h-5" />
           <span className="text-sm">Back to Problems</span>
@@ -941,6 +960,21 @@ export default function Practice() {
           </div>
           <span className="text-xl font-bold text-white">Leet<span className="text-purple-400">Speak</span></span>
         </div>
+        <button
+          onClick={async () => {
+            try {
+              await logout();
+              navigate('/');
+            } catch (error) {
+              console.error('Error logging out:', error);
+            }
+          }}
+          className="flex items-center gap-2 px-3 py-2 text-slate-400 hover:text-white hover:bg-slate-800/50 rounded-lg transition-all text-sm"
+          title="Logout"
+        >
+          <LogOut className="w-4 h-4" />
+          <span className="hidden sm:inline">Logout</span>
+        </button>
       </nav>
       <div className="mx-auto flex h-[calc(100vh-4rem)] w-full max-w-[1600px] flex-col gap-3 p-3">
         {/* AI Coach Bar */}

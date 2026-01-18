@@ -1,13 +1,38 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, Filter, ArrowLeft, Lock, CheckCircle2 } from 'lucide-react';
+import { Search, Filter, ArrowLeft, Lock, CheckCircle2, LogOut } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
+import { db } from '../utils/firebase';
+import { collection, getDocs } from 'firebase/firestore';
 
 const ListPage = () => {
   const navigate = useNavigate();
+  const { currentUser, logout } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDifficulty, setSelectedDifficulty] = useState('All');
   const [selectedTopic, setSelectedTopic] = useState('All Topics');
+  const [completedProblems, setCompletedProblems] = useState(new Set());
+
+  // Fetch completed problems from Firestore
+  useEffect(() => {
+    if (!currentUser) return;
+
+    const fetchCompletions = async () => {
+      try {
+        const completionsRef = collection(db, 'users', currentUser.uid, 'completions');
+        const snapshot = await getDocs(completionsRef);
+        const completed = new Set();
+        snapshot.forEach((doc) => {
+          completed.add(doc.id);
+        });
+        setCompletedProblems(completed);
+      } catch (error) {
+        console.error('Error fetching completions:', error);
+      }
+    };
+
+    fetchCompletions();
+  }, [currentUser]);
 
   const questions = [
     { id: 1, title: "Two Sum", problemId: "two-sum", difficulty: "Easy", topic: "Array", solved: false, locked: false },
@@ -67,8 +92,21 @@ const ListPage = () => {
           </div>
         </div>
         <div className="pr-6 md:pr-8">
-          <span className="text-sm text-slate-400">
-          </span>
+          <button
+            onClick={async () => {
+              try {
+                await logout();
+                navigate('/');
+              } catch (error) {
+                console.error('Error logging out:', error);
+              }
+            }}
+            className="flex items-center gap-2 px-3 py-2 text-slate-400 hover:text-white hover:bg-slate-800/50 rounded-lg transition-all text-sm"
+            title="Logout"
+          >
+            <LogOut className="w-4 h-4" />
+            <span className="hidden sm:inline">Logout</span>
+          </button>
         </div>
       </nav>
 
@@ -135,14 +173,16 @@ const ListPage = () => {
 
         {/* Questions List */}
         <div className="space-y-2">
-          {filteredQuestions.map((question) => (
+          {filteredQuestions.map((question) => {
+            const isCompleted = completedProblems.has(question.problemId);
+            return (
             <div
               key={question.id}
               className="flex items-center gap-4 p-4 bg-slate-800/30 border border-slate-700/50 rounded-lg hover:border-purple-500/50 hover:bg-slate-800/50 transition-all group"
             >
               {/* Status Icon */}
               <div className="flex-shrink-0">
-                {question.solved ? (
+                {isCompleted ? (
                   <CheckCircle2 className="w-5 h-5 text-green-400" />
                 ) : question.locked ? (
                   <Lock className="w-5 h-5 text-slate-600" />
@@ -191,7 +231,8 @@ const ListPage = () => {
                 )}
               </div>
             </div>
-          ))}
+          );
+          })}
         </div>
 
         {/* No Results */}
