@@ -45,7 +45,7 @@ LeetSpeak bridges this gap by:
 ### AI & Speech
 - **Google Gemini API** - AI coaching and code analysis
 - **Web Speech API** - Speech recognition
-- **Inworld AI API** - Natural text-to-speech
+- **Elevenlabs API** - AI Voice
 
 ### Backend
 - **Node.js/Express** 
@@ -124,31 +124,6 @@ The backend server runs on `http://localhost:3001` by default.
 
 Open your browser and navigate to `http://localhost:5173`.
 
-**Important**: Use Chrome, Edge, or Safari for full voice recognition support. Firefox has limited Web Speech API support.
-
-## 📁 Project Structure
-
-```
-LeetSpeak/
-├── src/
-│   ├── pages/
-│   │   ├── App.jsx           # Main app router
-│   │   ├── Home.jsx          # Landing page
-│   │   ├── ListPage.jsx      # Problem list
-│   │   └── Practice.jsx      # Practice interface
-│   ├── problems/             # Problem definitions (JSON)
-│   │   ├── two-sum.json
-│   │   ├── contains-duplicate.json
-│   │   └── ...
-│   └── utils/
-│       ├── gemini.js         # Gemini API integration
-│       └── inworld.js        # Inworld TTS integration
-├── server/
-│   ├── index.js              # Express server for C++ compilation
-│   └── temp/                 # Temporary compiled files
-├── public/                   # Static assets
-└── package.json
-```
 
 ## 🎮 How to Use
 
