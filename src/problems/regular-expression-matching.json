@@ -22,5 +22,15 @@
     { "name": "Example 1", "input": ["aa", "a"], "expected": false },
     { "name": "Example 2", "input": ["aa", "a*"], "expected": true },
     { "name": "Example 3", "input": ["ab", ".*"], "expected": true }
-  ]
+  ],
+  "hints": [
+    "This is a classic dynamic programming problem. Break it down into subproblems.",
+    "Use memoization or a DP table. dp[i][j] represents if s[0..i] matches p[0..j].",
+    "Handle three cases: normal character match, '.' (matches any), and '*' (matches zero or more of preceding).",
+    "For '*', you can either match zero characters (skip it) or match one or more characters (consume from string)."
+  ],
+  "solution": {
+    "javascript": "function isMatch(s, p) {\n  const dp = Array(s.length + 1).fill(null).map(() => Array(p.length + 1).fill(false));\n  dp[0][0] = true;\n  \n  for (let j = 2; j <= p.length; j++) {\n    if (p[j - 1] === '*') {\n      dp[0][j] = dp[0][j - 2];\n    }\n  }\n  \n  for (let i = 1; i <= s.length; i++) {\n    for (let j = 1; j <= p.length; j++) {\n      if (p[j - 1] === s[i - 1] || p[j - 1] === '.') {\n        dp[i][j] = dp[i - 1][j - 1];\n      } else if (p[j - 1] === '*') {\n        dp[i][j] = dp[i][j - 2];\n        if (p[j - 2] === s[i - 1] || p[j - 2] === '.') {\n          dp[i][j] = dp[i][j] || dp[i - 1][j];\n        }\n      }\n    }\n  }\n  \n  return dp[s.length][p.length];\n}",
+    "cpp": "bool isMatch(string s, string p) {\n    vector<vector<bool>> dp(s.length() + 1, vector<bool>(p.length() + 1, false));\n    dp[0][0] = true;\n    \n    for (int j = 2; j <= p.length(); j++) {\n        if (p[j - 1] == '*') {\n            dp[0][j] = dp[0][j - 2];\n        }\n    }\n    \n    for (int i = 1; i <= s.length(); i++) {\n        for (int j = 1; j <= p.length(); j++) {\n            if (p[j - 1] == s[i - 1] || p[j - 1] == '.') {\n                dp[i][j] = dp[i - 1][j - 1];\n            } else if (p[j - 1] == '*') {\n                dp[i][j] = dp[i][j - 2];\n                if (p[j - 2] == s[i - 1] || p[j - 2] == '.') {\n                    dp[i][j] = dp[i][j] || dp[i - 1][j];\n                }\n            }\n        }\n    }\n    \n    return dp[s.length()][p.length()];\n}"
+  }
 }

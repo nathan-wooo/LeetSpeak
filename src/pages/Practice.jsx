@@ -49,6 +49,135 @@ function levelStyles(level) {
   }
 }
 
+// Helper function to get hints from problem JSON or fallback to defaults
+function getHintsForProblem(problem) {
+  if (!problem) return [];
+  
+  // Use hints from JSON if available
+  if (problem.hints && Array.isArray(problem.hints) && problem.hints.length > 0) {
+    return problem.hints;
+  }
+  
+  // Fallback to default hints if JSON doesn't have hints
+  const id = problem.id || '';
+  const hints = [];
+  
+  if (id.includes('palindrome')) {
+    hints.push(
+      'A palindrome reads the same forwards and backwards. Check if characters match from both ends.',
+      'Expand around centers approach: each character (or pair) can be the center of a palindrome.',
+      'For each position, expand left and right while characters match. Keep track of the longest palindrome found.',
+      'There are O(n²) possible centers, and checking each takes O(n) time, giving O(n²) total.'
+    );
+  } else if (id.includes('container') || id.includes('water')) {
+    hints.push(
+      'The area is width × min(height[i], height[j]). Start with maximum width.',
+      'Use two pointers: one at the start and one at the end of the array.',
+      'Move the pointer with the smaller height towards the center, because that\'s the only way to potentially get a larger area.',
+      'This gives O(n) time complexity since each element is visited at most once.'
+    );
+  } else {
+    // Generic hints
+    hints.push(
+      'Start by understanding what the problem is asking. What are the inputs and expected outputs?',
+      'Think about edge cases: empty inputs, single elements, maximum values, etc.',
+      'Consider different approaches: brute force, sorting, hash tables, two pointers, etc.',
+      'What\'s the time and space complexity of your approach? Can you optimize it?'
+    );
+  }
+  
+  return hints;
+}
+
+// Component for Solution hints
+function SolutionHints({ problem, language, currentHintIndex, setCurrentHintIndex, solutionRevealed, setSolutionRevealed }) {
+  if (!problem) return null;
+  
+  const hints = getHintsForProblem(problem);
+  const hasMoreHints = currentHintIndex < hints.length - 1;
+  
+  // Get solution code based on language - use JSON if available
+  const getSolutionCode = () => {
+    // Use solution from JSON if available
+    if (problem.solution) {
+      const langKey = language === 'JavaScript' ? 'javascript' : 'cpp';
+      if (problem.solution[langKey]) {
+        return problem.solution[langKey];
+      }
+    }
+    
+    // Fallback to default message if no solution in JSON
+    return '// Solution code not yet available for this problem';
+  };
+  
+  return (
+    <div className="space-y-4 text-sm text-slate-300">
+      <div className="text-slate-200 mb-4">
+        <h3 className="text-lg font-semibold mb-2">Step-by-Step Hints</h3>
+        <p className="text-slate-400 text-xs">
+          Reveal hints one at a time to guide your thinking. Try solving it yourself first!
+        </p>
+      </div>
+      
+      {/* Show revealed hints */}
+      {currentHintIndex >= 0 && (
+        <div className="space-y-3">
+          {hints.slice(0, currentHintIndex + 1).map((hint, idx) => (
+            <div
+              key={idx}
+              className="rounded-md border border-purple-500/30 bg-purple-500/10 p-4 text-slate-200"
+            >
+              <div className="flex items-start gap-3">
+                <div className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 flex items-center justify-center text-xs font-semibold">
+                  {idx + 1}
+                </div>
+                <div className="flex-1">
+                  <div className="text-sm leading-relaxed">{hint}</div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+      
+      {/* Show next hint button */}
+      {hasMoreHints && !solutionRevealed && (
+        <button
+          onClick={() => setCurrentHintIndex(prev => prev + 1)}
+          className="w-full px-4 py-3 bg-purple-500/10 border border-purple-500/30 rounded-lg text-purple-400 hover:bg-purple-500/20 hover:border-purple-500/50 transition-all font-semibold"
+        >
+          {currentHintIndex === -1 ? 'Show First Hint' : `Show Hint ${currentHintIndex + 2}`}
+        </button>
+      )}
+      
+      {/* Show solution button */}
+      {!solutionRevealed && (
+        <button
+          onClick={() => setSolutionRevealed(true)}
+          className="w-full px-4 py-3 bg-amber-500/10 border border-amber-500/30 rounded-lg text-amber-400 hover:bg-amber-500/20 hover:border-amber-500/50 transition-all font-semibold"
+        >
+          Show Complete Solution
+        </button>
+      )}
+      
+      {/* Revealed solution */}
+      {solutionRevealed && (
+        <div className="space-y-3 mt-4">
+          <div className="text-amber-400 font-semibold text-base border-b border-amber-500/30 pb-2">
+            Complete Solution
+          </div>
+          <pre className="rounded-md border border-slate-700/50 bg-slate-900/60 p-4 font-mono text-xs text-slate-200 overflow-x-auto">
+            <code>{getSolutionCode()}</code>
+          </pre>
+          <div className="text-xs text-slate-400 italic">
+            Remember: Understanding the approach is more valuable than memorizing the code!
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function safeStringify(v) {
   try {
     return JSON.stringify(v);
@@ -181,6 +310,8 @@ export default function Practice() {
   const [chatInput, setChatInput] = useState(''); // Current chat input
   const [isChatting, setIsChatting] = useState(false); // Track if chat AI is responding
   const [isCoachTextBlurred, setIsCoachTextBlurred] = useState(false); // Track if coach text is blurred
+  const [currentHintIndex, setCurrentHintIndex] = useState(-1); // Track which hint is shown (-1 = none)
+  const [solutionRevealed, setSolutionRevealed] = useState(false); // Track if solution is revealed
   const recognitionRef = useRef(null);
   const lastAnalyzedRef = useRef({ transcript: '', code: '' });
   const lastSpokenRef = useRef('');
@@ -829,7 +960,7 @@ export default function Practice() {
                 </div>
               </div>
               <div className="flex gap-1 rounded-md border border-slate-700/50 bg-slate-800/50 p-1 text-sm">
-                {['Question', 'Solution', 'Submissions', 'Chat'].map((t) => (
+                {['Question', 'Solution', 'Chat'].map((t) => (
                   <button
                     key={t}
                     type="button"
@@ -887,15 +1018,14 @@ export default function Practice() {
                   </div>
                 </div>
               ) : activeTab === 'Solution' ? (
-                <div className="space-y-3 text-sm text-slate-300">
-                  <div className="text-slate-200">
-                    Not shown yet — the goal is to coach you without giving the answer.
-                  </div>
-                  <div className="rounded-md border border-slate-700/50 bg-slate-900/40 p-3 text-xs text-slate-400">
-                    When we add a real AI model, we can gate "Solution" behind a "show me after I try"
-                    flow.
-                  </div>
-                </div>
+                <SolutionHints 
+                  problem={problem}
+                  language={language}
+                  currentHintIndex={currentHintIndex}
+                  setCurrentHintIndex={setCurrentHintIndex}
+                  solutionRevealed={solutionRevealed}
+                  setSolutionRevealed={setSolutionRevealed}
+                />
               ) : activeTab === 'Chat' ? (
                 <div className="flex h-[calc(100vh-400px)] flex-col">
                   <div className="flex-1 overflow-y-auto space-y-3 pb-4">
@@ -991,14 +1121,7 @@ export default function Practice() {
                     </div>
                   </form>
                 </div>
-              ) : (
-                <div className="space-y-3 text-sm text-slate-300">
-                  <div className="text-slate-200">Submissions will be wired later.</div>
-                  <div className="rounded-md border border-slate-700/50 bg-slate-900/40 p-3 text-xs text-slate-400">
-                    We'll store attempts locally first, then add auth + a backend.
-                  </div>
-                </div>
-              )}
+              ) : null}
             </div>
           </div>
 

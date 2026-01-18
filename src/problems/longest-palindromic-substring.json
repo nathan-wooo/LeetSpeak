@@ -17,5 +17,15 @@
   "tests": [
     { "name": "Example 1", "input": ["babad"], "expected": "bab" },
     { "name": "Example 2", "input": ["cbbd"], "expected": "bb" }
-  ]
+  ],
+  "hints": [
+    "A palindrome reads the same forwards and backwards. Check if characters match from both ends.",
+    "Expand around centers approach: each character (or pair) can be the center of a palindrome.",
+    "For each position, expand left and right while characters match. Keep track of the longest palindrome found.",
+    "There are O(n²) possible centers, and checking each takes O(n) time, giving O(n²) total."
+  ],
+  "solution": {
+    "javascript": "function longestPalindrome(s) {\n  let maxLen = 0;\n  let start = 0;\n  \n  function expandAroundCenter(left, right) {\n    while (left >= 0 && right < s.length && s[left] === s[right]) {\n      left--;\n      right++;\n    }\n    return right - left - 1;\n  }\n  \n  for (let i = 0; i < s.length; i++) {\n    const len1 = expandAroundCenter(i, i);\n    const len2 = expandAroundCenter(i, i + 1);\n    const len = Math.max(len1, len2);\n    \n    if (len > maxLen) {\n      maxLen = len;\n      start = i - Math.floor((len - 1) / 2);\n    }\n  }\n  \n  return s.substring(start, start + maxLen);\n}",
+    "cpp": "string longestPalindrome(string s) {\n    int maxLen = 0, start = 0;\n    \n    auto expandAroundCenter = [&](int left, int right) {\n        while (left >= 0 && right < s.length() && s[left] == s[right]) {\n            left--;\n            right++;\n        }\n        return right - left - 1;\n    };\n    \n    for (int i = 0; i < s.length(); i++) {\n        int len1 = expandAroundCenter(i, i);\n        int len2 = expandAroundCenter(i, i + 1);\n        int len = max(len1, len2);\n        \n        if (len > maxLen) {\n            maxLen = len;\n            start = i - (len - 1) / 2;\n        }\n    }\n    \n    return s.substr(start, maxLen);\n}"
+  }
 }

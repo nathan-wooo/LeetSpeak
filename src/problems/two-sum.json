@@ -21,5 +21,15 @@
     { "name": "Example 1", "input": [[2,7,11,15], 9], "expected": [0,1] },
     { "name": "Example 2", "input": [[3,2,4], 6], "expected": [1,2] },
     { "name": "Example 3", "input": [[3,3], 6], "expected": [0,1] }
-  ]
+  ],
+  "hints": [
+    "You need to find two numbers that add up to the target. What if you store complements as you iterate?",
+    "For each number, calculate its complement (target - current number). If the complement is already in a map, you found a pair!",
+    "Use a hash map to store each number's index as you iterate. This lets you check for complements in O(1) time.",
+    "Time complexity: O(n), Space complexity: O(n)"
+  ],
+  "solution": {
+    "javascript": "function twoSum(nums, target) {\n  const map = new Map();\n  for (let i = 0; i < nums.length; i++) {\n    const complement = target - nums[i];\n    if (map.has(complement)) {\n      return [map.get(complement), i];\n    }\n    map.set(nums[i], i);\n  }\n  return [];\n}",
+    "cpp": "vector<int> twoSum(vector<int>& nums, int target) {\n    unordered_map<int, int> map;\n    for (int i = 0; i < nums.size(); i++) {\n        int complement = target - nums[i];\n        if (map.count(complement)) {\n            return {map[complement], i};\n        }\n        map[nums[i]] = i;\n    }\n    return {};\n}"
+  }
 }

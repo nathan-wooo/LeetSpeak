@@ -19,5 +19,15 @@
     { "name": "Example 2", "input": [1, 2, 3, 4], "expected": false },
     { "name": "Edge", "input": [], "expected": false },
     { "name": "Negatives", "input": [-1, -1], "expected": true }
-  ]
+  ],
+  "hints": [
+    "Think about what data structure allows you to check if an element already exists quickly.",
+    "A Set or hash table can track which numbers you've seen so far.",
+    "Iterate through the array and for each number, check if it's already in your set. If yes, return true. If no, add it to the set.",
+    "After iterating through all numbers without finding a duplicate, return false."
+  ],
+  "solution": {
+    "javascript": "function containsDuplicate(nums) {\n  const seen = new Set();\n  for (const num of nums) {\n    if (seen.has(num)) return true;\n    seen.add(num);\n  }\n  return false;\n}",
+    "cpp": "bool containsDuplicate(vector<int>& nums) {\n    unordered_set<int> seen;\n    for (int num : nums) {\n        if (seen.count(num)) return true;\n        seen.insert(num);\n    }\n    return false;\n}"
+  }
 }

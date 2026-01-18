@@ -19,5 +19,15 @@
     { "name": "Example 1", "input": [1,2,3,4,5], "expected": [5,4,3,2,1] },
     { "name": "Example 2", "input": [1,2], "expected": [2,1] },
     { "name": "Example 3", "input": [], "expected": [] }
-  ]
+  ],
+  "hints": [
+    "You need to reverse the direction of pointers. Think about keeping track of previous, current, and next nodes.",
+    "Start with prev = null and curr = head. As you traverse, save the next node, reverse the current pointer, then move forward.",
+    "The key is: next = curr.next, curr.next = prev, prev = curr, curr = next",
+    "Return prev as the new head after the loop completes."
+  ],
+  "solution": {
+    "javascript": "function reverseList(head) {\n  let prev = null;\n  let curr = head;\n  while (curr) {\n    const next = curr.next;\n    curr.next = prev;\n    prev = curr;\n    curr = next;\n  }\n  return prev;\n}",
+    "cpp": "ListNode* reverseList(ListNode* head) {\n    ListNode* prev = nullptr;\n    ListNode* curr = head;\n    while (curr) {\n        ListNode* next = curr->next;\n        curr->next = prev;\n        prev = curr;\n        curr = next;\n    }\n    return prev;\n}"
+  }
 }

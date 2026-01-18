@@ -18,5 +18,15 @@
   "tests": [
     { "name": "Example 1", "input": [[1,8,6,2,5,4,8,3,7]], "expected": 49 },
     { "name": "Example 2", "input": [[1,1]], "expected": 1 }
-  ]
+  ],
+  "hints": [
+    "The area is width × min(height[i], height[j]). Start with maximum width.",
+    "Use two pointers: one at the start and one at the end of the array.",
+    "Move the pointer with the smaller height towards the center, because that's the only way to potentially get a larger area.",
+    "This gives O(n) time complexity since each element is visited at most once."
+  ],
+  "solution": {
+    "javascript": "function maxArea(height) {\n  let left = 0;\n  let right = height.length - 1;\n  let maxArea = 0;\n  \n  while (left < right) {\n    const width = right - left;\n    const currentArea = width * Math.min(height[left], height[right]);\n    maxArea = Math.max(maxArea, currentArea);\n    \n    if (height[left] < height[right]) {\n      left++;\n    } else {\n      right--;\n    }\n  }\n  \n  return maxArea;\n}",
+    "cpp": "int maxArea(vector<int>& height) {\n    int left = 0, right = height.size() - 1;\n    int maxArea = 0;\n    \n    while (left < right) {\n        int width = right - left;\n        int currentArea = width * min(height[left], height[right]);\n        maxArea = max(maxArea, currentArea);\n        \n        if (height[left] < height[right]) {\n            left++;\n        } else {\n            right--;\n        }\n    }\n    \n    return maxArea;\n}"
+  }
 }

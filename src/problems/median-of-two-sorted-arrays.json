@@ -21,5 +21,15 @@
   "tests": [
     { "name": "Example 1", "input": [[1,3], [2]], "expected": 2.0 },
     { "name": "Example 2", "input": [[1,2], [3,4]], "expected": 2.5 }
-  ]
+  ],
+  "hints": [
+    "The median divides the array into two equal halves. For combined arrays, you need to find the partition point.",
+    "You can merge the two arrays and find the median, but that takes O(m+n) time. Can you do it in O(log(min(m,n)))?",
+    "Use binary search on the smaller array to find the correct partition. The partition must satisfy specific conditions.",
+    "The key insight: all elements on the left side of the partition must be <= all elements on the right side."
+  ],
+  "solution": {
+    "javascript": "function findMedianSortedArrays(nums1, nums2) {\n  if (nums1.length > nums2.length) {\n    [nums1, nums2] = [nums2, nums1];\n  }\n  \n  const m = nums1.length, n = nums2.length;\n  let left = 0, right = m;\n  \n  while (left <= right) {\n    const partitionX = Math.floor((left + right) / 2);\n    const partitionY = Math.floor((m + n + 1) / 2) - partitionX;\n    \n    const maxX = partitionX === 0 ? -Infinity : nums1[partitionX - 1];\n    const maxY = partitionY === 0 ? -Infinity : nums2[partitionY - 1];\n    const minX = partitionX === m ? Infinity : nums1[partitionX];\n    const minY = partitionY === n ? Infinity : nums2[partitionY];\n    \n    if (maxX <= minY && maxY <= minX) {\n      const maxLeft = Math.max(maxX, maxY);\n      if ((m + n) % 2 === 1) return maxLeft;\n      return (maxLeft + Math.min(minX, minY)) / 2;\n    } else if (maxX > minY) {\n      right = partitionX - 1;\n    } else {\n      left = partitionX + 1;\n    }\n  }\n}",
+    "cpp": "double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {\n    if (nums1.size() > nums2.size()) {\n        swap(nums1, nums2);\n    }\n    \n    int m = nums1.size(), n = nums2.size();\n    int left = 0, right = m;\n    \n    while (left <= right) {\n        int partitionX = (left + right) / 2;\n        int partitionY = (m + n + 1) / 2 - partitionX;\n        \n        int maxX = (partitionX == 0) ? INT_MIN : nums1[partitionX - 1];\n        int maxY = (partitionY == 0) ? INT_MIN : nums2[partitionY - 1];\n        int minX = (partitionX == m) ? INT_MAX : nums1[partitionX];\n        int minY = (partitionY == n) ? INT_MAX : nums2[partitionY];\n        \n        if (maxX <= minY && maxY <= minX) {\n            int maxLeft = max(maxX, maxY);\n            if ((m + n) % 2 == 1) return maxLeft;\n            return (maxLeft + min(minX, minY)) / 2.0;\n        } else if (maxX > minY) {\n            right = partitionX - 1;\n        } else {\n            left = partitionX + 1;\n        }\n    }\n    return 0.0;\n}"
+  }
 }
