@@ -1,10 +1,12 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ArrowRight, Terminal, Users, MessageSquare, BookOpen, Mic, Zap } from 'lucide-react';
 
 const Home = () => {
+  const navigate = useNavigate();
+
   const handleStartCoding = () => {
-    // In your actual app: navigate('/interview')
-    console.log('Navigate to /interview');
+    navigate('/list');
   };
 
   const stats = [
@@ -53,7 +55,7 @@ const Home = () => {
           {/* Hero Content */}
           <div className="flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-16 mb-20 pt-12 md:pt-20">           
             {/* Left Side  */}
-            <div className="flex-1 text-center lg:text-left">
+            <div className="flex-1 text-center lg:text-left opacity-0 animate-[fadeInUp_0.8s_ease-out_0.2s_forwards]">
               <div className="inline-block mb-6">
               </div>
               
@@ -98,9 +100,8 @@ const Home = () => {
             </div>
 
             {/* Right Side Image */}
-            <div className="hidden lg:block flex-shrink-0">
+            <div className="hidden lg:block flex-shrink-0 opacity-0 animate-[fadeInUp_0.8s_ease-out_1s_forwards]">
               <div className="relative w-64 h-64">
-                {/* Animated Code Window Mockup */}
                 <div className="absolute inset-0 bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-4 shadow-2xl">
                   <div className="flex gap-2 mb-4">
                     <div className="w-3 h-3 rounded-full bg-red-500/50"></div>
@@ -131,7 +132,13 @@ const Home = () => {
           {/* Stats Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-12 border-t border-white/10">
             {stats.map((stat, index) => (
-              <div key={index} className="flex items-start gap-4 p-6 bg-slate-800/30 border border-slate-700/50 rounded-xl hover:border-purple-500/50 transition-all duration-300">
+              <div 
+                key={index} 
+                className="flex items-start gap-4 p-6 bg-slate-800/30 border border-slate-700/50 rounded-xl hover:border-purple-500/50 transition-all duration-300 opacity-0"
+                style={{
+                  animation: `fadeInUp 0.8s ease-out ${1.8 + index * 0.2}s forwards`
+                }}
+              >,
                 <div className="text-purple-400 mt-1 bg-purple-500/10 p-2 rounded-lg">
                   {stat.icon}
                 </div>
@@ -144,7 +151,7 @@ const Home = () => {
           </div>
 
           {/* How It Works */}
-          <div className="mt-36 text-center">
+          <div className="mt-36 text-center opacity-0 animate-[fadeInUp_0.8s_ease-out_3.0s_forwards]">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
               How It Works
             </h2>
@@ -169,14 +176,6 @@ const Home = () => {
 
         </div>
       </main>
-
-      {/* Footer */}
-      <footer className="relative z-10 px-6 py-8 border-t border-white/10">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-slate-500">
-          <div>Built with 💜 at nwHacks 2026</div>
-          <div>Powered by Claude AI + ElevenLabs</div>
-        </div>
-      </footer>
     </div>
   );
 };
