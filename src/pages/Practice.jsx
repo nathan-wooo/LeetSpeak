@@ -827,7 +827,6 @@ export default function Practice() {
                     {problem.difficulty}
                   </span>
                   <span className="text-slate-500">•</span>
-                  <span className="text-slate-400">NeetCode-style practice view</span>
                 </div>
               </div>
               <div className="flex gap-1 rounded-md border border-slate-700/50 bg-slate-800/50 p-1 text-sm">
