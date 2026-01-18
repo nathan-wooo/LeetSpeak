@@ -68,10 +68,6 @@ const ListPage = () => {
         </div>
         <div className="pr-6 md:pr-8">
           <span className="text-sm text-slate-400">
-            <span className="text-green-400 font-semibold">{questions.filter(q => q.solved).length}</span>
-            <span className="text-slate-500">/</span>
-            <span className="text-slate-400">{questions.length}</span>
-            <span className="ml-2 text-slate-500">Solved</span>
           </span>
         </div>
       </nav>

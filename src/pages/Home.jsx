@@ -53,7 +53,7 @@ const Home = () => {
         <div className="relative z-10 w-full max-w-7xl mx-auto">
           
           {/* Hero Content */}
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-16 mb-20 pt-12 md:pt-20">           
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-16 mb-20 pt-12 md:pt-24">           
             {/* Left Side  */}
             <div className="flex-1 text-center lg:text-left opacity-0 animate-[fadeInUp_0.8s_ease-out_0.2s_forwards]">
               <div className="inline-block mb-6">
@@ -92,10 +92,6 @@ const Home = () => {
                   Start Coding
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </button>
-                
-                <button className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-transparent border-2 border-slate-600 text-slate-200 font-semibold text-lg rounded-lg hover:border-purple-400 hover:bg-purple-400/10 transition-all duration-300">
-                  Watch Demo
-                </button>
               </div>
             </div>
 
@@ -129,29 +125,8 @@ const Home = () => {
 
           </div>
 
-          {/* Stats Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-12 border-t border-white/10">
-            {stats.map((stat, index) => (
-              <div 
-                key={index} 
-                className="flex items-start gap-4 p-6 bg-slate-800/30 border border-slate-700/50 rounded-xl hover:border-purple-500/50 transition-all duration-300 opacity-0"
-                style={{
-                  animation: `fadeInUp 0.8s ease-out ${1.8 + index * 0.2}s forwards`
-                }}
-              >,
-                <div className="text-purple-400 mt-1 bg-purple-500/10 p-2 rounded-lg">
-                  {stat.icon}
-                </div>
-                <div>
-                  <p className="text-sm text-slate-400 mb-1">{stat.label}</p>
-                  <p className="text-lg font-semibold text-white">{stat.value}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-
           {/* How It Works */}
-          <div className="mt-36 text-center opacity-0 animate-[fadeInUp_0.8s_ease-out_3.0s_forwards]">
+          <div className="mt-80 text-center opacity-0 animate-[fadeInUp_0.8s_ease-out_3.0s_forwards]">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
               How It Works
             </h2>
