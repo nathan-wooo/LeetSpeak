@@ -1,0 +1,22 @@
+{
+  "id": "container-with-most-water",
+  "title": "Container With Most Water",
+  "difficulty": "Medium",
+  "topic": "Array",
+  "prompt": "You are given an integer array height of length n. There are n vertical lines drawn such that the two endpoints of the ith line are (i, 0) and (i, height[i]). Find two lines that together with the x-axis form a container, such that the container contains the most water.",
+  "examples": [
+    { "input": "height = [1,8,6,2,5,4,8,3,7]", "output": "49" },
+    { "input": "height = [1,1]", "output": "1" }
+  ],
+  "constraints": [
+    "n == height.length",
+    "2 <= n <= 10^5",
+    "0 <= height[i] <= 10^4"
+  ],
+  "jsStarter": "/**\n * Container With Most Water\n * @param {number[]} height\n * @return {number}\n */\nfunction maxArea(height) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "#include <vector>\nusing namespace std;\n\nclass Solution {\npublic:\n    int maxArea(vector<int>& height) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [
+    { "name": "Example 1", "input": [[1,8,6,2,5,4,8,3,7]], "expected": 49 },
+    { "name": "Example 2", "input": [[1,1]], "expected": 1 }
+  ]
+}

@@ -1,47 +1,9 @@
 import React, { useMemo, useRef, useState, useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { ArrowLeft } from 'lucide-react';
 import Editor from '@monaco-editor/react';
 import { analyzeWithGemini, chatWithGemini } from '../utils/gemini';
 import { speakText, stopSpeech } from '../utils/inworld';
-
-const PROBLEM = {
-  id: 'contains-duplicate',
-  title: 'Contains Duplicate',
-  difficulty: 'Easy',
-  prompt:
-    'Given an integer array nums, return true if any value appears more than once in the array, otherwise return false.',
-  examples: [
-    { input: 'nums = [1, 2, 3, 3]', output: 'true' },
-    { input: 'nums = [1, 2, 3, 4]', output: 'false' },
-  ],
-  constraints: ['1 <= nums.length <= 10^5', '-10^9 <= nums[i] <= 10^9'],
-  jsStarter: `/**
- * Contains Duplicate
- * @param {number[]} nums
- * @return {boolean}
- */
-function containsDuplicate(nums) {
-  // Talk through your approach out loud like an interview.
-  // Tip: A Set is a great fit here.
-}
-`,
-  cppStarter: `#include <vector>
-#include <unordered_set>
-using namespace std;
-
-class Solution {
-public:
-    bool containsDuplicate(vector<int>& nums) {
-        // Talk through your approach out loud like an interview.
-        // Tip: A set/hash table is a great fit here.
-    }
-};`,
-  tests: [
-    { name: 'Example 1', input: [1, 2, 3, 3], expected: true },
-    { name: 'Example 2', input: [1, 2, 3, 4], expected: false },
-    { name: 'Edge', input: [], expected: false },
-    { name: 'Negatives', input: [-1, -1], expected: true },
-  ],
-};
 
 function analyze({ transcript, code }) {
   const t = (transcript || '').toLowerCase();
@@ -83,7 +45,7 @@ function levelStyles(level) {
     case 'warn':
       return 'border-amber-500/30 bg-amber-500/10 text-amber-200';
     default:
-      return 'border-zinc-700 bg-zinc-900/60 text-zinc-200';
+      return 'border-slate-700/50 bg-slate-800/30 text-slate-200';
   }
 }
 
@@ -198,9 +160,15 @@ async function runCppSolution(code, tests) {
 }
 
 export default function Practice() {
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const problemId = searchParams.get('problem') || 'contains-duplicate';
+  
+  const [problem, setProblem] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('Question');
   const [language, setLanguage] = useState('JavaScript');
-  const [code, setCode] = useState(PROBLEM.jsStarter);
+  const [code, setCode] = useState('');
   const [transcript, setTranscript] = useState('');
   const [conversationHistory, setConversationHistory] = useState([]); // Keep full conversation context
   const conversationHistoryRef = useRef([]); // Ref to always have latest history
@@ -223,14 +191,37 @@ export default function Practice() {
   const currentAudioRef = useRef(null); // Track current audio element to stop it if needed
   const isTTSPlayingRef = useRef(false); // Track if TTS is currently playing
 
+  // Load problem from JSON file
+  useEffect(() => {
+    const loadProblem = async () => {
+      try {
+        setLoading(true);
+        // Use dynamic import for Vite - note: this requires the file to exist
+        const problemModule = await import(`../problems/${problemId}.json`);
+        const problemData = problemModule.default || problemModule;
+        setProblem(problemData);
+        setCode(problemData.jsStarter);
+      } catch (error) {
+        console.error('Error loading problem:', error);
+        // Fallback: redirect to list if problem not found
+        navigate('/list');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadProblem();
+  }, [problemId, navigate]);
+
   // Update code when language changes
   useEffect(() => {
+    if (!problem) return;
     if (language === 'JavaScript') {
-      setCode(PROBLEM.jsStarter);
+      setCode(problem.jsStarter);
     } else if (language === 'C++') {
-      setCode(PROBLEM.cppStarter);
+      setCode(problem.cppStarter);
     }
-  }, [language]);
+  }, [language, problem]);
 
   // Debounced analysis with Gemini API - ONLY when transcript changes (not code)
   useEffect(() => {
@@ -299,8 +290,8 @@ export default function Practice() {
           transcript,
           conversationHistory: newHistory, // Send full conversation context
           code, // Still send code for context, but don't trigger on code changes
-          problemTitle: PROBLEM.title,
-          problemPrompt: PROBLEM.prompt,
+          problemTitle: problem?.title || '',
+          problemPrompt: problem?.prompt || '',
         });
 
         // Only update if this is still the latest analysis request
@@ -460,7 +451,7 @@ export default function Practice() {
       }
 
       // Skip if it's just starter code
-      if (code === PROBLEM.jsStarter || code === PROBLEM.cppStarter) {
+      if (!problem || code === problem.jsStarter || code === problem.cppStarter) {
         return;
       }
 
@@ -473,8 +464,8 @@ export default function Practice() {
           transcript: 'Analyzing code progress...', // Silent analysis during coding
           conversationHistory: conversationHistoryRef.current,
           code,
-          problemTitle: PROBLEM.title,
-          problemPrompt: PROBLEM.prompt,
+          problemTitle: problem?.title || '',
+          problemPrompt: problem?.prompt || '',
         });
 
         if (currentAnalysisRef.current === analysisId && response.message) {
@@ -644,7 +635,7 @@ export default function Practice() {
         question,
         code,
         language,
-        problemTitle: PROBLEM.title,
+        problemTitle: problem?.title || '',
       });
 
       // Include code suggestion in message if provided
@@ -667,12 +658,14 @@ export default function Practice() {
   const run = async () => {
     setRunState({ status: 'running', output: null });
 
+    if (!problem) return;
+    
     let output;
     if (language === 'JavaScript') {
-      output = runJavaScriptSolution(code, PROBLEM.tests);
+      output = runJavaScriptSolution(code, problem.tests);
       setRunState({ status: 'done', output });
     } else if (language === 'C++') {
-      output = await runCppSolution(code, PROBLEM.tests);
+      output = await runCppSolution(code, problem.tests);
       setRunState({ status: 'done', output });
     } else {
       output = {
@@ -710,15 +703,44 @@ export default function Practice() {
 
   const topBarClass = `border ${levelStyles(coach.level)} rounded-lg`;
 
+  if (loading || !problem) {
+    return (
+      <div className="min-h-screen w-full bg-gray-900 text-slate-200 flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-lg text-slate-400 mb-2">Loading problem...</div>
+          <div className="h-2 w-64 bg-slate-800 rounded-full overflow-hidden">
+            <div className="h-full bg-purple-500 animate-pulse" style={{ width: '60%' }}></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen w-full bg-black text-zinc-100">
-      <div className="mx-auto flex h-screen w-full max-w-[1600px] flex-col gap-3 p-3">
+    <div className="min-h-screen w-full bg-gray-900 text-slate-200">
+      {/* Navbar with back button */}
+      <nav className="w-full h-16 flex items-center border-b border-white/10 bg-gray-900/80 backdrop-blur-sm sticky top-0 z-50 px-6 md:px-8">
+        <button 
+          onClick={() => navigate('/list')}
+          className="mr-4 text-slate-400 hover:text-white transition-colors flex items-center gap-2"
+        >
+          <ArrowLeft className="w-5 h-5" />
+          <span className="text-sm">Back to Problems</span>
+        </button>
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 bg-gradient-to-br rounded-md flex items-center justify-center">
+            <img src="Transparent_Logo.png" alt="LeetSpeak Logo" className="h-8 w-auto object-contain" />
+          </div>
+          <span className="text-xl font-bold text-white">Leet<span className="text-purple-400">Speak</span></span>
+        </div>
+      </nav>
+      <div className="mx-auto flex h-[calc(100vh-4rem)] w-full max-w-[1600px] flex-col gap-3 p-3">
         {/* AI Coach Bar */}
         <div className={topBarClass}>
           <div className="flex flex-col gap-2 px-4 py-3 md:flex-row md:items-center md:justify-between">
             <div className={`min-w-0 transition-all duration-200 ${isCoachTextBlurred ? 'blur-sm select-none' : ''}`}>
-              <div className="text-sm font-semibold tracking-wide">{coach.title}</div>
-              <div className="text-sm text-zinc-200/90">{coach.message}</div>
+              <div className="text-sm font-semibold tracking-wide text-white">{coach.title}</div>
+              <div className="text-sm text-slate-200/90">{coach.message}</div>
             </div>
             <div className="flex shrink-0 items-center gap-2">
               {canSpeech ? (
@@ -734,49 +756,49 @@ export default function Practice() {
                   <button
                     type="button"
                     onClick={startListening}
-                    className="rounded-md border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm text-zinc-200 hover:bg-zinc-900"
+                    className="rounded-md border border-slate-700/50 bg-slate-800/50 px-3 py-2 text-sm text-slate-200 hover:bg-slate-800/70"
                   >
                     Start mic
                   </button>
                 )
               ) : (
-                <div className="text-xs text-zinc-400">
+                <div className="text-xs text-slate-400">
                   Mic not supported. Try Chrome, Edge, or Safari.
                 </div>
               )}
               <button
                 type="button"
                 onClick={() => setIsCoachTextBlurred(!isCoachTextBlurred)}
-                className="rounded-md border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm text-zinc-200 hover:bg-zinc-900"
+                className="rounded-md border border-slate-700/50 bg-slate-800/50 px-3 py-2 text-sm text-slate-200 hover:bg-slate-800/70"
                 title={isCoachTextBlurred ? 'Show thinking text' : 'Hide thinking text'}
               >
                 {isCoachTextBlurred ? '👁️' : '🙈'}
               </button>
               {isAnalyzing && (
-                <div className="flex items-center gap-2 text-xs text-zinc-400">
-                  <div className="h-2 w-2 animate-pulse rounded-full bg-zinc-400"></div>
+                <div className="flex items-center gap-2 text-xs text-slate-400">
+                  <div className="h-2 w-2 animate-pulse rounded-full bg-purple-400"></div>
                   <span>Analyzing…</span>
                 </div>
               )}
             </div>
           </div>
-          <div className="border-t border-zinc-800 px-4 py-3">
+          <div className="border-t border-slate-700/50 px-4 py-3">
             {/* Progress bar showing if user is on the right track */}
             <div className="space-y-2">
               <div className="flex items-center justify-between text-xs">
-                <span className="text-zinc-400">Progress to Solution</span>
-                <span className={coach.progress >= 95 ? 'text-emerald-300' : coach.progress >= 60 ? 'text-amber-300' : 'text-zinc-400'}>
+                <span className="text-slate-400">Progress to Solution</span>
+                <span className={coach.progress >= 95 ? 'text-emerald-300' : coach.progress >= 60 ? 'text-amber-300' : 'text-slate-400'}>
                   {coach.progress >= 95 ? 'Almost Complete!' : coach.progress >= 60 ? 'Making Progress' : coach.progress >= 20 ? 'Getting Started' : 'Just Starting'}
                 </span>
               </div>
-              <div className="h-2 w-full overflow-hidden rounded-full bg-zinc-900">
+              <div className="h-2 w-full overflow-hidden rounded-full bg-slate-900/50">
                 <div
                   className={`h-full transition-all duration-500 ${
                     coach.progress >= 95
                       ? 'bg-emerald-500'
                       : coach.progress >= 60
                       ? 'bg-amber-500'
-                      : 'bg-zinc-600'
+                      : 'bg-purple-500'
                   }`}
                   style={{
                     width: `${Math.min(100, Math.max(0, coach.progress || 0))}%`,
@@ -784,8 +806,8 @@ export default function Practice() {
                 />
               </div>
               {isListening && (
-                <div className="flex items-center gap-2 text-xs text-zinc-400">
-                  <div className="h-1.5 w-1.5 animate-pulse rounded-full bg-red-400"></div>
+                <div className="flex items-center gap-2 text-xs text-slate-400">
+                  <div className="h-1.5 w-1.5 animate-pulse rounded-full bg-purple-400"></div>
                   <span>Listening…</span>
                 </div>
               )}
@@ -796,19 +818,19 @@ export default function Practice() {
         {/* Split view */}
         <div className="grid min-h-0 flex-1 grid-cols-1 gap-3 md:grid-cols-2">
           {/* Left: Problem */}
-          <div className="min-h-0 overflow-hidden rounded-lg border border-zinc-800 bg-zinc-950">
-            <div className="flex items-center justify-between border-b border-zinc-800 px-4 py-3">
+          <div className="min-h-0 overflow-hidden rounded-lg border border-slate-700/50 bg-slate-800/30">
+            <div className="flex items-center justify-between border-b border-slate-700/50 px-4 py-3">
               <div className="min-w-0">
-                <div className="truncate text-lg font-semibold">{PROBLEM.title}</div>
-                <div className="mt-1 flex items-center gap-2 text-xs text-zinc-400">
+                <div className="truncate text-lg font-semibold text-white">{problem.title}</div>
+                <div className="mt-1 flex items-center gap-2 text-xs text-slate-400">
                   <span className="rounded-full bg-emerald-500/10 px-2 py-1 text-emerald-200">
-                    {PROBLEM.difficulty}
+                    {problem.difficulty}
                   </span>
-                  <span className="text-zinc-500">•</span>
-                  <span className="text-zinc-400">NeetCode-style practice view</span>
+                  <span className="text-slate-500">•</span>
+                  <span className="text-slate-400">NeetCode-style practice view</span>
                 </div>
               </div>
-              <div className="flex gap-1 rounded-md border border-zinc-800 bg-zinc-900 p-1 text-sm">
+              <div className="flex gap-1 rounded-md border border-slate-700/50 bg-slate-800/50 p-1 text-sm">
                 {['Question', 'Solution', 'Submissions', 'Chat'].map((t) => (
                   <button
                     key={t}
@@ -816,7 +838,7 @@ export default function Practice() {
                     onClick={() => setActiveTab(t)}
                     className={[
                       'rounded-md px-3 py-1.5',
-                      activeTab === t ? 'bg-zinc-950 text-zinc-100' : 'text-zinc-300 hover:bg-zinc-800',
+                      activeTab === t ? 'bg-slate-900/80 text-white' : 'text-slate-300 hover:bg-slate-800/70',
                     ].join(' ')}
                   >
                     {t}
@@ -827,25 +849,25 @@ export default function Practice() {
 
             <div className="min-h-0 overflow-auto p-4">
               {activeTab === 'Question' ? (
-                <div className="space-y-4 text-sm leading-6 text-zinc-200">
-                  <p className="text-zinc-200">{PROBLEM.prompt}</p>
+                <div className="space-y-4 text-sm leading-6 text-slate-200">
+                  <p className="text-slate-200">{problem.prompt}</p>
 
                   <div>
-                    <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-zinc-400">
+                    <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-400">
                       Examples
                     </div>
                     <div className="space-y-3">
-                      {PROBLEM.examples.map((ex, idx) => (
+                      {problem.examples.map((ex, idx) => (
                         <div
                           key={idx}
-                          className="rounded-md border border-zinc-800 bg-black/40 p-3"
+                          className="rounded-md border border-slate-700/50 bg-slate-900/40 p-3"
                         >
-                          <div className="font-mono text-zinc-200">
+                          <div className="font-mono text-slate-200">
                             <div>
-                              <span className="text-zinc-500">Input:</span> {ex.input}
+                              <span className="text-slate-500">Input:</span> {ex.input}
                             </div>
                             <div>
-                              <span className="text-zinc-500">Output:</span> {ex.output}
+                              <span className="text-slate-500">Output:</span> {ex.output}
                             </div>
                           </div>
                         </div>
@@ -854,11 +876,11 @@ export default function Practice() {
                   </div>
 
                   <div>
-                    <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-zinc-400">
+                    <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-400">
                       Constraints
                     </div>
-                    <ul className="list-inside list-disc text-zinc-300">
-                      {PROBLEM.constraints.map((c) => (
+                    <ul className="list-inside list-disc text-slate-300">
+                      {problem.constraints.map((c) => (
                         <li key={c} className="font-mono text-xs">
                           {c}
                         </li>
@@ -867,11 +889,11 @@ export default function Practice() {
                   </div>
                 </div>
               ) : activeTab === 'Solution' ? (
-                <div className="space-y-3 text-sm text-zinc-300">
-                  <div className="text-zinc-200">
+                <div className="space-y-3 text-sm text-slate-300">
+                  <div className="text-slate-200">
                     Not shown yet — the goal is to coach you without giving the answer.
                   </div>
-                  <div className="rounded-md border border-zinc-800 bg-black/40 p-3 text-xs text-zinc-400">
+                  <div className="rounded-md border border-slate-700/50 bg-slate-900/40 p-3 text-xs text-slate-400">
                     When we add a real AI model, we can gate "Solution" behind a "show me after I try"
                     flow.
                   </div>
@@ -880,7 +902,7 @@ export default function Practice() {
                 <div className="flex h-[calc(100vh-400px)] flex-col">
                   <div className="flex-1 overflow-y-auto space-y-3 pb-4">
                     {chatMessages.length === 0 ? (
-                      <div className="text-sm text-zinc-400 italic">
+                      <div className="text-sm text-slate-400 italic">
                         Ask quick questions like "how do I implement a hashmap?"
                       </div>
                     ) : (
@@ -914,11 +936,11 @@ export default function Practice() {
                             key={idx}
                             className={`rounded-md p-3 ${
                               msg.role === 'user' 
-                                ? 'bg-zinc-800/50 text-zinc-200' 
-                                : 'bg-zinc-900/50 text-zinc-300'
+                                ? 'bg-slate-800/50 text-slate-200' 
+                                : 'bg-slate-800/30 text-slate-300'
                             }`}
                           >
-                            <div className="mb-1 text-xs font-semibold text-zinc-400">
+                            <div className="mb-1 text-xs font-semibold text-slate-400">
                               {msg.role === 'user' ? 'You' : 'AI Coach'}
                             </div>
                             <div className="space-y-2 text-sm">
@@ -927,7 +949,7 @@ export default function Practice() {
                                   return (
                                     <pre
                                       key={partIdx}
-                                      className="overflow-x-auto rounded-md border border-zinc-700 bg-black/60 p-3 font-mono text-xs text-zinc-200"
+                                      className="overflow-x-auto rounded-md border border-slate-700/50 bg-slate-900/60 p-3 font-mono text-xs text-slate-200"
                                     >
                                       <code>{part.content}</code>
                                     </pre>
@@ -945,26 +967,26 @@ export default function Practice() {
                       })
                     )}
                     {isChatting && (
-                      <div className="flex items-center gap-2 text-sm text-zinc-400">
-                        <div className="h-2 w-2 animate-pulse rounded-full bg-zinc-400"></div>
+                      <div className="flex items-center gap-2 text-sm text-slate-400">
+                        <div className="h-2 w-2 animate-pulse rounded-full bg-purple-400"></div>
                         <span>Thinking…</span>
                       </div>
                     )}
                   </div>
-                  <form onSubmit={handleChatSubmit} className="border-t border-zinc-800 pt-3">
+                  <form onSubmit={handleChatSubmit} className="border-t border-slate-700/50 pt-3">
                     <div className="flex gap-2">
                       <input
                         type="text"
                         value={chatInput}
                         onChange={(e) => setChatInput(e.target.value)}
                         placeholder="Ask a question..."
-                        className="flex-1 rounded-md border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-600"
+                        className="flex-1 rounded-md border border-slate-700/50 bg-slate-900/50 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50"
                         disabled={isChatting}
                       />
                       <button
                         type="submit"
                         disabled={!chatInput.trim() || isChatting}
-                        className="rounded-md bg-zinc-800 px-4 py-2 text-sm text-zinc-200 hover:bg-zinc-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="rounded-md bg-slate-800/70 px-4 py-2 text-sm text-slate-200 hover:bg-slate-700/70 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         Send
                       </button>
@@ -972,9 +994,9 @@ export default function Practice() {
                   </form>
                 </div>
               ) : (
-                <div className="space-y-3 text-sm text-zinc-300">
-                  <div className="text-zinc-200">Submissions will be wired later.</div>
-                  <div className="rounded-md border border-zinc-800 bg-black/40 p-3 text-xs text-zinc-400">
+                <div className="space-y-3 text-sm text-slate-300">
+                  <div className="text-slate-200">Submissions will be wired later.</div>
+                  <div className="rounded-md border border-slate-700/50 bg-slate-900/40 p-3 text-xs text-slate-400">
                     We'll store attempts locally first, then add auth + a backend.
                   </div>
                 </div>
@@ -983,19 +1005,19 @@ export default function Practice() {
           </div>
 
           {/* Right: Editor + Console */}
-          <div className="min-h-0 overflow-hidden rounded-lg border border-zinc-800 bg-zinc-950">
-            <div className="flex items-center justify-between border-b border-zinc-800 px-4 py-3">
+          <div className="min-h-0 overflow-hidden rounded-lg border border-slate-700/50 bg-slate-800/30">
+            <div className="flex items-center justify-between border-b border-slate-700/50 px-4 py-3">
               <div className="flex items-center gap-2">
                 <select
                   value={language}
                   onChange={(e) => setLanguage(e.target.value)}
-                  className="rounded-md border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-zinc-600"
+                  className="rounded-md border border-slate-700/50 bg-slate-900/50 px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-purple-500/50"
                 >
                   <option>JavaScript</option>
                   <option>Python</option>
                   <option>C++</option>
                 </select>
-                <div className="text-xs text-zinc-400">
+                <div className="text-xs text-slate-400">
                   {language === 'JavaScript'
                     ? 'Runs in-browser'
                     : language === 'C++'
@@ -1008,12 +1030,12 @@ export default function Practice() {
                   type="button"
                   onClick={() => {
                     if (inCodingPhase) {
-                      if (language === 'JavaScript') setCode(PROBLEM.jsStarter);
-                      else if (language === 'C++') setCode(PROBLEM.cppStarter);
+                      if (language === 'JavaScript') setCode(problem.jsStarter);
+                      else if (language === 'C++') setCode(problem.cppStarter);
                     }
                   }}
                   disabled={!inCodingPhase}
-                  className="rounded-md border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm text-zinc-200 hover:bg-zinc-900 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="rounded-md border border-slate-700/50 bg-slate-900/50 px-3 py-2 text-sm text-slate-200 hover:bg-slate-800/70 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Reset
                 </button>
@@ -1031,12 +1053,12 @@ export default function Practice() {
             <div className="grid min-h-0 h-full grid-rows-[1fr_220px]">
               <div className="min-h-0 overflow-hidden relative">
                 {!inCodingPhase ? (
-                  <div className="absolute inset-0 z-10 flex items-center justify-center bg-zinc-950/95 backdrop-blur-sm">
+                  <div className="absolute inset-0 z-10 flex items-center justify-center bg-slate-900/95 backdrop-blur-sm">
                     <div className="text-center space-y-3 px-6">
-                      <div className="text-lg font-semibold text-zinc-200">
+                      <div className="text-lg font-semibold text-slate-200">
                         Voice Phase Active
                       </div>
-                      <div className="text-sm text-zinc-400 max-w-md">
+                      <div className="text-sm text-slate-400 max-w-md">
                         Share your approach out loud using the microphone. The AI coach will guide you to the optimal solution. Once you reach the optimal approach, coding will be enabled.
                       </div>
                       {!isListening && (
@@ -1082,9 +1104,9 @@ export default function Practice() {
                 />
               </div>
 
-              <div className="min-h-0 border-t border-zinc-800 bg-black/40">
+              <div className="min-h-0 border-t border-slate-700/50 bg-slate-900/40">
                 <div className="flex items-center justify-between px-4 py-2">
-                  <div className="text-xs font-semibold uppercase tracking-wide text-zinc-400">
+                  <div className="text-xs font-semibold uppercase tracking-wide text-slate-400">
                     Console
                   </div>
                   {runState.output?.ok === true ? (
@@ -1092,10 +1114,10 @@ export default function Practice() {
                   ) : runState.output?.ok === false ? (
                     <div className="text-xs text-amber-300">Some tests failed</div>
                   ) : (
-                    <div className="text-xs text-zinc-500">—</div>
+                    <div className="text-xs text-slate-500">—</div>
                   )}
                 </div>
-                <div className="h-[calc(220px-40px)] overflow-auto px-4 pb-4 font-mono text-xs text-zinc-200">
+                <div className="h-[calc(220px-40px)] overflow-auto px-4 pb-4 font-mono text-xs text-slate-200">
                   {runState.output ? (
                     <div className="space-y-2">
                       {runState.output.error ? (
@@ -1116,21 +1138,21 @@ export default function Practice() {
                               >
                                 {r.pass ? 'PASS' : 'FAIL'}
                               </span>
-                              <span className="text-zinc-300">{r.name}</span>
-                              <span className="text-zinc-500">got</span>
-                              <span className="text-zinc-200">{safeStringify(r.got)}</span>
-                              <span className="text-zinc-500">expected</span>
-                              <span className="text-zinc-200">{safeStringify(r.expected)}</span>
+                              <span className="text-slate-300">{r.name}</span>
+                              <span className="text-slate-500">got</span>
+                              <span className="text-slate-200">{safeStringify(r.got)}</span>
+                              <span className="text-slate-500">expected</span>
+                              <span className="text-slate-200">{safeStringify(r.expected)}</span>
                             </div>
                           ))}
                         </div>
                       ) : null}
 
                       {runState.output.logs?.length ? (
-                        <div className="rounded-md border border-zinc-800 bg-black/40 p-2">
-                          <div className="mb-1 text-zinc-400">logs:</div>
+                        <div className="rounded-md border border-slate-700/50 bg-slate-900/40 p-2">
+                          <div className="mb-1 text-slate-400">logs:</div>
                           {runState.output.logs.map((l, idx) => (
-                            <div key={idx} className="text-zinc-300">
+                            <div key={idx} className="text-slate-300">
                               {l}
                             </div>
                           ))}
@@ -1140,12 +1162,12 @@ export default function Practice() {
                       {!runState.output.error &&
                       !runState.output.results?.length &&
                       !runState.output.logs?.length ? (
-                        <div className="text-zinc-500">No output.</div>
+                        <div className="text-slate-500">No output.</div>
                       ) : null}
                     </div>
                   ) : (
-                    <div className="px-0 py-2 text-zinc-500">
-                      Click <span className="text-zinc-300">Run</span> to execute tests.
+                    <div className="px-0 py-2 text-slate-500">
+                      Click <span className="text-slate-300">Run</span> to execute tests.
                     </div>
                   )}
                 </div>

@@ -1,0 +1,23 @@
+{
+  "id": "reverse-linked-list",
+  "title": "Reverse Linked List",
+  "difficulty": "Medium",
+  "topic": "Linked List",
+  "prompt": "Given the head of a singly linked list, reverse the list, and return the reversed list.",
+  "examples": [
+    { "input": "head = [1,2,3,4,5]", "output": "[5,4,3,2,1]" },
+    { "input": "head = [1,2]", "output": "[2,1]" },
+    { "input": "head = []", "output": "[]" }
+  ],
+  "constraints": [
+    "The number of nodes in the list is the range [0, 5000].",
+    "-5000 <= Node.val <= 5000"
+  ],
+  "jsStarter": "/**\n * Definition for singly-linked list.\n * function ListNode(val, next) {\n *     this.val = (val===undefined ? 0 : val)\n *     this.next = (next===undefined ? null : next)\n * }\n */\n/**\n * Reverse Linked List\n * @param {ListNode} head\n * @return {ListNode}\n */\nfunction reverseList(head) {\n  // Talk through your approach out loud like an interview.\n  // Tip: Use two pointers - one to track the current node and one to track the previous node.\n}",
+  "cppStarter": "/**\n * Definition for singly-linked list.\n * struct ListNode {\n *     int val;\n *     ListNode *next;\n *     ListNode() : val(0), next(nullptr) {}\n *     ListNode(int x) : val(x), next(nullptr) {}\n *     ListNode(int x, ListNode *next) : val(x), next(next) {}\n * };\n */\nclass Solution {\npublic:\n    ListNode* reverseList(ListNode* head) {\n        // Talk through your approach out loud like an interview.\n        // Tip: Use two pointers - one to track the current node and one to track the previous node.\n    }\n};",
+  "tests": [
+    { "name": "Example 1", "input": [1,2,3,4,5], "expected": [5,4,3,2,1] },
+    { "name": "Example 2", "input": [1,2], "expected": [2,1] },
+    { "name": "Example 3", "input": [], "expected": [] }
+  ]
+}

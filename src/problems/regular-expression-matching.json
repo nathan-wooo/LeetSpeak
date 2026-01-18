@@ -1,0 +1,26 @@
+{
+  "id": "regular-expression-matching",
+  "title": "Regular Expression Matching",
+  "difficulty": "Hard",
+  "topic": "String",
+  "prompt": "Given an input string s and a pattern p, implement regular expression matching with support for '.' and '*'.",
+  "examples": [
+    { "input": "s = \"aa\", p = \"a\"", "output": "false" },
+    { "input": "s = \"aa\", p = \"a*\"", "output": "true" },
+    { "input": "s = \"ab\", p = \".*\"", "output": "true" }
+  ],
+  "constraints": [
+    "1 <= s.length <= 20",
+    "1 <= p.length <= 20",
+    "s contains only lowercase English letters.",
+    "p contains only lowercase English letters, '.', and '*'.",
+    "It is guaranteed for each appearance of the character '*', there will be a previous valid character to match."
+  ],
+  "jsStarter": "/**\n * Regular Expression Matching\n * @param {string} s\n * @param {string} p\n * @return {boolean}\n */\nfunction isMatch(s, p) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    bool isMatch(string s, string p) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [
+    { "name": "Example 1", "input": ["aa", "a"], "expected": false },
+    { "name": "Example 2", "input": ["aa", "a*"], "expected": true },
+    { "name": "Example 3", "input": ["ab", ".*"], "expected": true }
+  ]
+}

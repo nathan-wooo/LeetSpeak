@@ -1,0 +1,23 @@
+{
+  "id": "contains-duplicate",
+  "title": "Contains Duplicate",
+  "difficulty": "Easy",
+  "topic": "Array",
+  "prompt": "Given an integer array nums, return true if any value appears more than once in the array, otherwise return false.",
+  "examples": [
+    { "input": "nums = [1, 2, 3, 3]", "output": "true" },
+    { "input": "nums = [1, 2, 3, 4]", "output": "false" }
+  ],
+  "constraints": [
+    "1 <= nums.length <= 10^5",
+    "-10^9 <= nums[i] <= 10^9"
+  ],
+  "jsStarter": "/**\n * Contains Duplicate\n * @param {number[]} nums\n * @return {boolean}\n */\nfunction containsDuplicate(nums) {\n  // Talk through your approach out loud like an interview.\n  // Tip: A Set is a great fit here.\n}",
+  "cppStarter": "#include <vector>\n#include <unordered_set>\nusing namespace std;\n\nclass Solution {\npublic:\n    bool containsDuplicate(vector<int>& nums) {\n        // Talk through your approach out loud like an interview.\n        // Tip: A set/hash table is a great fit here.\n    }\n};",
+  "tests": [
+    { "name": "Example 1", "input": [1, 2, 3, 3], "expected": true },
+    { "name": "Example 2", "input": [1, 2, 3, 4], "expected": false },
+    { "name": "Edge", "input": [], "expected": false },
+    { "name": "Negatives", "input": [-1, -1], "expected": true }
+  ]
+}

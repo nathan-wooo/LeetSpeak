@@ -1,0 +1,23 @@
+{
+  "id": "zigzag-conversion",
+  "title": "Zigzag Conversion",
+  "difficulty": "Medium",
+  "topic": "String",
+  "prompt": "The string \"PAYPALISHIRING\" is written in a zigzag pattern on a given number of rows. Read the string line by line and return the converted string.",
+  "examples": [
+    { "input": "s = \"PAYPALISHIRING\", numRows = 3", "output": "\"PAHNAPLSIIGYIR\"" },
+    { "input": "s = \"PAYPALISHIRING\", numRows = 4", "output": "\"PINALSIGYAHRPI\"" },
+    { "input": "s = \"A\", numRows = 1", "output": "\"A\"" }
+  ],
+  "constraints": [
+    "1 <= s.length <= 1000",
+    "s consists of English letters (lower-case and upper-case), ',' and '.'.",
+    "1 <= numRows <= 1000"
+  ],
+  "jsStarter": "/**\n * Zigzag Conversion\n * @param {string} s\n * @param {number} numRows\n * @return {string}\n */\nfunction convert(s, numRows) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "#include <string>\n#include <vector>\nusing namespace std;\n\nclass Solution {\npublic:\n    string convert(string s, int numRows) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [
+    { "name": "Example 1", "input": ["PAYPALISHIRING", 3], "expected": "PAHNAPLSIIGYIR" },
+    { "name": "Example 2", "input": ["PAYPALISHIRING", 4], "expected": "PINALSIGYAHRPI" }
+  ]
+}

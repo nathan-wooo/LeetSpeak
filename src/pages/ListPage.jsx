@@ -10,14 +10,14 @@ const ListPage = () => {
   const [selectedTopic, setSelectedTopic] = useState('All Topics');
 
   const questions = [
-    { id: 1, title: "Two Sum", difficulty: "Easy", topic: "Array", solved: false, locked: false },
-    { id: 2, title: "Contains Duplicate", difficulty: "Easy", topic: "Array", solved: false, locked: false },
-    { id: 3, title: "Reverse Linked List", difficulty: "Medium", topic: "Linked List", solved: false, locked: false },
-    { id: 4, title: "Median of Two Sorted Arrays", difficulty: "Hard", topic: "Array", solved: false, locked: false },
-    { id: 5, title: "Longest Palindromic Substring", difficulty: "Medium", topic: "String", solved: false, locked: false },
-    { id: 6, title: "Zigzag Conversion", difficulty: "Medium", topic: "String", solved: false, locked: false },
-    { id: 7, title: "Regular Expression Matching", difficulty: "Hard", topic: "String", solved: false, locked: false },
-    { id: 8, title: "Container With Most Water", difficulty: "Medium", topic: "Array", solved: false, locked: false },
+    { id: 1, title: "Two Sum", problemId: "two-sum", difficulty: "Easy", topic: "Array", solved: false, locked: false },
+    { id: 2, title: "Contains Duplicate", problemId: "contains-duplicate", difficulty: "Easy", topic: "Array", solved: false, locked: false },
+    { id: 3, title: "Reverse Linked List", problemId: "reverse-linked-list", difficulty: "Medium", topic: "Linked List", solved: false, locked: false },
+    { id: 4, title: "Median of Two Sorted Arrays", problemId: "median-of-two-sorted-arrays", difficulty: "Hard", topic: "Array", solved: false, locked: false },
+    { id: 5, title: "Longest Palindromic Substring", problemId: "longest-palindromic-substring", difficulty: "Medium", topic: "String", solved: false, locked: false },
+    { id: 6, title: "Zigzag Conversion", problemId: "zigzag-conversion", difficulty: "Medium", topic: "String", solved: false, locked: false },
+    { id: 7, title: "Regular Expression Matching", problemId: "regular-expression-matching", difficulty: "Hard", topic: "String", solved: false, locked: false },
+    { id: 8, title: "Container With Most Water", problemId: "container-with-most-water", difficulty: "Medium", topic: "Array", solved: false, locked: false },
   ];
 
   const topics = ["All Topics", "Array", "String", "Linked List", "Math", "Dynamic Programming", "Hash Table"];
@@ -36,8 +36,8 @@ const ListPage = () => {
     return "bg-slate-500/10 text-slate-400 border-slate-500/30";
   };
 
-  const handleStartQuestion = (questionId) => {
-    console.log(`Starting question ${questionId}`);
+  const handleStartQuestion = (problemId) => {
+    navigate(`/practice?problem=${problemId}`);
   };
 
   const filteredQuestions = questions.filter(q => {
@@ -187,7 +187,7 @@ const ListPage = () => {
                   </button>
                 ) : (
                   <button
-                    onClick={() => handleStartQuestion(question.id)}
+                    onClick={() => handleStartQuestion(question.problemId)}
                     className="px-4 py-2 bg-purple-500/10 text-purple-400 border border-purple-500/30 rounded-lg hover:bg-purple-500 hover:text-white transition-all font-semibold group-hover:scale-105"
                   >
                     Solve

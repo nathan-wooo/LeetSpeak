@@ -1,0 +1,21 @@
+{
+  "id": "longest-palindromic-substring",
+  "title": "Longest Palindromic Substring",
+  "difficulty": "Medium",
+  "topic": "String",
+  "prompt": "Given a string s, return the longest palindromic substring in s.",
+  "examples": [
+    { "input": "s = \"babad\"", "output": "\"bab\"" },
+    { "input": "s = \"cbbd\"", "output": "\"bb\"" }
+  ],
+  "constraints": [
+    "1 <= s.length <= 1000",
+    "s consist of only digits and English letters."
+  ],
+  "jsStarter": "/**\n * Longest Palindromic Substring\n * @param {string} s\n * @return {string}\n */\nfunction longestPalindrome(s) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    string longestPalindrome(string s) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [
+    { "name": "Example 1", "input": ["babad"], "expected": "bab" },
+    { "name": "Example 2", "input": ["cbbd"], "expected": "bb" }
+  ]
+}

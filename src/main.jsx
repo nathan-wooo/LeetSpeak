@@ -5,6 +5,7 @@ import './index.css'
 import Home from './pages/Home'
 import App from './pages/App'
 import ListPage from './pages/ListPage'
+import Practice from './pages/Practice'
 
 
 createRoot(document.getElementById('root')).render(
@@ -14,7 +15,8 @@ createRoot(document.getElementById('root')).render(
         <Route path="/" element={<Home />} />
         <Route path="/list" element={<ListPage />} />
         <Route path="/interview" element={<App />} />
+        <Route path="/practice" element={<Practice />} />
       </Routes>
     </BrowserRouter>
-  </StrictMode>,
+  </StrictMode>
 )
