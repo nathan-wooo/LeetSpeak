@@ -4,7 +4,7 @@
 
 LeetSpeak is an AI-powered coding practice platform that helps developers prepare for technical interviews by practicing articulating their thought process out loud. Just like in real interviews, you'll explain your approach before coding while receiving real-time, conversational guidance from an AI coach.
 
-![LeetSpeak Logo](public/Transparent_Logo.png)
+![LeetSpeak Logo](public/LeetSpeakImage.png)
 
 ## 🎯 Problem
 
@@ -19,14 +19,14 @@ LeetSpeak bridges this gap by:
 - **Voice-driven practice**: Speak your thought process while solving problems
 - **Real-time AI coaching**: Receive instant, Socratic feedback without spoiling the solution
 - **Progressive unlocking**: Code editing is enabled only after you've articulated the optimal approach
-- **Multi-language support**: Practice with JavaScript and C++ (with more languages coming)
+- **Multi-language support**: Practice with JavaScript, Python, and C++
 
 ## 🚀 Features
 
 - 🎤 **Voice Recognition**: Uses Web Speech API to capture your spoken thoughts
 - 🤖 **AI Coaching**: Google Gemini API provides intelligent, conversational guidance
-- 🔊 **Text-to-Speech**: Inworld AI (with browser fallback) speaks feedback naturally
-- 💻 **Monaco Editor**: Full-featured code editor (same as VS Code) for implementation
+- 🔊 **Text-to-Speech**: Inworld AI speaks feedback naturally
+- 💻 **Monaco Editor**: Full-featured code editor for implementation
 - 🧪 **Test Runner**: Run your code against test cases with instant feedback
 - 💬 **Chat Assistant**: Ask quick questions about syntax and patterns
 - 📊 **Progress Tracking**: Visual progress bar shows how close you are to the solution
@@ -44,21 +44,20 @@ LeetSpeak bridges this gap by:
 
 ### AI & Speech
 - **Google Gemini API** - AI coaching and code analysis
-- **Web Speech API** - Speech recognition (browser-native)
-- **Inworld AI API** - Natural text-to-speech (with browser fallback)
+- **Web Speech API** - Speech recognition
+- **Inworld AI API** - Natural text-to-speech
 
 ### Backend
-- **Node.js/Express** - C++ compilation server
-- **g++** - C++ compiler (required for C++ support)
+- **Node.js/Express** 
+- **g++
 
 ### Deployment
-- **Netlify** - Frontend hosting
-- **Netlify Functions** - Serverless backend support
+- **Netlify** - Frontend hosting with a .tech domain
 
 ## 📋 Prerequisites
 
 - **Node.js** (v18 or higher)
-- **npm** or **yarn**
+- **npm** 
 - **g++** compiler (optional, only needed for C++ support)
   - macOS: `brew install gcc`
   - Ubuntu/Debian: `sudo apt-get install g++`
@@ -225,71 +224,3 @@ Edit `src/utils/inworld.js` or set in `.env`:
 ```javascript
 const INWORLD_VOICE_ID = "Nova"; // Options: Ronald, Nova, Adam, Ashley, etc.
 ```
-
-### Backend Port
-
-Set the `PORT` environment variable in the `server/` directory or edit `server/index.js`:
-
-```javascript
-const PORT = process.env.PORT || 3001;
-```
-
-## 🚢 Deployment
-
-### Frontend (Netlify)
-
-1. Build the project:
-   ```bash
-   npm run build
-   ```
-
-2. Deploy to Netlify:
-   - Connect your repository to Netlify
-   - Set build command: `npm run build`
-   - Set publish directory: `dist`
-   - Add environment variables in Netlify dashboard
-
-### Backend (Optional)
-
-The backend is only needed for C++ compilation. You can:
-- Deploy as a separate service (Heroku, Railway, etc.)
-- Use Netlify Functions (requires configuration)
-- Run locally if C++ support isn't needed
-
-## 🌐 Browser Compatibility
-
-| Feature | Chrome | Edge | Safari | Firefox |
-|---------|--------|------|--------|---------|
-| Voice Recognition | ✅ | ✅ | ✅ | ⚠️ Limited |
-| Text-to-Speech | ✅ | ✅ | ✅ | ✅ |
-| Monaco Editor | ✅ | ✅ | ✅ | ✅ |
-
-**Recommendation**: Use Chrome, Edge, or Safari for the best experience.
-
-## 🤝 Contributing
-
-Contributions are welcome! Feel free to:
-- Add new LeetCode problems
-- Improve the AI coaching prompts
-- Enhance the UI/UX
-- Add support for more languages
-- Report bugs or suggest features
-
-## 📝 License
-
-This project is open source and available under the [MIT License](LICENSE).
-
-## 🙏 Acknowledgments
-
-- **LeetCode** - For problem inspiration
-- **Google Gemini** - AI coaching capabilities
-- **Inworld AI** - Natural text-to-speech
-- **Monaco Editor** - Powerful code editing experience
-
-## 📧 Contact
-
-For questions or feedback, please open an issue on GitHub.
-
----
-
-**Happy practicing! Remember: In real interviews, communication is just as important as coding. LeetSpeak helps you master both.** 🚀
