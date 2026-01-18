@@ -105,6 +105,7 @@ export async function analyzeWithGemini({ transcript, conversationHistory = [], 
       level: 'neutral',
       title: 'API Key Missing',
       message: 'Set VITE_GEMINI_API_KEY in your .env file to enable AI coaching.',
+      progress: 0,
     };
   }
 
@@ -114,6 +115,7 @@ export async function analyzeWithGemini({ transcript, conversationHistory = [], 
       level: 'neutral',
       title: 'Thinking…',
       message: 'Share your thoughts out loud or type them, and I\'ll help guide you!',
+      progress: 0,
     };
   }
 
@@ -135,17 +137,40 @@ Their current code:
 
 IMPORTANT RULES:
 - DO NOT give the answer or complete solution
-- DO remember the conversation context and respond to their latest question/statement
-- DO provide hints and questions to guide them based on what they've already shared
+- DO remember the conversation context and respond NATURALLY to their latest question/statement
+- DO NOT reference the code unless the student's message is explicitly about code or solving the problem
+- For casual greetings or when starting a conversation, encourage them to share their thinking by asking questions like:
+  * "What are your initial thoughts on how to approach this?"
+  * "How are you thinking about solving this problem?"
+  * "What's going through your mind as you read the problem?"
+- For casual greetings or non-problem-related messages, gently redirect them to think about the problem by asking them to share their approach or initial thoughts
+- DO provide hints and questions to guide them based on what they've already shared ABOUT THE PROBLEM
+- Only mention code structure/hints when they're actively discussing their approach or asking about implementation
 - DO ask about time/space complexity when they're going in wrong direction
 - DO encourage them when they're on the right track
-- DO point out potential issues (e.g., "Consider edge cases", "Think about O(n²) vs O(n)")
+- DO point out potential issues (e.g., "Consider edge cases", "Think about O(n²) vs O(n)") ONLY when relevant to their current discussion
 - When the student has clearly identified the optimal approach (e.g., "I'll use a Set" for finding duplicates), encourage them with phrases like "Great approach!" or "Excellent, you've got it! Start coding that solution."
 - Keep responses SHORT (1-2 sentences max)
 - Use a supportive, Socratic teaching style
 - Reference previous parts of the conversation when relevant (e.g., "Yes, that approach you mentioned..." or "Following up on what you said about...")
 
-Respond with ONLY the coaching message, no markdown, no code examples.`;
+PROGRESS TRACKING:
+- Assess how close the student is to a complete, working solution (0-100%)
+- 0-20%: Just starting, no clear approach yet
+- 20-40%: Has identified an approach but not implemented
+- 40-60%: Started implementing, incomplete or has syntax errors
+- 60-80%: Mostly implemented but has logical bugs or missing edge cases
+- 80-95%: Close to solution, minor issues remaining
+- 95-100%: Only when code is complete and correct (check if code has a return statement and proper logic)
+- Base progress on actual code implementation, not just thoughts/approach
+
+Respond with ONLY:
+1. Your coaching message (1-2 sentences)
+2. A new line with "PROGRESS:" followed by a number 0-100 representing how close they are to a complete solution
+
+Example format:
+Great approach! Consider using a hash set for O(n) time complexity.
+PROGRESS: 35`;
 
   try {
     const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
@@ -185,6 +210,7 @@ Respond with ONLY the coaching message, no markdown, no code examples.`;
             level: 'neutral',
             title: 'Model Not Found',
             message: `Model "${GEMINI_MODEL}" not found. Try changing GEMINI_MODEL to "gemini-pro" or check available models.`,
+            progress: 0,
           };
         }
       } catch {
@@ -196,21 +222,39 @@ Respond with ONLY the coaching message, no markdown, no code examples.`;
         level: 'neutral',
         title: 'Analysis Error',
         message: 'Could not analyze. Check your API key and model name.',
+        progress: 0,
       };
     }
 
     const data = await response.json();
-    const message = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || '';
+    const fullResponse = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || '';
 
-    if (!message) {
+    if (!fullResponse) {
       return {
         level: 'neutral',
         title: 'No Response',
         message: 'Could not get analysis. Try again.',
+        progress: 0,
       };
     }
 
-    // Determine level and whether optimal approach is reached
+    // Extract progress percentage from response
+    const progressMatch = fullResponse.match(/PROGRESS:\s*(\d+)/i);
+    let progress = 0;
+    if (progressMatch) {
+      progress = Math.max(0, Math.min(100, parseInt(progressMatch[1], 10)));
+    } else {
+      // Fallback: try to extract from message if AI doesn't follow format exactly
+      const fallbackMatch = fullResponse.match(/progress[:\s]+(\d+)/i);
+      if (fallbackMatch) {
+        progress = Math.max(0, Math.min(100, parseInt(fallbackMatch[1], 10)));
+      }
+    }
+
+    // Extract just the message (remove PROGRESS line)
+    const message = fullResponse.replace(/PROGRESS:\s*\d+.*$/i, '').trim();
+
+    // Determine level and whether optimal approach is reached based on progress and message
     const messageLower = message.toLowerCase();
     let level = 'neutral';
     let title = 'Thinking…';
@@ -220,39 +264,59 @@ Respond with ONLY the coaching message, no markdown, no code examples.`;
     const optimalIndicators = [
       'great approach', 'excellent', 'perfect approach', 'you\'ve got it', 
       'that\'s the right way', 'start coding', 'begin implementing',
-      'optimal solution', 'correct approach', 'ready to code'
+      'optimal solution', 'correct approach', 'ready to code',
+      'excellent plan', 'great plan', 'that\'s a great', 'that\'s an excellent'
     ];
     
-    const hasOptimalApproach = optimalIndicators.some(indicator => 
+    // Check for phrases that indicate they should start coding
+    const codingPromptIndicators = [
+      'how would you translate', 'translate that', 'implement that', 
+      'start translating', 'begin implementing', 'write the code',
+      'code that', 'code it', 'implement it'
+    ];
+    
+    const hasOptimalIndicators = optimalIndicators.some(indicator => 
       messageLower.includes(indicator)
-    ) || (
-      messageLower.includes('good') && 
-      (messageLower.includes('approach') || messageLower.includes('solution'))
     );
+    
+    const hasCodingPrompt = codingPromptIndicators.some(indicator =>
+      messageLower.includes(indicator)
+    );
+    
+    // Unlock if: (optimal indicators with progress >= 30) OR (coding prompt) OR (progress >= 60)
+    const hasOptimalApproach = (hasOptimalIndicators && progress >= 30) || hasCodingPrompt || progress >= 60;
 
     if (hasOptimalApproach) {
       level = 'good';
       title = 'Ready to Code!';
       shouldStopMic = true;
-    } else if (messageLower.includes('good') || messageLower.includes('right track') || messageLower.includes('correct')) {
+    } else if (progress >= 80) {
+      // High progress should also unlock coding phase
       level = 'good';
-      title = 'On Track ✓';
-    } else if (
-      messageLower.includes('wrong') ||
-      messageLower.includes('consider') ||
-      messageLower.includes('think about') ||
-      messageLower.includes('time complexity') ||
-      messageLower.includes('space complexity')
-    ) {
+      title = 'Almost There!';
+      shouldStopMic = true;
+    } else if (progress >= 60) {
+      // Progress >= 60 should unlock coding phase
+      level = 'good';
+      title = 'Making Progress';
+      shouldStopMic = true;
+    } else if (progress >= 40) {
       level = 'warn';
-      title = 'Consider This';
+      title = 'On the Right Track';
+    } else if (progress >= 20) {
+      level = 'warn';
+      title = 'Getting Started';
+    } else {
+      level = 'neutral';
+      title = 'Thinking…';
     }
 
     return {
       level,
       title,
-      message,
+      message: message || 'Share your thoughts and I\'ll guide you!',
       shouldStopMic,
+      progress,
     };
   } catch (error) {
     console.error('Gemini API error:', error);
@@ -260,6 +324,7 @@ Respond with ONLY the coaching message, no markdown, no code examples.`;
       level: 'neutral',
       title: 'Connection Error',
       message: 'Could not connect to AI coach. Check your internet connection.',
+      progress: 0,
     };
   }
 }
