@@ -161,9 +161,9 @@ const Home = () => {
             
             <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
               {[
-                { num: "01", title: "Code & Speak", desc: "Solve problems while verbalizing your approach" },
-                { num: "02", title: "AI Listens", desc: "AI analyzes your code and thinking process" },
-                { num: "03", title: "Get Guided", desc: "Receive feedback to guide you through the problem" }
+                { num: "1", title: "Code & Speak", desc: "Solve problems while verbalizing your approach" },
+                { num: "2", title: "AI Listens", desc: "AI analyzes your code and thinking process" },
+                { num: "3", title: "Get Guided", desc: "Receive feedback to guide you through the problem" }
               ].map((step, idx) => (
                 <div key={idx} className="relative p-6 bg-slate-800/30 border border-slate-700/50 rounded-xl">
                   <div className="text-5xl font-bold text-purple-500/20 mb-3">{step.num}</div>
