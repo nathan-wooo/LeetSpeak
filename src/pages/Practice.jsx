@@ -312,6 +312,7 @@ export default function Practice() {
   const [isCoachTextBlurred, setIsCoachTextBlurred] = useState(false); // Track if coach text is blurred
   const [currentHintIndex, setCurrentHintIndex] = useState(-1); // Track which hint is shown (-1 = none)
   const [solutionRevealed, setSolutionRevealed] = useState(false); // Track if solution is revealed
+  const [showCongratulations, setShowCongratulations] = useState(false); // Track if congratulations modal should show
   const recognitionRef = useRef(null);
   const lastAnalyzedRef = useRef({ transcript: '', code: '' });
   const lastSpokenRef = useRef('');
@@ -827,6 +828,8 @@ export default function Practice() {
         message: 'All tests passed! Great job solving this problem.',
         progress: 100,
       }));
+      // Show congratulations modal
+      setShowCongratulations(true);
     } else if (output?.results && output.results.length > 0) {
       // Calculate progress based on passing tests
       const passedTests = output.results.filter(r => r.pass === true).length;
@@ -858,6 +861,71 @@ export default function Practice() {
 
   return (
     <div className="min-h-screen w-full bg-gray-900 text-slate-200">
+      {/* Congratulations Modal */}
+      {showCongratulations && (
+        <div 
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-sm animate-fade-in"
+          onClick={() => setShowCongratulations(false)}
+        >
+          <div 
+            className="relative bg-gradient-to-br from-slate-900 via-purple-900/20 to-slate-900 border border-purple-500/30 rounded-2xl p-8 md:p-12 max-w-lg w-full mx-4 shadow-2xl animate-scale-in"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Confetti/Sparkle effect */}
+            <div className="absolute inset-0 overflow-hidden rounded-2xl pointer-events-none">
+              <div className="absolute top-4 left-4 w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></div>
+              <div className="absolute top-8 right-8 w-2 h-2 bg-emerald-400 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
+              <div className="absolute bottom-8 left-8 w-2 h-2 bg-purple-400 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
+              <div className="absolute bottom-4 right-4 w-2 h-2 bg-blue-400 rounded-full animate-pulse" style={{ animationDelay: '0.6s' }}></div>
+            </div>
+
+            {/* Content */}
+            <div className="relative z-10 text-center">
+              {/* Icon */}
+              <div className="mb-6 flex justify-center">
+                <div className="relative">
+                  <div className="absolute inset-0 bg-emerald-500/20 rounded-full blur-xl animate-pulse"></div>
+                  <div className="relative w-20 h-20 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-full flex items-center justify-center shadow-lg">
+                    <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              {/* Title */}
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">
+                🎉 Congratulations! 🎉
+              </h2>
+
+              {/* Message */}
+              <p className="text-lg text-slate-300 mb-2">
+                All test cases passed!
+              </p>
+              <p className="text-slate-400 mb-8">
+                You've successfully solved <span className="text-purple-400 font-semibold">{problem?.title}</span>
+              </p>
+
+              {/* Buttons */}
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                <button
+                  onClick={() => navigate('/list')}
+                  className="px-6 py-3 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-semibold rounded-lg transition-all duration-200 shadow-lg hover:shadow-purple-500/50 transform hover:scale-105"
+                >
+                  View More Problems
+                </button>
+                <button
+                  onClick={() => setShowCongratulations(false)}
+                  className="px-6 py-3 bg-slate-700/50 hover:bg-slate-700 text-slate-200 font-semibold rounded-lg transition-all duration-200 border border-slate-600 hover:border-slate-500"
+                >
+                  Continue Coding
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Navbar with back button */}
       <nav className="w-full h-16 flex items-center border-b border-white/10 bg-gray-900/80 backdrop-blur-sm sticky top-0 z-50 px-6 md:px-8">
         <button 
