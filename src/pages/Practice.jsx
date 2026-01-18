@@ -1286,6 +1286,27 @@ export default function Practice() {
               <div className="min-h-0 overflow-hidden relative">
                 {!inCodingPhase ? (
                   <div className="absolute inset-0 z-10 flex items-center justify-center bg-slate-900/95 backdrop-blur-sm">
+                    {/* Subtle skip button for debugging */}
+                    <button
+                      onClick={() => {
+                        // Simulate reaching optimal approach
+                        setInCodingPhase(true);
+                        if (isListening) {
+                          stopListening();
+                        }
+                        // Set coach state as if AI said "Yes you got it"
+                        setCoach({
+                          level: 'good',
+                          title: 'Ready to Code!',
+                          message: 'You have the optimal approach! Start implementing. I\'ll watch your code and help if needed.',
+                          progress: 60, // Set progress to unlock threshold
+                        });
+                      }}
+                      className="absolute bottom-4 right-4 text-xs text-slate-600 hover:text-slate-400 opacity-30 hover:opacity-60 transition-all px-2 py-1 rounded border border-slate-700/30 hover:border-slate-600/50 bg-slate-800/20"
+                      title="Skip to coding phase (debug)"
+                    >
+                      Skip
+                    </button>
                     <div className="text-center space-y-3 px-6">
                       <div className="text-lg font-semibold text-slate-200">
                         Voice Phase Active
