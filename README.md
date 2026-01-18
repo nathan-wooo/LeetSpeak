@@ -49,7 +49,8 @@ LeetSpeak bridges this gap by:
 
 ### Backend
 - **Node.js/Express** 
-- **g++
+- **g++**
+- **Firebase**
 
 ### Deployment
 - **Netlify** - Frontend hosting with a .tech domain
@@ -60,7 +61,6 @@ LeetSpeak bridges this gap by:
 - **npm** 
 - **g++** compiler (optional, only needed for C++ support)
   - macOS: `brew install gcc`
-  - Ubuntu/Debian: `sudo apt-get install g++`
   - Windows: Install [MinGW](https://www.mingw-w64.org/)
 
 ## 🚀 Getting Started
