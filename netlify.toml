@@ -1,0 +1,22 @@
+# Netlify configuration
+[build]
+  publish = "dist"
+
+# Force HTTPS for all requests
+[[redirects]]
+  from = "http://leetspeak.tech/*"
+  to = "https://leetspeak.tech/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://www.leetspeak.tech/*"
+  to = "https://www.leetspeak.tech/:splat"
+  status = 301
+  force = true
+
+# SPA routing (existing redirect)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
