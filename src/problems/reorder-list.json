@@ -1,0 +1,28 @@
+{
+  "id": "reorder-list",
+  "title": "Reorder List",
+  "difficulty": "Medium",
+  "topic": "Linked List",
+  "prompt": "You are given the head of a singly linked-list. The list can be represented as: L0 → L1 → … → Ln - 1 → Ln. Reorder the list to be on the following form: L0 → Ln → L1 → Ln - 1 → L2 → Ln - 2 → …",
+  "examples": [
+    {"input": "head = [1,2,3,4]", "output": "[1,4,2,3]"},
+    {"input": "head = [1,2,3,4,5]", "output": "[1,5,2,4,3]"}
+  ],
+  "constraints": [
+    "1 <= number of nodes <= 5 * 10^4",
+    "-1000 <= Node.val <= 1000"
+  ],
+  "jsStarter": "/**\n * Reorder List\n * @param {ListNode} head\n * @return {void}\n */\nfunction reorderList(head) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "class Solution {\npublic:\n    void reorderList(ListNode* head) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [],
+  "hints": [
+    "Find the middle of the list (slow/fast pointers). Split into two halves.",
+    "Reverse the second half. Then merge: take one from first half, one from reversed second half, alternating.",
+    "Finding middle: slow moves 1, fast moves 2. When fast reaches end, slow is at middle.",
+    "O(n) time, O(1) space."
+  ],
+  "solution": {
+    "javascript": "function reorderList(head) {\n  let slow = head, fast = head;\n  while (fast?.next) { slow = slow.next; fast = fast.next.next; }\n  let second = slow.next; slow.next = null;\n  let prev = null;\n  while (second) { const next = second.next; second.next = prev; prev = second; second = next; }\n  let first = head; second = prev;\n  while (second) {\n    const t1 = first.next, t2 = second.next;\n    first.next = second; second.next = t1;\n    first = t1; second = t2;\n  }\n}",
+    "cpp": "void reorderList(ListNode* head) {\n    ListNode *slow = head, *fast = head;\n    while (fast && fast->next) { slow = slow->next; fast = fast->next->next; }\n    ListNode* second = slow->next; slow->next = nullptr;\n    ListNode* prev = nullptr;\n    while (second) { ListNode* next = second->next; second->next = prev; prev = second; second = next; }\n    ListNode* first = head; second = prev;\n    while (second) {\n        ListNode* t1 = first->next, *t2 = second->next;\n        first->next = second; second->next = t1;\n        first = t1; second = t2;\n    }\n}"
+  }
+}

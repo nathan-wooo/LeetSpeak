@@ -1,0 +1,28 @@
+{
+  "id": "encode-and-decode-strings",
+  "title": "Encode and Decode Strings",
+  "difficulty": "Medium",
+  "topic": "Arrays & Hashing",
+  "prompt": "Design an algorithm to encode a list of strings to a string and decode a string to a list of strings. Implement the encode and decode methods. You are not allowed to solve the problem using any serialize methods (such as eval).",
+  "examples": [
+    {"input": "Input: [\"Hello\",\"World\"]", "output": "Encoded then decoded gives [\"Hello\",\"World\"]"}
+  ],
+  "constraints": [
+    "1 <= strs.length <= 200",
+    "0 <= strs[i].length <= 200",
+    "strs[i] contains any possible characters out of 256 valid ASCII characters."
+  ],
+  "jsStarter": "/**\n * Encode and Decode Strings\n */\nfunction encode(strs) {\n  // Your code here\n}\nfunction decode(s) {\n  // Your code here\n}",
+  "cppStarter": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    string encode(vector<string>& strs) { }\n    vector<string> decode(string s) { }\n};",
+  "tests": [],
+  "hints": [
+    "You need a way to delimit strings. Use length prefix: encode as \"4#word4#word\" so you know where each string ends.",
+    "Format: length + '#' + string. To decode, read the number before '#', then read that many chars.",
+    "Handle empty strings: \"0#\" for empty string.",
+    "This approach handles any character including '#' in the string since we use length."
+  ],
+  "solution": {
+    "javascript": "function encode(strs) {\n  return strs.map(s => s.length + '#' + s).join('');\n}\nfunction decode(s) {\n  const result = [];\n  let i = 0;\n  while (i < s.length) {\n    let j = i;\n    while (s[j] !== '#') j++;\n    const len = parseInt(s.slice(i, j), 10);\n    result.push(s.slice(j + 1, j + 1 + len));\n    i = j + 1 + len;\n  }\n  return result;\n}",
+    "cpp": "string encode(vector<string>& strs) {\n    string result;\n    for (string& s : strs) result += to_string(s.size()) + '#' + s;\n    return result;\n}\nvector<string> decode(string s) {\n    vector<string> result;\n    int i = 0;\n    while (i < s.size()) {\n        int j = i;\n        while (s[j] != '#') j++;\n        int len = stoi(s.substr(i, j - i));\n        result.push_back(s.substr(j + 1, len));\n        i = j + 1 + len;\n    }\n    return result;\n}"
+  }
+}

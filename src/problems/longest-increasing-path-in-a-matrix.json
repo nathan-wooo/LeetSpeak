@@ -1,0 +1,20 @@
+{
+  "id": "longest-increasing-path-in-a-matrix",
+  "title": "Longest Increasing Path In a Matrix",
+  "difficulty": "Hard",
+  "topic": "2-D Dynamic Programming",
+  "prompt": "See the full problem on LeetCode: https://leetcode.com/problems/longest-increasing-path-in-a-matrix/\n\nNeetcode walkthrough: https://www.youtube.com/watch?v=wCc_nd-GiEc\n\nThis is a placeholder. Add full problem content (prompt, examples, tests) to enable Run and hints.",
+  "examples": [],
+  "constraints": [],
+  "jsStarter": "/**\n * Longest Increasing Path In a Matrix\n * See: https://leetcode.com/problems/longest-increasing-path-in-a-matrix/\n */\nfunction solution(input) {\n  // Your code here\n  return null;\n}",
+  "cppStarter": "#include <vector>\nusing namespace std;\n\n// See: https://leetcode.com/problems/longest-increasing-path-in-a-matrix/\nclass Solution {\npublic:\n    // Implement your solution here\n};",
+  "tests": [],
+  "hints": [
+    "Watch Neetcode's explanation: https://www.youtube.com/watch?v=wCc_nd-GiEc",
+    "Full problem: https://leetcode.com/problems/longest-increasing-path-in-a-matrix/"
+  ],
+  "solution": {
+    "javascript": "// Add solution when you solve it",
+    "cpp": "// Add solution when you solve it"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "distinct-subsequences",
+  "title": "Distinct Subsequences",
+  "difficulty": "Hard",
+  "topic": "2-D Dynamic Programming",
+  "prompt": "See the full problem on LeetCode: https://leetcode.com/problems/distinct-subsequences/\n\nNeetcode walkthrough: https://www.youtube.com/watch?v=-RDzMJ33nx8\n\nThis is a placeholder. Add full problem content (prompt, examples, tests) to enable Run and hints.",
+  "examples": [],
+  "constraints": [],
+  "jsStarter": "/**\n * Distinct Subsequences\n * See: https://leetcode.com/problems/distinct-subsequences/\n */\nfunction solution(input) {\n  // Your code here\n  return null;\n}",
+  "cppStarter": "#include <vector>\nusing namespace std;\n\n// See: https://leetcode.com/problems/distinct-subsequences/\nclass Solution {\npublic:\n    // Implement your solution here\n};",
+  "tests": [],
+  "hints": [
+    "Watch Neetcode's explanation: https://www.youtube.com/watch?v=-RDzMJ33nx8",
+    "Full problem: https://leetcode.com/problems/distinct-subsequences/"
+  ],
+  "solution": {
+    "javascript": "// Add solution when you solve it",
+    "cpp": "// Add solution when you solve it"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "id": "word-search",
+  "title": "Word Search",
+  "difficulty": "Medium",
+  "topic": "Backtracking",
+  "prompt": "Given an m x n grid of characters board and a string word, return true if word exists in the grid. The word can be constructed from letters of sequentially adjacent cells, where adjacent cells are horizontally or vertically neighboring. The same letter cell may not be used more than once.",
+  "examples": [
+    {"input": "board = [[\"A\",\"B\",\"C\",\"E\"],[\"S\",\"F\",\"C\",\"S\"],[\"A\",\"D\",\"E\",\"E\"]], word = \"ABCCED\"", "output": "true"},
+    {"input": "board = [[\"A\",\"B\",\"C\",\"E\"],[\"S\",\"F\",\"C\",\"S\"],[\"A\",\"D\",\"E\",\"E\"]], word = \"ABCB\"", "output": "false"}
+  ],
+  "constraints": [
+    "m == board.length",
+    "n = board[i].length",
+    "1 <= m, n <= 6",
+    "1 <= word.length <= 15"
+  ],
+  "jsStarter": "/**\n * Word Search\n * @param {character[][]} board\n * @param {string} word\n * @return {boolean}\n */\nfunction exist(board, word) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "class Solution {\npublic:\n    bool exist(vector<vector<char>>& board, string word) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [],
+  "hints": [
+    "DFS from each cell that matches the first letter. Use visited set or mark cell temporarily.",
+    "Backtrack: for each (r,c), if board[r][c] matches word[i], mark visited, recurse on 4 neighbors with word[i+1], unmark.",
+    "Base: if i === word.length, return true. Bounds check and visited check.",
+    "O(m*n*4^len) - explore 4 directions at each step."
+  ],
+  "solution": {
+    "javascript": "function exist(board, word) {\n  const m = board.length, n = board[0].length;\n  const dirs = [[0,1],[1,0],[0,-1],[-1,0]];\n  function dfs(r, c, i) {\n    if (i === word.length) return true;\n    if (r < 0 || r >= m || c < 0 || c >= n || board[r][c] !== word[i]) return false;\n    const ch = board[r][c]; board[r][c] = '.';\n    for (const [dr, dc] of dirs) if (dfs(r+dr, c+dc, i+1)) return true;\n    board[r][c] = ch; return false;\n  }\n  for (let r = 0; r < m; r++) for (let c = 0; c < n; c++) if (dfs(r, c, 0)) return true;\n  return false;\n}",
+    "cpp": "bool exist(vector<vector<char>>& board, string word) {\n    int m = board.size(), n = board[0].size();\n    int dirs[4][2] = {{0,1},{1,0},{0,-1},{-1,0}};\n    function<bool(int,int,int)> dfs = [&](int r, int c, int i) {\n        if (i == word.size()) return true;\n        if (r<0||r>=m||c<0||c>=n||board[r][c]!=word[i]) return false;\n        char ch = board[r][c]; board[r][c] = '.';\n        for (int d = 0; d < 4; d++) if (dfs(r+dirs[d][0], c+dirs[d][1], i+1)) return true;\n        board[r][c] = ch; return false;\n    };\n    for (int r=0;r<m;r++) for (int c=0;c<n;c++) if (dfs(r,c,0)) return true;\n    return false;\n}"
+  }
+}

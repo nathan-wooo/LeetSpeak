@@ -1,0 +1,20 @@
+{
+  "id": "insert-interval",
+  "title": "Insert Interval",
+  "difficulty": "Medium",
+  "topic": "Intervals",
+  "prompt": "See the full problem on LeetCode: https://leetcode.com/problems/insert-interval/\n\nNeetcode walkthrough: https://www.youtube.com/watch?v=A8NUOmlwOlM\n\nThis is a placeholder. Add full problem content (prompt, examples, tests) to enable Run and hints.",
+  "examples": [],
+  "constraints": [],
+  "jsStarter": "/**\n * Insert Interval\n * See: https://leetcode.com/problems/insert-interval/\n */\nfunction solution(input) {\n  // Your code here\n  return null;\n}",
+  "cppStarter": "#include <vector>\nusing namespace std;\n\n// See: https://leetcode.com/problems/insert-interval/\nclass Solution {\npublic:\n    // Implement your solution here\n};",
+  "tests": [],
+  "hints": [
+    "Watch Neetcode's explanation: https://www.youtube.com/watch?v=A8NUOmlwOlM",
+    "Full problem: https://leetcode.com/problems/insert-interval/"
+  ],
+  "solution": {
+    "javascript": "// Add solution when you solve it",
+    "cpp": "// Add solution when you solve it"
+  }
+}

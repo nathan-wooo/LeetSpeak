@@ -1,0 +1,28 @@
+{
+  "id": "subtree-of-another-tree",
+  "title": "Subtree of Another Tree",
+  "difficulty": "Easy",
+  "topic": "Trees",
+  "prompt": "Given the roots of two binary trees root and subRoot, return true if there is a subtree of root with the same structure and node values of subRoot and false otherwise. A subtree includes a node and all of its descendants.",
+  "examples": [
+    {"input": "root = [3,4,5,1,2], subRoot = [4,1,2]", "output": "true"},
+    {"input": "root = [3,4,5,1,2,null,null,null,null,0], subRoot = [4,1,2]", "output": "false"}
+  ],
+  "constraints": [
+    "1 <= number of nodes <= 2000",
+    "-10^4 <= Node.val <= 10^4"
+  ],
+  "jsStarter": "/**\n * Subtree of Another Tree\n * @param {TreeNode} root\n * @param {TreeNode} subRoot\n * @return {boolean}\n */\nfunction isSubtree(root, subRoot) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "class Solution {\npublic:\n    bool isSubtree(TreeNode* root, TreeNode* subRoot) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [],
+  "hints": [
+    "For each node in root, check if the tree starting at that node matches subRoot. Use isSameTree as a helper.",
+    "If root is null, return false (subRoot is non-empty). If current node matches subRoot (isSameTree), return true.",
+    "Otherwise recursively check isSubtree(root.left, subRoot) || isSubtree(root.right, subRoot).",
+    "O(m * n) worst case - for each of m nodes we may compare up to n nodes."
+  ],
+  "solution": {
+    "javascript": "function isSubtree(root, subRoot) {\n  if (!root) return false;\n  if (isSame(root, subRoot)) return true;\n  return isSubtree(root.left, subRoot) || isSubtree(root.right, subRoot);\n}\nfunction isSame(p, q) {\n  if (!p && !q) return true;\n  if (!p || !q || p.val !== q.val) return false;\n  return isSame(p.left, q.left) && isSame(p.right, q.right);\n}",
+    "cpp": "bool isSubtree(TreeNode* root, TreeNode* subRoot) {\n    if (!root) return false;\n    if (isSame(root, subRoot)) return true;\n    return isSubtree(root->left, subRoot) || isSubtree(root->right, subRoot);\n}\nbool isSame(TreeNode* p, TreeNode* q) {\n    if (!p && !q) return true;\n    if (!p || !q || p->val != q->val) return false;\n    return isSame(p->left, q->left) && isSame(p->right, q->right);\n}"
+  }
+}

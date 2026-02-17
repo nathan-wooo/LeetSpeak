@@ -1,0 +1,29 @@
+{
+  "id": "count-good-nodes-in-binary-tree",
+  "title": "Count Good Nodes In Binary Tree",
+  "difficulty": "Medium",
+  "topic": "Trees",
+  "prompt": "Given a binary tree root, a node X in the tree is named good if in the path from root to X there are no nodes with a value greater than X. Return the number of good nodes in the binary tree.",
+  "examples": [
+    {"input": "root = [3,1,4,3,null,1,5]", "output": "4"},
+    {"input": "root = [3,3,null,4,2]", "output": "3"},
+    {"input": "root = [1]", "output": "1"}
+  ],
+  "constraints": [
+    "1 <= number of nodes <= 10^5",
+    "-10^4 <= Node.val <= 10^4"
+  ],
+  "jsStarter": "/**\n * Count Good Nodes In Binary Tree\n * @param {TreeNode} root\n * @return {number}\n */\nfunction goodNodes(root) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "class Solution {\npublic:\n    int goodNodes(TreeNode* root) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [],
+  "hints": [
+    "DFS: pass the maximum value seen so far in the path. At each node, if node.val >= maxSoFar, it's good. Update maxSoFar for children.",
+    "Base: null returns 0. Count = 1 if good, else 0. Add recursive counts from left and right with updated max.",
+    "maxSoFar for children = max(maxSoFar, node.val).",
+    "O(n) time, O(h) space."
+  ],
+  "solution": {
+    "javascript": "function goodNodes(root) {\n  function dfs(node, maxSoFar) {\n    if (!node) return 0;\n    const count = node.val >= maxSoFar ? 1 : 0;\n    const newMax = Math.max(maxSoFar, node.val);\n    return count + dfs(node.left, newMax) + dfs(node.right, newMax);\n  }\n  return dfs(root, -Infinity);\n}",
+    "cpp": "int goodNodes(TreeNode* root) {\n    function<int(TreeNode*, int)> dfs = [&](TreeNode* node, int maxSoFar) {\n        if (!node) return 0;\n        int count = node->val >= maxSoFar ? 1 : 0;\n        int newMax = max(maxSoFar, node->val);\n        return count + dfs(node->left, newMax) + dfs(node->right, newMax);\n    };\n    return dfs(root, INT_MIN);\n}"
+  }
+}

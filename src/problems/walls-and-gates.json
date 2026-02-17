@@ -1,0 +1,28 @@
+{
+  "id": "walls-and-gates",
+  "title": "Walls And Gates",
+  "difficulty": "Medium",
+  "topic": "Graphs",
+  "prompt": "You are given an m x n grid rooms. Fill each empty room with the distance to its nearest gate. If it is impossible to reach a gate, it should be filled with 2^31 - 1. A gate is at (r,c) if rooms[r][c] == 0. Empty room is -1. Walls are -1.",
+  "examples": [
+    {"input": "rooms = [[2147483647,-1,0,2147483647],[2147483647,2147483647,2147483647,-1],[2147483647,-1,2147483647,-1],[0,-1,2147483647,2147483647]]", "output": "Rooms updated with distances to nearest gate"}
+  ],
+  "constraints": [
+    "m == rooms.length",
+    "n == rooms[i].length",
+    "1 <= m, n <= 250"
+  ],
+  "jsStarter": "/**\n * Walls And Gates\n * @param {number[][]} rooms\n * @return {void}\n */\nfunction wallsAndGates(rooms) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "class Solution {\npublic:\n    void wallsAndGates(vector<vector<int>>& rooms) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [],
+  "hints": [
+    "Multi-source BFS from all gates (value 0). For each empty room, the first time we reach it is the shortest distance.",
+    "Queue all gates with dist 0. When visiting (r,c), try 4 neighbors: if empty (INF), set rooms[nr][nc] = dist+1, enqueue.",
+    "This way each empty room gets the distance from the nearest gate.",
+    "O(m*n) time."
+  ],
+  "solution": {
+    "javascript": "function wallsAndGates(rooms) {\n  const m = rooms.length, n = rooms[0].length, INF = 2147483647;\n  const q = [];\n  for (let r=0;r<m;r++) for (let c=0;c<n;c++) if (rooms[r][c]===0) q.push([r,c]);\n  const dirs = [[1,0],[-1,0],[0,1],[0,-1]];\n  let dist = 0;\n  while (q.length) {\n    const size = q.length;\n    for (let i=0;i<size;i++) {\n      const [r,c] = q.shift();\n      for (const [dr,dc] of dirs) {\n        const nr = r+dr, nc = c+dc;\n        if (nr>=0&&nr<m&&nc>=0&&nc<n&&rooms[nr][nc]===INF) { rooms[nr][nc]=dist+1; q.push([nr,nc]); }\n      }\n    }\n    dist++;\n  }\n}",
+    "cpp": "void wallsAndGates(vector<vector<int>>& rooms) {\n    int m = rooms.size(), n = rooms[0].size(), INF = 2147483647;\n    queue<pair<int,int>> q;\n    for (int r=0;r<m;r++) for (int c=0;c<n;c++) if (rooms[r][c]==0) q.push({r,c});\n    int dirs[4][2] = {{1,0},{-1,0},{0,1},{0,-1}}, dist = 0;\n    while (!q.empty()) {\n        int sz = q.size();\n        while (sz--) {\n            auto [r,c] = q.front(); q.pop();\n            for (int d=0;d<4;d++) {\n                int nr = r+dirs[d][0], nc = c+dirs[d][1];\n                if (nr>=0&&nr<m&&nc>=0&&nc<n&&rooms[nr][nc]==INF) { rooms[nr][nc]=dist+1; q.push({nr,nc}); }\n            }\n        }\n        dist++;\n    }\n}"
+  }
+}

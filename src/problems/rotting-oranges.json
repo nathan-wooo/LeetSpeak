@@ -1,0 +1,30 @@
+{
+  "id": "rotting-oranges",
+  "title": "Rotting Oranges",
+  "difficulty": "Medium",
+  "topic": "Graphs",
+  "prompt": "You are given an m x n grid where each cell can have one of three values: 0 representing an empty cell, 1 representing a fresh orange, or 2 representing a rotten orange. Every minute, any fresh orange that is 4-directionally adjacent to a rotten orange becomes rotten. Return the minimum number of minutes that must elapse until no cell has a fresh orange. If this is impossible, return -1.",
+  "examples": [
+    {"input": "grid = [[2,1,1],[1,1,0],[0,1,1]]", "output": "4"},
+    {"input": "grid = [[2,1,1],[0,1,1],[1,0,1]]", "output": "-1"},
+    {"input": "grid = [[0,2]]", "output": "0"}
+  ],
+  "constraints": [
+    "m == grid.length",
+    "n == grid[i].length",
+    "1 <= m, n <= 10"
+  ],
+  "jsStarter": "/**\n * Rotting Oranges\n * @param {number[][]} grid\n * @return {number}\n */\nfunction orangesRotting(grid) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "class Solution {\npublic:\n    int orangesRotting(vector<vector<int>>& grid) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [],
+  "hints": [
+    "BFS from all rotten oranges (multi-source BFS). Track minutes (levels). Each minute = one BFS level.",
+    "Count fresh oranges initially. When we rot one, decrement. If fresh > 0 at end, return -1.",
+    "Queue stores (r, c). For each level, process all in queue, add newly rotten to next level.",
+    "O(m*n) time."
+  ],
+  "solution": {
+    "javascript": "function orangesRotting(grid) {\n  const m = grid.length, n = grid[0].length;\n  let fresh = 0, q = [];\n  for (let r=0;r<m;r++) for (let c=0;c<n;c++) {\n    if (grid[r][c]===1) fresh++;\n    if (grid[r][c]===2) q.push([r,c]);\n  }\n  const dirs = [[1,0],[-1,0],[0,1],[0,-1]];\n  let mins = 0;\n  while (q.length && fresh > 0) {\n    const next = [];\n    for (const [r,c] of q) {\n      for (const [dr,dc] of dirs) {\n        const nr = r+dr, nc = c+dc;\n        if (nr>=0&&nr<m&&nc>=0&&nc<n&&grid[nr][nc]===1) { grid[nr][nc]=2; fresh--; next.push([nr,nc]); }\n      }\n    }\n    q = next; if (q.length) mins++;\n  }\n  return fresh > 0 ? -1 : mins;\n}",
+    "cpp": "int orangesRotting(vector<vector<int>>& grid) {\n    int m = grid.size(), n = grid[0].size(), fresh = 0;\n    queue<pair<int,int>> q;\n    for (int r=0;r<m;r++) for (int c=0;c<n;c++) {\n        if (grid[r][c]==1) fresh++;\n        if (grid[r][c]==2) q.push({r,c});\n    }\n    int dirs[4][2] = {{1,0},{-1,0},{0,1},{0,-1}}, mins = 0;\n    while (!q.empty() && fresh) {\n        int sz = q.size();\n        while (sz--) {\n            auto [r,c] = q.front(); q.pop();\n            for (int d=0;d<4;d++) {\n                int nr = r+dirs[d][0], nc = c+dirs[d][1];\n                if (nr>=0&&nr<m&&nc>=0&&nc<n&&grid[nr][nc]==1) { grid[nr][nc]=2; fresh--; q.push({nr,nc}); }\n            }\n        }\n        if (!q.empty()) mins++;\n    }\n    return fresh ? -1 : mins;\n}"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "id": "binary-tree-right-side-view",
+  "title": "Binary Tree Right Side View",
+  "difficulty": "Medium",
+  "topic": "Trees",
+  "prompt": "Given the root of a binary tree, imagine yourself standing on the right side of it. Return the values of the nodes you can see ordered from top to bottom.",
+  "examples": [
+    {"input": "root = [1,2,3,null,5,null,4]", "output": "[1,3,4]"},
+    {"input": "root = [1,null,3]", "output": "[1,3]"},
+    {"input": "root = []", "output": "[]"}
+  ],
+  "constraints": [
+    "0 <= number of nodes <= 100",
+    "-100 <= Node.val <= 100"
+  ],
+  "jsStarter": "/**\n * Binary Tree Right Side View\n * @param {TreeNode} root\n * @return {number[]}\n */\nfunction rightSideView(root) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "class Solution {\npublic:\n    vector<int> rightSideView(TreeNode* root) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [],
+  "hints": [
+    "BFS level order: the last node of each level is the rightmost. Or traverse right-to-left and take first of each level.",
+    "DFS: visit right child before left. For each level, the first node we see (rightmost) gets added. Track result.length to know if we've seen this level.",
+    "Recursive: pass level. If result.length === level, we haven't seen this level - push the value. Visit right before left.",
+    "O(n) time."
+  ],
+  "solution": {
+    "javascript": "function rightSideView(root) {\n  const result = [];\n  function dfs(node, level) {\n    if (!node) return;\n    if (level === result.length) result.push(node.val);\n    dfs(node.right, level + 1);\n    dfs(node.left, level + 1);\n  }\n  dfs(root, 0);\n  return result;\n}",
+    "cpp": "vector<int> rightSideView(TreeNode* root) {\n    vector<int> result;\n    function<void(TreeNode*, int)> dfs = [&](TreeNode* node, int level) {\n        if (!node) return;\n        if (level == result.size()) result.push_back(node->val);\n        dfs(node->right, level + 1);\n        dfs(node->left, level + 1);\n    };\n    dfs(root, 0);\n    return result;\n}"
+  }
+}

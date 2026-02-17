@@ -1,0 +1,28 @@
+{
+  "id": "alien-dictionary",
+  "title": "Alien Dictionary",
+  "difficulty": "Hard",
+  "topic": "Graphs",
+  "prompt": "There is a new alien language that uses the English alphabet. However, the order among the letters is unknown to you. You are given a list of strings words from the alien language's dictionary, where the strings are sorted lexicographically by the rules of this new language. Return a string of the unique letters in the new alien language sorted in lexicographically increasing order by the new language's rules. If there is no solution, return empty string. If multiple solutions exist, return any of them.",
+  "examples": [
+    {"input": "words = [\"wrt\",\"wrf\",\"er\",\"ett\",\"rftt\"]", "output": "\"wertf\""},
+    {"input": "words = [\"z\",\"x\"]", "output": "\"zx\""}
+  ],
+  "constraints": [
+    "1 <= words.length <= 100",
+    "1 <= words[i].length <= 100"
+  ],
+  "jsStarter": "/**\n * Alien Dictionary\n * @param {string[]} words\n * @return {string}\n */\nfunction alienOrder(words) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "class Solution {\npublic:\n    string alienOrder(vector<string>& words) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [],
+  "hints": [
+    "Build graph from adjacent words: compare word[i] and word[i+1], find first differing char, add edge c1 -> c2.",
+    "Topological sort. If cycle, return empty. Kahn's or DFS. Need to include all chars that appear.",
+    "Handle prefix case: if word[i] is prefix of word[i+1], invalid (longer should not come before shorter).",
+    "O(C) where C = total chars in words."
+  ],
+  "solution": {
+    "javascript": "function alienOrder(words) {\n  const adj = {}, indeg = {};\n  for (const w of words) for (const c of w) { adj[c] = adj[c] || []; indeg[c] = indeg[c] || 0; }\n  for (let i = 0; i < words.length - 1; i++) {\n    const a = words[i], b = words[i+1];\n    if (a.length > b.length && a.startsWith(b)) return '';\n    for (let j = 0; j < Math.min(a.length, b.length); j++) {\n      if (a[j] !== b[j]) { adj[a[j]].push(b[j]); indeg[b[j]]++; break; }\n    }\n  }\n  const q = Object.keys(indeg).filter(c => indeg[c] === 0);\n  let result = '';\n  while (q.length) {\n    const c = q.shift(); result += c;\n    for (const n of adj[c]) if (--indeg[n] === 0) q.push(n);\n  }\n  return result.length === Object.keys(indeg).length ? result : '';\n}",
+    "cpp": "string alienOrder(vector<string>& words) {\n    unordered_map<char, vector<char>> adj;\n    unordered_map<char, int> indeg;\n    for (auto& w : words) for (char c : w) { adj[c]; indeg[c]; }\n    for (int i = 0; i < words.size()-1; i++) {\n        string a = words[i], b = words[i+1];\n        if (a.size() > b.size() && a.substr(0, b.size()) == b) return \"\";\n        for (int j = 0; j < min(a.size(), b.size()); j++) {\n            if (a[j] != b[j]) { adj[a[j]].push_back(b[j]); indeg[b[j]]++; break; }\n        }\n    }\n    queue<char> q;\n    for (auto& [c, d] : indeg) if (d == 0) q.push(c);\n    string result;\n    while (!q.empty()) {\n        char c = q.front(); q.pop(); result += c;\n        for (char n : adj[c]) if (--indeg[n] == 0) q.push(n);\n    }\n    return result.size() == indeg.size() ? result : \"\";\n}"
+  }
+}

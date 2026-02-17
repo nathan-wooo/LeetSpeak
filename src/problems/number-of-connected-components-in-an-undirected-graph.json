@@ -1,0 +1,28 @@
+{
+  "id": "number-of-connected-components-in-an-undirected-graph",
+  "title": "Number of Connected Components In An Undirected Graph",
+  "difficulty": "Medium",
+  "topic": "Graphs",
+  "prompt": "You have a graph of n nodes. You are given an integer n and an array edges where edges[i] = [ai, bi] indicates that there is an edge between ai and bi. Return the number of connected components of the graph.",
+  "examples": [
+    {"input": "n = 5, edges = [[0,1],[1,2],[3,4]]", "output": "2"},
+    {"input": "n = 5, edges = [[0,1],[1,2],[2,3],[3,4]]", "output": "1"}
+  ],
+  "constraints": [
+    "1 <= n <= 2000",
+    "0 <= edges.length <= 5000"
+  ],
+  "jsStarter": "/**\n * Number of Connected Components In An Undirected Graph\n * @param {number} n\n * @param {number[][]} edges\n * @return {number}\n */\nfunction countComponents(n, edges) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "class Solution {\npublic:\n    int countComponents(int n, vector<vector<int>>& edges) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [],
+  "hints": [
+    "Union-Find: start with n components. For each edge, union the two nodes. Decrement count when we merge two different components.",
+    "Or DFS/BFS: count number of times we need to start a traversal to visit all nodes.",
+    "Build adjacency list, iterate nodes, if unvisited run DFS and increment count.",
+    "O(n + E) time."
+  ],
+  "solution": {
+    "javascript": "function countComponents(n, edges) {\n  const parent = Array(n).fill(0).map((_, i) => i);\n  let count = n;\n  function find(x) { return parent[x] === x ? x : (parent[x] = find(parent[x])); }\n  function union(a, b) {\n    const pa = find(a), pb = find(b);\n    if (pa !== pb) { parent[pa] = pb; count--; }\n  }\n  for (const [u, v] of edges) union(u, v);\n  return count;\n}",
+    "cpp": "int countComponents(int n, vector<vector<int>>& edges) {\n    vector<int> parent(n);\n    iota(parent.begin(), parent.end(), 0);\n    int count = n;\n    function<int(int)> find = [&](int x) { return parent[x] == x ? x : parent[x] = find(parent[x]); };\n    auto uni = [&](int a, int b) {\n        int pa = find(a), pb = find(b);\n        if (pa != pb) { parent[pa] = pb; count--; }\n    };\n    for (auto& e : edges) uni(e[0], e[1]);\n    return count;\n}"
+  }
+}

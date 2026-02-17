@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, Filter, ArrowLeft, Lock, CheckCircle2, LogOut } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { db } from '../utils/firebase';
 import { collection, getDocs } from 'firebase/firestore';
+import neetcode150 from '../data/neetcode150.json';
 
 const ListPage = () => {
   const navigate = useNavigate();
@@ -12,6 +13,12 @@ const ListPage = () => {
   const [selectedDifficulty, setSelectedDifficulty] = useState('All');
   const [selectedTopic, setSelectedTopic] = useState('All Topics');
   const [completedProblems, setCompletedProblems] = useState(new Set());
+
+  const questions = neetcode150;
+  const topics = useMemo(
+    () => ['All Topics', ...[...new Set(neetcode150.map((q) => q.topic).filter(Boolean))].sort()],
+    []
+  );
 
   // Fetch completed problems from Firestore
   useEffect(() => {
@@ -34,19 +41,7 @@ const ListPage = () => {
     fetchCompletions();
   }, [currentUser]);
 
-  const questions = [
-    { id: 1, title: "Two Sum", problemId: "two-sum", difficulty: "Easy", topic: "Array", solved: false, locked: false },
-    { id: 2, title: "Contains Duplicate", problemId: "contains-duplicate", difficulty: "Easy", topic: "Array", solved: false, locked: false },
-    { id: 3, title: "Reverse Linked List", problemId: "reverse-linked-list", difficulty: "Medium", topic: "Linked List", solved: false, locked: false },
-    { id: 4, title: "Median of Two Sorted Arrays", problemId: "median-of-two-sorted-arrays", difficulty: "Hard", topic: "Array", solved: false, locked: false },
-    { id: 5, title: "Longest Palindromic Substring", problemId: "longest-palindromic-substring", difficulty: "Medium", topic: "String", solved: false, locked: false },
-    { id: 6, title: "Zigzag Conversion", problemId: "zigzag-conversion", difficulty: "Medium", topic: "String", solved: false, locked: false },
-    { id: 7, title: "Regular Expression Matching", problemId: "regular-expression-matching", difficulty: "Hard", topic: "String", solved: false, locked: false },
-    { id: 8, title: "Container With Most Water", problemId: "container-with-most-water", difficulty: "Medium", topic: "Array", solved: false, locked: false },
-  ];
-
-  const topics = ["All Topics", "Array", "String", "Linked List", "Math", "Dynamic Programming", "Hash Table"];
-  const difficulties = ["All", "Easy", "Medium", "Hard"];
+  const difficulties = ['All', 'Easy', 'Medium', 'Hard'];
 
   const getDifficultyColor = (difficulty) => {
     switch (difficulty) {
@@ -101,11 +96,11 @@ const ListPage = () => {
                 console.error('Error logging out:', error);
               }
             }}
-            className="flex items-center gap-2 px-3 py-2 text-slate-400 hover:text-white hover:bg-slate-800/50 rounded-lg transition-all text-sm"
+            className="group inline-flex items-center gap-2 px-5 py-2.5 bg-white text-slate-950 font-semibold text-sm rounded-lg hover:bg-purple-400 hover:text-white transition-all duration-300 shadow-lg shadow-purple-500/20 hover:shadow-purple-500/40 hover:scale-105"
             title="Logout"
           >
             <LogOut className="w-4 h-4" />
-            <span className="hidden sm:inline">Logout</span>
+            Log Out
           </button>
         </div>
       </nav>

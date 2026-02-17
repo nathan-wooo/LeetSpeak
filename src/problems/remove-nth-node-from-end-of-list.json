@@ -1,0 +1,29 @@
+{
+  "id": "remove-nth-node-from-end-of-list",
+  "title": "Remove Nth Node From End of List",
+  "difficulty": "Medium",
+  "topic": "Linked List",
+  "prompt": "Given the head of a linked list, remove the nth node from the end of the list and return its head.",
+  "examples": [
+    {"input": "head = [1,2,3,4,5], n = 2", "output": "[1,2,3,5]"},
+    {"input": "head = [1], n = 1", "output": "[]"},
+    {"input": "head = [1,2], n = 1", "output": "[1]"}
+  ],
+  "constraints": [
+    "1 <= number of nodes <= 30",
+    "1 <= n <= number of nodes"
+  ],
+  "jsStarter": "/**\n * Remove Nth Node From End of List\n * @param {ListNode} head\n * @param {number} n\n * @return {ListNode}\n */\nfunction removeNthFromEnd(head, n) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "class Solution {\npublic:\n    ListNode* removeNthFromEnd(ListNode* head, int n) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [],
+  "hints": [
+    "Use two pointers. Move first pointer n steps ahead. Then move both until first reaches the end.",
+    "The second pointer will be at the node before the one to delete. Use a dummy node to handle removing the head.",
+    "Dummy -> head. Left = dummy, Right = head. Move right n times. Then move both until right hits null.",
+    "left.next = left.next.next to skip the nth node. Return dummy.next."
+  ],
+  "solution": {
+    "javascript": "function removeNthFromEnd(head, n) {\n  const dummy = new ListNode(0, head);\n  let left = dummy, right = head;\n  for (let i = 0; i < n; i++) right = right.next;\n  while (right) { left = left.next; right = right.next; }\n  left.next = left.next.next;\n  return dummy.next;\n}",
+    "cpp": "ListNode* removeNthFromEnd(ListNode* head, int n) {\n    ListNode dummy(0, head);\n    ListNode *left = &dummy, *right = head;\n    for (int i = 0; i < n; i++) right = right->next;\n    while (right) { left = left->next; right = right->next; }\n    left->next = left->next->next;\n    return dummy.next;\n}"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "id": "maximum-depth-of-binary-tree",
+  "title": "Maximum Depth of Binary Tree",
+  "difficulty": "Easy",
+  "topic": "Trees",
+  "prompt": "Given the root of a binary tree, return its maximum depth. The maximum depth is the number of nodes along the longest path from the root node down to the farthest leaf node.",
+  "examples": [
+    {"input": "root = [3,9,20,null,null,15,7]", "output": "3"},
+    {"input": "root = [1,null,2]", "output": "2"}
+  ],
+  "constraints": [
+    "0 <= number of nodes <= 10^4",
+    "-100 <= Node.val <= 100"
+  ],
+  "jsStarter": "/**\n * Maximum Depth of Binary Tree\n * @param {TreeNode} root\n * @return {number}\n */\nfunction maxDepth(root) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "class Solution {\npublic:\n    int maxDepth(TreeNode* root) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [],
+  "hints": [
+    "Recursive: if root is null, return 0. Otherwise return 1 + max(maxDepth(left), maxDepth(right)).",
+    "The depth at current node = 1 (for this node) + the max of depths of its subtrees.",
+    "DFS or BFS both work. BFS: count levels. DFS: simpler recursion.",
+    "O(n) time, O(h) space."
+  ],
+  "solution": {
+    "javascript": "function maxDepth(root) {\n  if (!root) return 0;\n  return 1 + Math.max(maxDepth(root.left), maxDepth(root.right));\n}",
+    "cpp": "int maxDepth(TreeNode* root) {\n    if (!root) return 0;\n    return 1 + max(maxDepth(root->left), maxDepth(root->right));\n}"
+  }
+}

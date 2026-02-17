@@ -1,0 +1,29 @@
+{
+  "id": "linked-list-cycle",
+  "title": "Linked List Cycle",
+  "difficulty": "Easy",
+  "topic": "Linked List",
+  "prompt": "Given head, the head of a linked list, determine if the linked list has a cycle in it. There is a cycle in a linked list if there is some node in the list that can be reached again by continuously following the next pointer.",
+  "examples": [
+    {"input": "head = [3,2,0,-4], pos = 1", "output": "true"},
+    {"input": "head = [1,2], pos = 0", "output": "true"},
+    {"input": "head = [1], pos = -1", "output": "false"}
+  ],
+  "constraints": [
+    "0 <= number of nodes <= 10^4",
+    "-10^5 <= Node.val <= 10^5"
+  ],
+  "jsStarter": "/**\n * Linked List Cycle\n * @param {ListNode} head\n * @return {boolean}\n */\nfunction hasCycle(head) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "class Solution {\npublic:\n    bool hasCycle(ListNode* head) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [],
+  "hints": [
+    "Floyd's cycle detection: use slow and fast pointers. Slow moves 1, fast moves 2.",
+    "If there is a cycle, slow and fast will eventually meet. If fast reaches null, no cycle.",
+    "Why it works: in each step, the distance between fast and slow decreases by 1 (fast gains 1 step on slow).",
+    "O(n) time, O(1) space."
+  ],
+  "solution": {
+    "javascript": "function hasCycle(head) {\n  let slow = head, fast = head;\n  while (fast && fast.next) {\n    slow = slow.next;\n    fast = fast.next.next;\n    if (slow === fast) return true;\n  }\n  return false;\n}",
+    "cpp": "bool hasCycle(ListNode* head) {\n    ListNode *slow = head, *fast = head;\n    while (fast && fast->next) {\n        slow = slow->next;\n        fast = fast->next->next;\n        if (slow == fast) return true;\n    }\n    return false;\n}"
+  }
+}

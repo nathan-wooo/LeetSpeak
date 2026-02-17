@@ -1,0 +1,29 @@
+{
+  "id": "balanced-binary-tree",
+  "title": "Balanced Binary Tree",
+  "difficulty": "Easy",
+  "topic": "Trees",
+  "prompt": "Given a binary tree, determine if it is height-balanced. A height-balanced binary tree is defined as: a binary tree in which the left and right subtrees of every node differ in height by no more than 1.",
+  "examples": [
+    {"input": "root = [3,9,20,null,null,15,7]", "output": "true"},
+    {"input": "root = [1,2,2,3,3,null,null,4,4]", "output": "false"},
+    {"input": "root = []", "output": "true"}
+  ],
+  "constraints": [
+    "0 <= number of nodes <= 5000",
+    "-10^4 <= Node.val <= 10^4"
+  ],
+  "jsStarter": "/**\n * Balanced Binary Tree\n * @param {TreeNode} root\n * @return {boolean}\n */\nfunction isBalanced(root) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "class Solution {\npublic:\n    bool isBalanced(TreeNode* root) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [],
+  "hints": [
+    "For each node, check if |leftHeight - rightHeight| <= 1 and both subtrees are balanced.",
+    "Use a helper that returns height. Return -1 or special value to indicate unbalanced (to avoid redundant checks).",
+    "If any subtree returns -1 (unbalanced), propagate -1. Otherwise return 1 + max(left, right).",
+    "O(n) time - each node visited once."
+  ],
+  "solution": {
+    "javascript": "function isBalanced(root) {\n  function height(node) {\n    if (!node) return 0;\n    const left = height(node.left), right = height(node.right);\n    if (left === -1 || right === -1 || Math.abs(left - right) > 1) return -1;\n    return 1 + Math.max(left, right);\n  }\n  return height(root) !== -1;\n}",
+    "cpp": "bool isBalanced(TreeNode* root) {\n    function<int(TreeNode*)> height = [&](TreeNode* node) {\n        if (!node) return 0;\n        int left = height(node->left), right = height(node->right);\n        if (left == -1 || right == -1 || abs(left - right) > 1) return -1;\n        return 1 + max(left, right);\n    };\n    return height(root) != -1;\n}"
+  }
+}

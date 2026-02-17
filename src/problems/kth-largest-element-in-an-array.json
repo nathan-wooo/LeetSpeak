@@ -1,0 +1,28 @@
+{
+  "id": "kth-largest-element-in-an-array",
+  "title": "Kth Largest Element In An Array",
+  "difficulty": "Medium",
+  "topic": "Heaps",
+  "prompt": "Given an integer array nums and an integer k, return the kth largest element in the array. Note that it is the kth largest element in the sorted order, not the kth distinct element. Can you solve it without sorting?",
+  "examples": [
+    {"input": "nums = [3,2,1,5,6,4], k = 2", "output": "5"},
+    {"input": "nums = [3,2,3,1,2,4,5,5,6], k = 4", "output": "4"}
+  ],
+  "constraints": [
+    "1 <= k <= nums.length <= 10^5",
+    "-10^4 <= nums[i] <= 10^4"
+  ],
+  "jsStarter": "/**\n * Kth Largest Element In An Array\n * @param {number[]} nums\n * @param {number} k\n * @return {number}\n */\nfunction findKthLargest(nums, k) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "class Solution {\npublic:\n    int findKthLargest(vector<int>& nums, int k) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [],
+  "hints": [
+    "QuickSelect: partition like quicksort, if pivot index equals k-1 (for kth largest) return. Else recurse on left or right.",
+    "For kth largest, partition so larger elements are on the left. kth largest = (n-k)th smallest in 0-indexed.",
+    "Heap: maintain min-heap of size k. kth largest = top of heap. O(n log k).",
+    "QuickSelect average O(n), worst O(n^2). Random pivot avoids worst case."
+  ],
+  "solution": {
+    "javascript": "function findKthLargest(nums, k) {\n  k = nums.length - k;\n  function quickSelect(l, r) {\n    const pivot = nums[r]; let p = l;\n    for (let i = l; i < r; i++) if (nums[i] <= pivot) [nums[p], nums[i]] = [nums[i], nums[p++]];\n    [nums[p], nums[r]] = [nums[r], nums[p]];\n    if (p > k) return quickSelect(l, p - 1);\n    if (p < k) return quickSelect(p + 1, r);\n    return nums[p];\n  }\n  return quickSelect(0, nums.length - 1);\n}",
+    "cpp": "int findKthLargest(vector<int>& nums, int k) {\n    k = nums.size() - k;\n    function<int(int,int)> qs = [&](int l, int r) {\n        int pivot = nums[r], p = l;\n        for (int i = l; i < r; i++) if (nums[i] <= pivot) swap(nums[p++], nums[i]);\n        swap(nums[p], nums[r]);\n        if (p > k) return qs(l, p - 1);\n        if (p < k) return qs(p + 1, r);\n        return nums[p];\n    };\n    return qs(0, nums.size() - 1);\n}"
+  }
+}

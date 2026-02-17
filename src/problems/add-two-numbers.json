@@ -1,0 +1,29 @@
+{
+  "id": "add-two-numbers",
+  "title": "Add Two Numbers",
+  "difficulty": "Medium",
+  "topic": "Linked List",
+  "prompt": "You are given two non-empty linked lists representing two non-negative integers. The digits are stored in reverse order, and each of their nodes contains a single digit. Add the two numbers and return the sum as a linked list in reverse order.",
+  "examples": [
+    {"input": "l1 = [2,4,3], l2 = [5,6,4]", "output": "[7,0,8]"},
+    {"input": "l1 = [0], l2 = [0]", "output": "[0]"},
+    {"input": "l1 = [9,9,9,9,9,9,9], l2 = [9,9,9,9]", "output": "[8,9,9,9,0,0,0,1]"}
+  ],
+  "constraints": [
+    "1 <= number of nodes <= 100",
+    "0 <= Node.val <= 9"
+  ],
+  "jsStarter": "/**\n * Add Two Numbers\n * @param {ListNode} l1\n * @param {ListNode} l2\n * @return {ListNode}\n */\nfunction addTwoNumbers(l1, l2) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "class Solution {\npublic:\n    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [],
+  "hints": [
+    "Simulate addition digit by digit. Use a carry variable. Process while either list has nodes or carry is non-zero.",
+    "Sum = l1.val + l2.val + carry. New digit = sum % 10, carry = Math.floor(sum / 10).",
+    "Use a dummy node for the result. Move l1, l2, and tail forward. Handle different lengths by treating null as 0.",
+    "O(max(m,n)) time, O(1) extra space (excluding result)."
+  ],
+  "solution": {
+    "javascript": "function addTwoNumbers(l1, l2) {\n  const dummy = new ListNode();\n  let tail = dummy, carry = 0;\n  while (l1 || l2 || carry) {\n    const sum = (l1?.val ?? 0) + (l2?.val ?? 0) + carry;\n    tail.next = new ListNode(sum % 10);\n    carry = Math.floor(sum / 10);\n    tail = tail.next;\n    l1 = l1?.next; l2 = l2?.next;\n  }\n  return dummy.next;\n}",
+    "cpp": "ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {\n    ListNode dummy;\n    ListNode* tail = &dummy;\n    int carry = 0;\n    while (l1 || l2 || carry) {\n        int sum = (l1 ? l1->val : 0) + (l2 ? l2->val : 0) + carry;\n        tail->next = new ListNode(sum % 10);\n        carry = sum / 10;\n        tail = tail->next;\n        if (l1) l1 = l1->next;\n        if (l2) l2 = l2->next;\n    }\n    return dummy.next;\n}"
+  }
+}

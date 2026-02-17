@@ -1,0 +1,29 @@
+{
+  "id": "construct-binary-tree-from-preorder-and-inorder-traversal",
+  "title": "Construct Binary Tree From Preorder And Inorder Traversal",
+  "difficulty": "Medium",
+  "topic": "Trees",
+  "prompt": "Given two integer arrays preorder and inorder where preorder is the preorder traversal of a binary tree and inorder is the inorder traversal of the same tree, construct and return the binary tree.",
+  "examples": [
+    {"input": "preorder = [3,9,20,15,7], inorder = [9,3,15,20,7]", "output": "[3,9,20,null,null,15,7]"},
+    {"input": "preorder = [-1], inorder = [-1]", "output": "[-1]"}
+  ],
+  "constraints": [
+    "1 <= preorder.length <= 3000",
+    "inorder.length == preorder.length",
+    "-3000 <= preorder[i], inorder[i] <= 3000"
+  ],
+  "jsStarter": "/**\n * Construct Binary Tree From Preorder And Inorder Traversal\n * @param {number[]} preorder\n * @param {number[]} inorder\n * @return {TreeNode}\n */\nfunction buildTree(preorder, inorder) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "class Solution {\npublic:\n    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [],
+  "hints": [
+    "Preorder: root first, then left subtree, then right. Inorder: left, root, right.",
+    "First element of preorder is the root. Find root in inorder - everything left is left subtree, everything right is right subtree.",
+    "Recursively build: root = preorder[0], find index in inorder. Left = buildTree(preorder[1..mid], inorder[0..mid-1]), right = buildTree(preorder[mid+1..], inorder[mid+1..]).",
+    "Use a map for inorder value -> index for O(1) lookup. O(n) time."
+  ],
+  "solution": {
+    "javascript": "function buildTree(preorder, inorder) {\n  const inMap = {}; inorder.forEach((v, i) => inMap[v] = i);\n  function build(preStart, preEnd, inStart, inEnd) {\n    if (preStart > preEnd) return null;\n    const root = new TreeNode(preorder[preStart]);\n    const mid = inMap[root.val];\n    const leftSize = mid - inStart;\n    root.left = build(preStart + 1, preStart + leftSize, inStart, mid - 1);\n    root.right = build(preStart + leftSize + 1, preEnd, mid + 1, inEnd);\n    return root;\n  }\n  return build(0, preorder.length - 1, 0, inorder.length - 1);\n}",
+    "cpp": "TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {\n    unordered_map<int,int> inMap;\n    for (int i = 0; i < inorder.size(); i++) inMap[inorder[i]] = i;\n    function<TreeNode*(int,int,int,int)> build = [&](int ps, int pe, int is, int ie) {\n        if (ps > pe) return (TreeNode*)nullptr;\n        TreeNode* root = new TreeNode(preorder[ps]);\n        int mid = inMap[root->val];\n        int leftSize = mid - is;\n        root->left = build(ps + 1, ps + leftSize, is, mid - 1);\n        root->right = build(ps + leftSize + 1, pe, mid + 1, ie);\n        return root;\n    };\n    return build(0, preorder.size() - 1, 0, inorder.size() - 1);\n}"
+  }
+}

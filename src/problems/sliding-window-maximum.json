@@ -1,0 +1,29 @@
+{
+  "id": "sliding-window-maximum",
+  "title": "Sliding Window Maximum",
+  "difficulty": "Hard",
+  "topic": "Sliding Window",
+  "prompt": "You are given an array of integers nums, there is a sliding window of size k which is moving from the very left of the array to the very right. You can only see the k numbers in the window. Each time the sliding window moves right by one position. Return the max sliding window.",
+  "examples": [
+    {"input": "nums = [1,3,-1,-3,5,3,6,7], k = 3", "output": "[3,3,5,5,6,7]"},
+    {"input": "nums = [1], k = 1", "output": "[1]"}
+  ],
+  "constraints": [
+    "1 <= nums.length <= 10^5",
+    "-10^4 <= nums[i] <= 10^4",
+    "1 <= k <= nums.length"
+  ],
+  "jsStarter": "/**\n * Sliding Window Maximum\n * @param {number[]} nums\n * @param {number} k\n * @return {number[]}\n */\nfunction maxSlidingWindow(nums, k) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "#include <vector>\n#include <deque>\nusing namespace std;\n\nclass Solution {\npublic:\n    vector<int> maxSlidingWindow(vector<int>& nums, int k) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [],
+  "hints": [
+    "Use a monotonically decreasing deque. Store indices (not values) so we can check if the max is still in the window.",
+    "The front of the deque is always the max of the current window. When we add a new element, pop from the back until the back >= new element.",
+    "When the front index is outside the window (i - front >= k), pop from front.",
+    "O(n) - each element pushed and popped at most once."
+  ],
+  "solution": {
+    "javascript": "function maxSlidingWindow(nums, k) {\n  const dq = [];\n  const result = [];\n  for (let i = 0; i < nums.length; i++) {\n    while (dq.length && nums[dq[dq.length-1]] <= nums[i]) dq.pop();\n    dq.push(i);\n    if (dq[0] <= i - k) dq.shift();\n    if (i >= k - 1) result.push(nums[dq[0]]);\n  }\n  return result;\n}",
+    "cpp": "vector<int> maxSlidingWindow(vector<int>& nums, int k) {\n    deque<int> dq;\n    vector<int> result;\n    for (int i = 0; i < nums.size(); i++) {\n        while (!dq.empty() && nums[dq.back()] <= nums[i]) dq.pop_back();\n        dq.push_back(i);\n        if (dq.front() <= i - k) dq.pop_front();\n        if (i >= k - 1) result.push_back(nums[dq.front()]);\n    }\n    return result;\n}"
+  }
+}

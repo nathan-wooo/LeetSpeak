@@ -1,0 +1,31 @@
+{
+  "id": "minimum-window-substring",
+  "title": "Minimum Window Substring",
+  "difficulty": "Hard",
+  "topic": "Sliding Window",
+  "prompt": "Given two strings s and t of lengths m and n respectively, return the minimum window substring of s such that every character in t (including duplicates) is included in the window. If there is no such substring, return the empty string \"\".",
+  "examples": [
+    {"input": "s = \"ADOBECODEBANC\", t = \"ABC\"", "output": "\"BANC\""},
+    {"input": "s = \"a\", t = \"a\"", "output": "\"a\""},
+    {"input": "s = \"a\", t = \"aa\"", "output": "\"\""}
+  ],
+  "constraints": [
+    "m == s.length",
+    "n == t.length",
+    "1 <= m, n <= 10^5",
+    "s and t consist of uppercase and lowercase English letters."
+  ],
+  "jsStarter": "/**\n * Minimum Window Substring\n * @param {string} s\n * @param {string} t\n * @return {string}\n */\nfunction minWindow(s, t) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "#include <string>\n#include <unordered_map>\nusing namespace std;\n\nclass Solution {\npublic:\n    string minWindow(string s, string t) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [],
+  "hints": [
+    "Sliding window. Expand right until we have all chars from t. Then shrink left to minimize while still valid.",
+    "Use a map to count required chars from t. Track 'have' vs 'need'. When have == need, we have a valid window.",
+    "Shrink left: when we have valid window, move left and decrement counts. When we lose a required char, we need to expand again.",
+    "O(n) time. Track best start and length, return the substring at the end."
+  ],
+  "solution": {
+    "javascript": "function minWindow(s, t) {\n  const need = {}; for (const c of t) need[c] = (need[c] || 0) + 1;\n  let have = 0, needCount = Object.keys(need).length;\n  const window = {};\n  let bestStart = 0, bestLen = Infinity, left = 0;\n  for (let right = 0; right < s.length; right++) {\n    window[s[right]] = (window[s[right]] || 0) + 1;\n    if (need[s[right]] && window[s[right]] === need[s[right]]) have++;\n    while (have === needCount) {\n      if (right - left + 1 < bestLen) { bestLen = right - left + 1; bestStart = left; }\n      window[s[left]]--;\n      if (need[s[left]] && window[s[left]] < need[s[left]]) have--;\n      left++;\n    }\n  }\n  return bestLen === Infinity ? '' : s.slice(bestStart, bestStart + bestLen);\n}",
+    "cpp": "string minWindow(string s, string t) {\n    unordered_map<char, int> need;\n    for (char c : t) need[c]++;\n    int have = 0, needCount = need.size();\n    unordered_map<char, int> window;\n    int bestStart = 0, bestLen = INT_MAX, left = 0;\n    for (int right = 0; right < s.size(); right++) {\n        window[s[right]]++;\n        if (need.count(s[right]) && window[s[right]] == need[s[right]]) have++;\n        while (have == needCount) {\n            if (right - left + 1 < bestLen) { bestLen = right - left + 1; bestStart = left; }\n            window[s[left]]--;\n            if (need.count(s[left]) && window[s[left]] < need[s[left]]) have--;\n            left++;\n        }\n    }\n    return bestLen == INT_MAX ? \"\" : s.substr(bestStart, bestLen);\n}"
+  }
+}

@@ -154,6 +154,12 @@ Navigate to the problem list and select a LeetCode problem to practice.
 
 ## 🧪 Adding New Problems
 
+### Neetcode 150
+
+The problem list is built from **Neetcode 150**. 
+
+### Problem File Structure
+
 Problems are stored as JSON files in `src/problems/`. Each problem file should follow this structure:
 
 ```json
@@ -180,7 +186,7 @@ Problems are stored as JSON files in `src/problems/`. Each problem file should f
 }
 ```
 
-After adding a problem JSON file, add it to the `questions` array in `src/pages/ListPage.jsx`.
+After adding a problem JSON file, run `npm run fetch-neetcode` to regenerate the manifest (or add the problem to `src/data/neetcode150.json` manually).
 
 ## 🔧 Configuration
 

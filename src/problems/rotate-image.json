@@ -1,0 +1,20 @@
+{
+  "id": "rotate-image",
+  "title": "Rotate Image",
+  "difficulty": "Medium",
+  "topic": "Math & Geometry",
+  "prompt": "See the full problem on LeetCode: https://leetcode.com/problems/rotate-image/\n\nNeetcode walkthrough: https://www.youtube.com/watch?v=fMSJSS7eO1w\n\nThis is a placeholder. Add full problem content (prompt, examples, tests) to enable Run and hints.",
+  "examples": [],
+  "constraints": [],
+  "jsStarter": "/**\n * Rotate Image\n * See: https://leetcode.com/problems/rotate-image/\n */\nfunction solution(input) {\n  // Your code here\n  return null;\n}",
+  "cppStarter": "#include <vector>\nusing namespace std;\n\n// See: https://leetcode.com/problems/rotate-image/\nclass Solution {\npublic:\n    // Implement your solution here\n};",
+  "tests": [],
+  "hints": [
+    "Watch Neetcode's explanation: https://www.youtube.com/watch?v=fMSJSS7eO1w",
+    "Full problem: https://leetcode.com/problems/rotate-image/"
+  ],
+  "solution": {
+    "javascript": "// Add solution when you solve it",
+    "cpp": "// Add solution when you solve it"
+  }
+}

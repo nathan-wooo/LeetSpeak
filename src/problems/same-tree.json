@@ -1,0 +1,29 @@
+{
+  "id": "same-tree",
+  "title": "Same Tree",
+  "difficulty": "Easy",
+  "topic": "Trees",
+  "prompt": "Given the roots of two binary trees p and q, write a function to check if they are the same or not. Two binary trees are the same if they are structurally identical, and the nodes have the same value.",
+  "examples": [
+    {"input": "p = [1,2,3], q = [1,2,3]", "output": "true"},
+    {"input": "p = [1,2], q = [1,null,2]", "output": "false"},
+    {"input": "p = [1,2,1], q = [1,1,2]", "output": "false"}
+  ],
+  "constraints": [
+    "0 <= number of nodes <= 100",
+    "-10^4 <= Node.val <= 10^4"
+  ],
+  "jsStarter": "/**\n * Same Tree\n * @param {TreeNode} p\n * @param {TreeNode} q\n * @return {boolean}\n */\nfunction isSameTree(p, q) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "class Solution {\npublic:\n    bool isSameTree(TreeNode* p, TreeNode* q) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [],
+  "hints": [
+    "Base case: both null -> true. One null and one not -> false. Values different -> false.",
+    "Recursive: check if values match, then recursively check isSameTree(p.left, q.left) && isSameTree(p.right, q.right).",
+    "Pre-order traversal works naturally.",
+    "O(n) time, O(h) space."
+  ],
+  "solution": {
+    "javascript": "function isSameTree(p, q) {\n  if (!p && !q) return true;\n  if (!p || !q || p.val !== q.val) return false;\n  return isSameTree(p.left, q.left) && isSameTree(p.right, q.right);\n}",
+    "cpp": "bool isSameTree(TreeNode* p, TreeNode* q) {\n    if (!p && !q) return true;\n    if (!p || !q || p->val != q->val) return false;\n    return isSameTree(p->left, q->left) && isSameTree(p->right, q->right);\n}"
+  }
+}

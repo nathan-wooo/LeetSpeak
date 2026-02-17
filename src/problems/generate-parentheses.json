@@ -1,0 +1,27 @@
+{
+  "id": "generate-parentheses",
+  "title": "Generate Parentheses",
+  "difficulty": "Medium",
+  "topic": "Stack",
+  "prompt": "Given n pairs of parentheses, write a function to generate all combinations of well-formed parentheses.",
+  "examples": [
+    {"input": "n = 3", "output": "[\"((()))\",\"(()())\",\"(())()\",\"()(())\",\"()()()\"]"},
+    {"input": "n = 1", "output": "[\"()\"]"}
+  ],
+  "constraints": [
+    "1 <= n <= 8"
+  ],
+  "jsStarter": "/**\n * Generate Parentheses\n * @param {number} n\n * @return {string[]}\n */\nfunction generateParenthesis(n) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    vector<string> generateParenthesis(int n) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [],
+  "hints": [
+    "Backtracking. Track open count and close count. Add '(' when open < n. Add ')' when close < open.",
+    "Base case: when open == n and close == n, we have a valid string. Add to result.",
+    "Recursively try adding '(' then backtrack, then try ')' then backtrack.",
+    "Each valid string has n open and n close, and at any prefix we have open >= close."
+  ],
+  "solution": {
+    "javascript": "function generateParenthesis(n) {\n  const result = [];\n  function backtrack(s, open, close) {\n    if (s.length === 2 * n) { result.push(s); return; }\n    if (open < n) backtrack(s + '(', open + 1, close);\n    if (close < open) backtrack(s + ')', open, close + 1);\n  }\n  backtrack('', 0, 0);\n  return result;\n}",
+    "cpp": "vector<string> generateParenthesis(int n) {\n    vector<string> result;\n    function<void(string, int, int)> backtrack = [&](string s, int open, int close) {\n        if (s.size() == 2 * n) { result.push_back(s); return; }\n        if (open < n) backtrack(s + '(', open + 1, close);\n        if (close < open) backtrack(s + ')', open, close + 1);\n    };\n    backtrack(\"\", 0, 0);\n    return result;\n}"
+  }
+}

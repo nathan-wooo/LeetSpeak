@@ -1,0 +1,27 @@
+{
+  "id": "serialize-and-deserialize-binary-tree",
+  "title": "Serialize And Deserialize Binary Tree",
+  "difficulty": "Hard",
+  "topic": "Trees",
+  "prompt": "Design an algorithm to serialize and deserialize a binary tree. There is no restriction on how your serialization/deserialization algorithm should work. You just need to ensure that a binary tree can be serialized to a string and this string can be deserialized to the original tree structure.",
+  "examples": [
+    {"input": "root = [1,2,3,null,null,4,5]", "output": "Serialized then deserialized gives same tree"}
+  ],
+  "constraints": [
+    "0 <= number of nodes <= 10^4",
+    "-1000 <= Node.val <= 1000"
+  ],
+  "jsStarter": "/**\n * Serialize And Deserialize Binary Tree\n */\nfunction serialize(root) { }\nfunction deserialize(data) { }",
+  "cppStarter": "class Codec {\npublic:\n    string serialize(TreeNode* root) { }\n    TreeNode* deserialize(string data) { }\n};",
+  "tests": [],
+  "hints": [
+    "Preorder with null markers. Serialize: preorder, use 'N' or '#' for null. Deserialize: same order, build tree recursively.",
+    "Format: \"1,2,N,N,3,4,N,N,5,N,N\" - comma separated values, N for null.",
+    "Deserialize: split by comma, use an index/iterator. If value is N, return null. Else create node, recursively build left then right.",
+    "O(n) for both serialize and deserialize."
+  ],
+  "solution": {
+    "javascript": "function serialize(root) {\n  const result = [];\n  function ser(node) {\n    if (!node) { result.push('N'); return; }\n    result.push(String(node.val));\n    ser(node.left); ser(node.right);\n  }\n  ser(root);\n  return result.join(',');\n}\nfunction deserialize(data) {\n  const arr = data.split(','); let i = 0;\n  function des() {\n    if (arr[i] === 'N') { i++; return null; }\n    const node = new TreeNode(parseInt(arr[i++]));\n    node.left = des(); node.right = des();\n    return node;\n  }\n  return des();\n}",
+    "cpp": "string serialize(TreeNode* root) {\n    if (!root) return \"N\";\n    return to_string(root->val) + \",\" + serialize(root->left) + \",\" + serialize(root->right);\n}\nTreeNode* deserialize(string data) {\n    int i = 0;\n    function<TreeNode*()> des = [&]() {\n        if (i >= data.size() || data[i] == 'N') { i += 2; return (TreeNode*)nullptr; }\n        int val = 0, sign = 1;\n        if (data[i] == '-') { sign = -1; i++; }\n        while (i < data.size() && isdigit(data[i])) val = val * 10 + (data[i++] - '0');\n        i++;\n        TreeNode* node = new TreeNode(val * sign);\n        node->left = des(); node->right = des();\n        return node;\n    };\n    return des();\n}"
+  }
+}

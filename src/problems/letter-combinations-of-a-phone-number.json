@@ -1,0 +1,29 @@
+{
+  "id": "letter-combinations-of-a-phone-number",
+  "title": "Letter Combinations of a Phone Number",
+  "difficulty": "Medium",
+  "topic": "Backtracking",
+  "prompt": "Given a string containing digits from 2-9 inclusive, return all possible letter combinations that the number could represent. Return the answer in any order. A mapping of digits to letters (just like on the telephone buttons) is given below. Note that 1 does not map to any letters.",
+  "examples": [
+    {"input": "digits = \"23\"", "output": "[\"ad\",\"ae\",\"af\",\"bd\",\"be\",\"bf\",\"cd\",\"ce\",\"cf\"]"},
+    {"input": "digits = \"\"", "output": "[]"},
+    {"input": "digits = \"2\"", "output": "[\"a\",\"b\",\"c\"]"}
+  ],
+  "constraints": [
+    "0 <= digits.length <= 4",
+    "digits[i] is a digit in the range ['2', '9']."
+  ],
+  "jsStarter": "/**\n * Letter Combinations of a Phone Number\n * @param {string} digits\n * @return {string[]}\n */\nfunction letterCombinations(digits) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "class Solution {\npublic:\n    vector<string> letterCombinations(string digits) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [],
+  "hints": [
+    "Map each digit to its letters: 2->abc, 3->def, etc. Backtrack: for each digit, try each letter, recurse on next digit.",
+    "Base: if we've processed all digits, add current string to result.",
+    "For each letter of digits[i], append, recurse(i+1), remove.",
+    "O(4^n) - each digit has up to 4 letters."
+  ],
+  "solution": {
+    "javascript": "function letterCombinations(digits) {\n  if (!digits.length) return [];\n  const map = { '2':'abc','3':'def','4':'ghi','5':'jkl','6':'mno','7':'pqrs','8':'tuv','9':'wxyz' };\n  const result = [];\n  function backtrack(i, path) {\n    if (i === digits.length) { result.push(path); return; }\n    for (const c of map[digits[i]]) backtrack(i + 1, path + c);\n  }\n  backtrack(0, '');\n  return result;\n}",
+    "cpp": "vector<string> letterCombinations(string digits) {\n    if (digits.empty()) return {};\n    vector<string> map = {\"\",\"\",\"abc\",\"def\",\"ghi\",\"jkl\",\"mno\",\"pqrs\",\"tuv\",\"wxyz\"};\n    vector<string> result;\n    function<void(int,string)> bt = [&](int i, string path) {\n        if (i == digits.size()) { result.push_back(path); return; }\n        for (char c : map[digits[i]-'0']) bt(i+1, path+c);\n    };\n    bt(0, \"\");\n    return result;\n}"
+  }
+}

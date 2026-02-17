@@ -1,11 +1,13 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, Terminal, Users, MessageSquare, BookOpen, Mic, Zap, LogIn } from 'lucide-react';
+import { ArrowRight, Terminal, Mic, Zap, LogIn, LogOut } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+
+const authButtonClass = "group inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-white text-slate-950 font-semibold text-sm rounded-lg hover:bg-purple-400 hover:text-white transition-all duration-300 shadow-lg shadow-purple-500/20 hover:shadow-purple-500/40 hover:scale-105";
 
 const Home = () => {
   const navigate = useNavigate();
-  const { currentUser } = useAuth();
+  const { currentUser, logout } = useAuth();
 
   const handleStartCoding = () => {
     if (currentUser) {
@@ -14,12 +16,6 @@ const Home = () => {
       navigate('/login');
     }
   };
-
-  const stats = [
-    { icon: <Users className="w-5 h-5" />, label: "Built for Students", value: "By Hackers" },
-    { icon: <MessageSquare className="w-5 h-5" />, label: "Communication", value: "First Approach" },
-    { icon: <BookOpen className="w-5 h-5" />, label: "Socratic Method", value: "Powered by AI" }
-  ];
 
   const features = [
     { icon: <Mic />, text: "Voice-driven coding practice" },
@@ -31,27 +27,35 @@ const Home = () => {
     <div className="min-h-screen bg-gray-900 text-slate-200 font-sans flex flex-col">
       
       {/* Navbar */}
-      <nav className="w-full h-16 flex items-center justify-between border-b border-white/10 bg-gray-900/80 backdrop-blur-sm sticky top-0 z-50">
-        <div className="flex items-center pl-6 md:pl-8">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-gradient-to-br rounded-md flex items-center justify-center">
-              <img src="Transparent_Logo.png" alt="LeetSpeak Logo" className="h-8 w-auto object-contain" />
-            </div>
-            <span className="text-xl font-bold text-white">Leet<span className="text-purple-400">Speak</span></span>
+      <nav className="w-full h-16 flex items-center justify-between border-b border-white/10 bg-gray-900/80 backdrop-blur-sm sticky top-0 z-50 px-6 md:px-8">
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 bg-gradient-to-br rounded-md flex items-center justify-center">
+            <img src="Transparent_Logo.png" alt="LeetSpeak Logo" className="h-8 w-auto object-contain" />
           </div>
+          <span className="text-xl font-bold text-white">Leet<span className="text-purple-400">Speak</span></span>
         </div>
-        <div className="pr-6 md:pr-8 flex items-center gap-3">
+        <div>
           {currentUser ? (
-            <span className="text-sm text-slate-400 px-3 py-1.5 border border-purple-500/30 rounded-full bg-purple-500/5">
-              {currentUser.email}
-            </span>
+            <button
+              onClick={async () => {
+                try {
+                  await logout();
+                } catch (error) {
+                  console.error('Error logging out:', error);
+                }
+              }}
+              className={authButtonClass}
+            >
+              <LogOut className="w-4 h-4" />
+              Log Out
+            </button>
           ) : (
             <button
               onClick={() => navigate('/login')}
-              className="flex items-center gap-2 px-4 py-2 text-sm text-slate-200 hover:text-white border border-purple-500/30 hover:border-purple-500/50 rounded-lg bg-purple-500/5 hover:bg-purple-500/10 transition-all"
+              className={authButtonClass}
             >
               <LogIn className="w-4 h-4" />
-              Sign In
+              Log In
             </button>
           )}
         </div>

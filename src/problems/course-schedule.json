@@ -1,0 +1,28 @@
+{
+  "id": "course-schedule",
+  "title": "Course Schedule",
+  "difficulty": "Medium",
+  "topic": "Graphs",
+  "prompt": "There are a total of numCourses courses you have to take, labeled from 0 to numCourses - 1. You are given an array prerequisites where prerequisites[i] = [ai, bi] indicates that you must take course bi first if you want to take course ai. Return true if you can finish all courses. Otherwise, return false.",
+  "examples": [
+    {"input": "numCourses = 2, prerequisites = [[1,0]]", "output": "true"},
+    {"input": "numCourses = 2, prerequisites = [[1,0],[0,1]]", "output": "false"}
+  ],
+  "constraints": [
+    "1 <= numCourses <= 2000",
+    "0 <= prerequisites.length <= 5000"
+  ],
+  "jsStarter": "/**\n * Course Schedule\n * @param {number} numCourses\n * @param {number[][]} prerequisites\n * @return {boolean}\n */\nfunction canFinish(numCourses, prerequisites) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "class Solution {\npublic:\n    bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [],
+  "hints": [
+    "Detect cycle in directed graph. If cycle exists, cannot finish. Topological sort or DFS with cycle detection.",
+    "Build adjacency list: course -> list of courses it unlocks. DFS: 0=unvisited, 1=visiting, 2=done. If we meet 1, cycle.",
+    "Alternatively: Kahn's algo (BFS). Build in-degree. Queue nodes with in-degree 0, decrement neighbors. If count != numCourses, cycle.",
+    "O(V+E) time."
+  ],
+  "solution": {
+    "javascript": "function canFinish(numCourses, prerequisites) {\n  const adj = Array.from({length: numCourses}, () => []);\n  for (const [a,b] of prerequisites) adj[b].push(a);\n  const state = Array(numCourses).fill(0);\n  function hasCycle(v) {\n    if (state[v] === 1) return true;\n    if (state[v] === 2) return false;\n    state[v] = 1;\n    for (const u of adj[v]) if (hasCycle(u)) return true;\n    state[v] = 2;\n    return false;\n  }\n  for (let i = 0; i < numCourses; i++) if (hasCycle(i)) return false;\n  return true;\n}",
+    "cpp": "bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {\n    vector<vector<int>> adj(numCourses);\n    for (auto& p : prerequisites) adj[p[1]].push_back(p[0]);\n    vector<int> state(numCourses);\n    function<bool(int)> hasCycle = [&](int v) {\n        if (state[v]==1) return true;\n        if (state[v]==2) return false;\n        state[v] = 1;\n        for (int u : adj[v]) if (hasCycle(u)) return true;\n        state[v] = 2;\n        return false;\n    };\n    for (int i=0;i<numCourses;i++) if (hasCycle(i)) return false;\n    return true;\n}"
+  }
+}

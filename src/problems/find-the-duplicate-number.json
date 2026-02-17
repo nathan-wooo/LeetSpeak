@@ -1,0 +1,29 @@
+{
+  "id": "find-the-duplicate-number",
+  "title": "Find The Duplicate Number",
+  "difficulty": "Medium",
+  "topic": "Linked List",
+  "prompt": "Given an array of integers nums containing n + 1 integers where each integer is in the range [1, n] inclusive. There is only one repeated number in nums, return this repeated number. You must solve the problem without modifying the array and using only constant extra space.",
+  "examples": [
+    {"input": "nums = [1,3,4,2,2]", "output": "2"},
+    {"input": "nums = [3,1,3,4,2]", "output": "3"}
+  ],
+  "constraints": [
+    "1 <= n <= 10^5",
+    "nums.length == n + 1",
+    "1 <= nums[i] <= n"
+  ],
+  "jsStarter": "/**\n * Find The Duplicate Number\n * @param {number[]} nums\n * @return {number}\n */\nfunction findDuplicate(nums) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "class Solution {\npublic:\n    int findDuplicate(vector<int>& nums) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [],
+  "hints": [
+    "Treat array as linked list: index i points to nums[i]. The duplicate creates a cycle. Use Floyd's cycle detection.",
+    "Phase 1: Find meeting point of slow and fast. Phase 2: Start one from 0, one from meeting point; both move 1. They meet at the duplicate.",
+    "Why: the duplicate is the entrance to the cycle. Floyd's algorithm finds it.",
+    "O(n) time, O(1) space."
+  ],
+  "solution": {
+    "javascript": "function findDuplicate(nums) {\n  let slow = nums[0], fast = nums[0];\n  do { slow = nums[slow]; fast = nums[nums[fast]]; } while (slow !== fast);\n  slow = nums[0];\n  while (slow !== fast) { slow = nums[slow]; fast = nums[fast]; }\n  return slow;\n}",
+    "cpp": "int findDuplicate(vector<int>& nums) {\n    int slow = nums[0], fast = nums[0];\n    do { slow = nums[slow]; fast = nums[nums[fast]]; } while (slow != fast);\n    slow = nums[0];\n    while (slow != fast) { slow = nums[slow]; fast = nums[fast]; }\n    return slow;\n}"
+  }
+}

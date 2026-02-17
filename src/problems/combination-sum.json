@@ -1,0 +1,30 @@
+{
+  "id": "combination-sum",
+  "title": "Combination Sum",
+  "difficulty": "Medium",
+  "topic": "Backtracking",
+  "prompt": "Given an array of distinct integers candidates and a target integer target, return a list of all unique combinations of candidates where the chosen numbers sum to target. You may return the combinations in any order. The same number may be chosen from candidates an unlimited number of times.",
+  "examples": [
+    {"input": "candidates = [2,3,6,7], target = 7", "output": "[[2,2,3],[7]]"},
+    {"input": "candidates = [2,3,5], target = 8", "output": "[[2,2,2,2],[2,3,3],[3,5]]"},
+    {"input": "candidates = [2], target = 1", "output": "[]"}
+  ],
+  "constraints": [
+    "1 <= candidates.length <= 30",
+    "2 <= candidates[i] <= 40",
+    "1 <= target <= 40"
+  ],
+  "jsStarter": "/**\n * Combination Sum\n * @param {number[]} candidates\n * @param {number} target\n * @return {number[][]}\n */\nfunction combinationSum(candidates, target) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "class Solution {\npublic:\n    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [],
+  "hints": [
+    "Backtrack: at each step, try adding each candidate (starting from current index to allow reuse). If sum exceeds target, return.",
+    "Base case: if target == 0, add current path to result. If target < 0, return.",
+    "Loop from start index to end: add candidate, recurse with target - candidate and same start (reuse), backtrack.",
+    "O(2^target) in worst case."
+  ],
+  "solution": {
+    "javascript": "function combinationSum(candidates, target) {\n  const result = [];\n  function backtrack(start, path, remaining) {\n    if (remaining === 0) { result.push([...path]); return; }\n    if (remaining < 0) return;\n    for (let i = start; i < candidates.length; i++) {\n      path.push(candidates[i]);\n      backtrack(i, path, remaining - candidates[i]);\n      path.pop();\n    }\n  }\n  backtrack(0, [], target);\n  return result;\n}",
+    "cpp": "vector<vector<int>> combinationSum(vector<int>& candidates, int target) {\n    vector<vector<int>> result;\n    vector<int> path;\n    function<void(int,int)> bt = [&](int start, int rem) {\n        if (rem == 0) { result.push_back(path); return; }\n        if (rem < 0) return;\n        for (int i = start; i < candidates.size(); i++) {\n            path.push_back(candidates[i]);\n            bt(i, rem - candidates[i]);\n            path.pop_back();\n        }\n    };\n    bt(0, target);\n    return result;\n}"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "jump-game-ii",
+  "title": "Jump Game II",
+  "difficulty": "Medium",
+  "topic": "Greedy",
+  "prompt": "See the full problem on LeetCode: https://leetcode.com/problems/jump-game-ii/\n\nNeetcode walkthrough: https://www.youtube.com/watch?v=dJ7sWiOoK7g\n\nThis is a placeholder. Add full problem content (prompt, examples, tests) to enable Run and hints.",
+  "examples": [],
+  "constraints": [],
+  "jsStarter": "/**\n * Jump Game II\n * See: https://leetcode.com/problems/jump-game-ii/\n */\nfunction solution(input) {\n  // Your code here\n  return null;\n}",
+  "cppStarter": "#include <vector>\nusing namespace std;\n\n// See: https://leetcode.com/problems/jump-game-ii/\nclass Solution {\npublic:\n    // Implement your solution here\n};",
+  "tests": [],
+  "hints": [
+    "Watch Neetcode's explanation: https://www.youtube.com/watch?v=dJ7sWiOoK7g",
+    "Full problem: https://leetcode.com/problems/jump-game-ii/"
+  ],
+  "solution": {
+    "javascript": "// Add solution when you solve it",
+    "cpp": "// Add solution when you solve it"
+  }
+}

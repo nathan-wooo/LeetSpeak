@@ -1,0 +1,28 @@
+{
+  "id": "min-stack",
+  "title": "Min Stack",
+  "difficulty": "Medium",
+  "topic": "Stack",
+  "prompt": "Design a stack that supports push, pop, top, and retrieving the minimum element in constant time. Implement the MinStack class: MinStack() initializes the stack. void push(int val) pushes the element val onto the stack. void pop() removes the element on the top of the stack. int top() gets the top element of the stack. int getMin() retrieves the minimum element in the stack.",
+  "examples": [
+    {"input": "MinStack, push(-2), push(0), push(-3), getMin(), pop(), top(), getMin()", "output": "null, null, null, null, -3, null, 0, -2"}
+  ],
+  "constraints": [
+    "-2^31 <= val <= 2^31 - 1",
+    "Methods pop, top and getMin operations will always be called on non-empty stacks.",
+    "At most 3 * 10^4 calls will be made to push, pop, top, and getMin."
+  ],
+  "jsStarter": "/**\n * Min Stack - design problem\n */\nvar MinStack = function() { };\nMinStack.prototype.push = function(val) { };\nMinStack.prototype.pop = function() { };\nMinStack.prototype.top = function() { };\nMinStack.prototype.getMin = function() { };",
+  "cppStarter": "class MinStack {\npublic:\n    MinStack() { }\n    void push(int val) { }\n    void pop() { }\n    int top() { }\n    int getMin() { }\n};",
+  "tests": [],
+  "hints": [
+    "Use two stacks: one for values, one for minimums. When pushing, push to min stack only if val <= current min.",
+    "When popping, pop from min stack only if the value being popped equals the current min.",
+    "Alternatively: store pairs (val, minSoFar) in a single stack. Each element knows the min at the time it was pushed.",
+    "All operations O(1)."
+  ],
+  "solution": {
+    "javascript": "var MinStack = function() {\n  this.stack = [];\n  this.minStack = [];\n};\nMinStack.prototype.push = function(val) {\n  this.stack.push(val);\n  if (this.minStack.length === 0 || val <= this.minStack[this.minStack.length-1]) this.minStack.push(val);\n};\nMinStack.prototype.pop = function() {\n  const val = this.stack.pop();\n  if (val === this.minStack[this.minStack.length-1]) this.minStack.pop();\n};\nMinStack.prototype.top = function() { return this.stack[this.stack.length-1]; };\nMinStack.prototype.getMin = function() { return this.minStack[this.minStack.length-1]; };",
+    "cpp": "class MinStack {\n    stack<int> st;\n    stack<int> minSt;\npublic:\n    void push(int val) {\n        st.push(val);\n        if (minSt.empty() || val <= minSt.top()) minSt.push(val);\n    }\n    void pop() {\n        if (st.top() == minSt.top()) minSt.pop();\n        st.pop();\n    }\n    int top() { return st.top(); }\n    int getMin() { return minSt.top(); }\n};"
+  }
+}

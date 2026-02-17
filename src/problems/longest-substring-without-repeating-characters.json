@@ -1,0 +1,29 @@
+{
+  "id": "longest-substring-without-repeating-characters",
+  "title": "Longest Substring Without Repeating Characters",
+  "difficulty": "Medium",
+  "topic": "Sliding Window",
+  "prompt": "Given a string s, find the length of the longest substring without repeating characters.",
+  "examples": [
+    {"input": "s = \"abcabcbb\"", "output": "3"},
+    {"input": "s = \"bbbbb\"", "output": "1"},
+    {"input": "s = \"pwwkew\"", "output": "3"}
+  ],
+  "constraints": [
+    "0 <= s.length <= 5 * 10^4",
+    "s consists of English letters, digits, symbols and spaces."
+  ],
+  "jsStarter": "/**\n * Longest Substring Without Repeating Characters\n * @param {string} s\n * @return {number}\n */\nfunction lengthOfLongestSubstring(s) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "#include <string>\n#include <unordered_set>\nusing namespace std;\n\nclass Solution {\npublic:\n    int lengthOfLongestSubstring(string s) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [],
+  "hints": [
+    "Sliding window with a set. Expand right until you see a duplicate; then shrink left until the duplicate is removed.",
+    "When s[right] is already in the set, move left pointer and remove s[left] from set until s[right] is not in set.",
+    "Track max window size as you expand.",
+    "O(n) time. Each character visited at most twice (once by left, once by right)."
+  ],
+  "solution": {
+    "javascript": "function lengthOfLongestSubstring(s) {\n  const set = new Set();\n  let left = 0, maxLen = 0;\n  for (let right = 0; right < s.length; right++) {\n    while (set.has(s[right])) {\n      set.delete(s[left]);\n      left++;\n    }\n    set.add(s[right]);\n    maxLen = Math.max(maxLen, right - left + 1);\n  }\n  return maxLen;\n}",
+    "cpp": "int lengthOfLongestSubstring(string s) {\n    unordered_set<char> set;\n    int left = 0, maxLen = 0;\n    for (int right = 0; right < s.size(); right++) {\n        while (set.count(s[right])) {\n            set.erase(s[left]);\n            left++;\n        }\n        set.insert(s[right]);\n        maxLen = max(maxLen, right - left + 1);\n    }\n    return maxLen;\n}"
+  }
+}

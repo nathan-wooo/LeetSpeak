@@ -1,0 +1,29 @@
+{
+  "id": "top-k-frequent-elements",
+  "title": "Top K Frequent Elements",
+  "difficulty": "Medium",
+  "topic": "Arrays & Hashing",
+  "prompt": "Given an integer array nums and an integer k, return the k most frequent elements. You may return the answer in any order.",
+  "examples": [
+    {"input": "nums = [1,1,1,2,2,3], k = 2", "output": "[1,2]"},
+    {"input": "nums = [1], k = 1", "output": "[1]"}
+  ],
+  "constraints": [
+    "1 <= nums.length <= 10^5",
+    "-10^4 <= nums[i] <= 10^4",
+    "k is in the range [1, the number of unique elements in the array]."
+  ],
+  "jsStarter": "/**\n * Top K Frequent Elements\n * @param {number[]} nums\n * @param {number} k\n * @return {number[]}\n */\nfunction topKFrequent(nums, k) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "#include <vector>\n#include <unordered_map>\n#include <queue>\nusing namespace std;\n\nclass Solution {\npublic:\n    vector<int> topKFrequent(vector<int>& nums, int k) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [],
+  "hints": [
+    "Count the frequency of each element using a hash map.",
+    "Use a min-heap (priority queue) of size k. Keep the k most frequent elements.",
+    "Alternatively: bucket sort - create buckets where bucket[i] holds all elements with frequency i.",
+    "Bucket sort: O(n) time. Heap: O(n log k) time."
+  ],
+  "solution": {
+    "javascript": "function topKFrequent(nums, k) {\n  const count = new Map();\n  for (const n of nums) count.set(n, (count.get(n) || 0) + 1);\n  const buckets = Array(nums.length + 1).fill(null).map(() => []);\n  for (const [num, freq] of count) buckets[freq].push(num);\n  const result = [];\n  for (let i = buckets.length - 1; i >= 0 && result.length < k; i--) {\n    for (const n of buckets[i]) {\n      result.push(n);\n      if (result.length === k) return result;\n    }\n  }\n  return result;\n}",
+    "cpp": "vector<int> topKFrequent(vector<int>& nums, int k) {\n    unordered_map<int, int> count;\n    for (int n : nums) count[n]++;\n    vector<vector<int>> buckets(nums.size() + 1);\n    for (auto& p : count) buckets[p.second].push_back(p.first);\n    vector<int> result;\n    for (int i = buckets.size() - 1; i >= 0 && result.size() < k; i--)\n        for (int n : buckets[i]) {\n            result.push_back(n);\n            if (result.size() == k) return result;\n        }\n    return result;\n}"
+  }
+}

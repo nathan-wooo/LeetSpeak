@@ -1,0 +1,29 @@
+{
+  "id": "lru-cache",
+  "title": "LRU Cache",
+  "difficulty": "Medium",
+  "topic": "Linked List",
+  "prompt": "Design a data structure that follows the constraints of a Least Recently Used (LRU) cache. Implement the LRUCache class: LRUCache(int capacity) initializes the cache with positive size capacity. int get(int key) returns the value of the key if it exists, otherwise -1. void put(int key, int value) updates the value or inserts the key if not present. When capacity is reached, invalidate the least recently used item.",
+  "examples": [
+    {"input": "LRUCache(2), put(1,1), put(2,2), get(1), put(3,3), get(2), put(4,4), get(1), get(3), get(4)", "output": "null,null,null,1,null,-1,null,-1,3,4"}
+  ],
+  "constraints": [
+    "1 <= capacity <= 3000",
+    "0 <= key <= 10^4",
+    "0 <= value <= 10^5",
+    "At most 2 * 10^5 calls to get and put."
+  ],
+  "jsStarter": "/**\n * LRU Cache - design problem\n */\nvar LRUCache = function(capacity) { };\nLRUCache.prototype.get = function(key) { };\nLRUCache.prototype.put = function(key, value) { };",
+  "cppStarter": "class LRUCache {\npublic:\n    LRUCache(int capacity) { }\n    int get(int key) { }\n    void put(int key, int value) { }\n};",
+  "tests": [],
+  "hints": [
+    "Use a map for O(1) lookup. Use a doubly linked list to maintain order (most recent at front, least at back).",
+    "On get: if exists, move to front (remove from list, add to head). On put: if exists update and move to front; else add new, evict from tail if over capacity.",
+    "Map stores key -> {value, list node} for quick access and to remove from list.",
+    "Alternatively use Map which preserves insertion order - delete and re-set to move to end."
+  ],
+  "solution": {
+    "javascript": "var LRUCache = function(capacity) {\n  this.cap = capacity;\n  this.map = new Map();\n};\nLRUCache.prototype.get = function(key) {\n  if (!this.map.has(key)) return -1;\n  const val = this.map.get(key);\n  this.map.delete(key);\n  this.map.set(key, val);\n  return val;\n};\nLRUCache.prototype.put = function(key, value) {\n  if (this.map.has(key)) this.map.delete(key);\n  this.map.set(key, value);\n  if (this.map.size > this.cap) this.map.delete(this.map.keys().next().value);\n};",
+    "cpp": "class LRUCache {\n    int cap;\n    list<pair<int,int>> li;\n    unordered_map<int,list<pair<int,int>>::iterator> map;\npublic:\n    LRUCache(int capacity) : cap(capacity) {}\n    int get(int key) {\n        if (!map.count(key)) return -1;\n        auto it = map[key];\n        li.splice(li.begin(), li, it);\n        return it->second;\n    }\n    void put(int key, int value) {\n        if (map.count(key)) li.erase(map[key]);\n        li.push_front({key, value});\n        map[key] = li.begin();\n        if (map.size() > cap) { map.erase(li.back().first); li.pop_back(); }\n    }\n};"
+  }
+}

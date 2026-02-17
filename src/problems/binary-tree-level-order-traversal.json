@@ -1,0 +1,29 @@
+{
+  "id": "binary-tree-level-order-traversal",
+  "title": "Binary Tree Level Order Traversal",
+  "difficulty": "Medium",
+  "topic": "Trees",
+  "prompt": "Given the root of a binary tree, return the level order traversal of its nodes' values. (i.e., from left to right, level by level).",
+  "examples": [
+    {"input": "root = [3,9,20,null,null,15,7]", "output": "[[3],[9,20],[15,7]]"},
+    {"input": "root = [1]", "output": "[[1]]"},
+    {"input": "root = []", "output": "[]"}
+  ],
+  "constraints": [
+    "0 <= number of nodes <= 2000",
+    "-1000 <= Node.val <= 1000"
+  ],
+  "jsStarter": "/**\n * Binary Tree Level Order Traversal\n * @param {TreeNode} root\n * @return {number[][]}\n */\nfunction levelOrder(root) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "class Solution {\npublic:\n    vector<vector<int>> levelOrder(TreeNode* root) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [],
+  "hints": [
+    "BFS with a queue. Process nodes level by level. For each level, get the current queue size, process that many nodes, and add their children.",
+    "Initialize queue with root. While queue not empty: record size, create level array, for i in 0..size: pop node, add to level, push children. Push level to result.",
+    "Alternatively use DFS with level parameter and append to result[level].",
+    "O(n) time, O(n) space for the queue."
+  ],
+  "solution": {
+    "javascript": "function levelOrder(root) {\n  if (!root) return [];\n  const result = [], q = [root];\n  while (q.length) {\n    const level = [], size = q.length;\n    for (let i = 0; i < size; i++) {\n      const node = q.shift();\n      level.push(node.val);\n      if (node.left) q.push(node.left);\n      if (node.right) q.push(node.right);\n    }\n    result.push(level);\n  }\n  return result;\n}",
+    "cpp": "vector<vector<int>> levelOrder(TreeNode* root) {\n    if (!root) return {};\n    vector<vector<int>> result;\n    queue<TreeNode*> q; q.push(root);\n    while (!q.empty()) {\n        vector<int> level;\n        int size = q.size();\n        for (int i = 0; i < size; i++) {\n            TreeNode* node = q.front(); q.pop();\n            level.push_back(node->val);\n            if (node->left) q.push(node->left);\n            if (node->right) q.push(node->right);\n        }\n        result.push_back(level);\n    }\n    return result;\n}"
+  }
+}

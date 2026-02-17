@@ -1,0 +1,20 @@
+{
+  "id": "gas-station",
+  "title": "Gas Station",
+  "difficulty": "Medium",
+  "topic": "Greedy",
+  "prompt": "See the full problem on LeetCode: https://leetcode.com/problems/gas-station/\n\nNeetcode walkthrough: https://www.youtube.com/watch?v=lJwbPZGo05A\n\nThis is a placeholder. Add full problem content (prompt, examples, tests) to enable Run and hints.",
+  "examples": [],
+  "constraints": [],
+  "jsStarter": "/**\n * Gas Station\n * See: https://leetcode.com/problems/gas-station/\n */\nfunction solution(input) {\n  // Your code here\n  return null;\n}",
+  "cppStarter": "#include <vector>\nusing namespace std;\n\n// See: https://leetcode.com/problems/gas-station/\nclass Solution {\npublic:\n    // Implement your solution here\n};",
+  "tests": [],
+  "hints": [
+    "Watch Neetcode's explanation: https://www.youtube.com/watch?v=lJwbPZGo05A",
+    "Full problem: https://leetcode.com/problems/gas-station/"
+  ],
+  "solution": {
+    "javascript": "// Add solution when you solve it",
+    "cpp": "// Add solution when you solve it"
+  }
+}

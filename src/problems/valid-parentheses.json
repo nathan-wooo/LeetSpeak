@@ -1,0 +1,29 @@
+{
+  "id": "valid-parentheses",
+  "title": "Valid Parentheses",
+  "difficulty": "Easy",
+  "topic": "Stack",
+  "prompt": "Given a string s containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid. An input string is valid if: 1) Open brackets must be closed by the same type of brackets. 2) Open brackets must be closed in the correct order. 3) Every close bracket has a corresponding open bracket of the same type.",
+  "examples": [
+    {"input": "s = \"()\"", "output": "true"},
+    {"input": "s = \"()[]{}\"", "output": "true"},
+    {"input": "s = \"(]\"", "output": "false"}
+  ],
+  "constraints": [
+    "1 <= s.length <= 10^4",
+    "s consists of parentheses only '()[]{}'."
+  ],
+  "jsStarter": "/**\n * Valid Parentheses\n * @param {string} s\n * @return {boolean}\n */\nfunction isValid(s) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "#include <string>\n#include <stack>\nusing namespace std;\n\nclass Solution {\npublic:\n    bool isValid(string s) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [],
+  "hints": [
+    "Use a stack. When you see an opening bracket, push it. When you see a closing bracket, check if it matches the top of the stack.",
+    "If the closing bracket matches the top, pop. If not, or stack is empty, return false.",
+    "At the end, the stack must be empty.",
+    "O(n) time, O(n) space."
+  ],
+  "solution": {
+    "javascript": "function isValid(s) {\n  const stack = [];\n  const pairs = { ')': '(', ']': '[', '}': '{' };\n  for (const c of s) {\n    if (pairs[c]) {\n      if (stack.pop() !== pairs[c]) return false;\n    } else stack.push(c);\n  }\n  return stack.length === 0;\n}",
+    "cpp": "bool isValid(string s) {\n    stack<char> st;\n    for (char c : s) {\n        if (c == '(' || c == '[' || c == '{') st.push(c);\n        else {\n            if (st.empty()) return false;\n            if ((c == ')' && st.top() != '(') || (c == ']' && st.top() != '[') || (c == '}' && st.top() != '{')) return false;\n            st.pop();\n        }\n    }\n    return st.empty();\n}"
+  }
+}

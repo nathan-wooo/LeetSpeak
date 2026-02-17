@@ -1,0 +1,29 @@
+{
+  "id": "valid-palindrome",
+  "title": "Valid Palindrome",
+  "difficulty": "Easy",
+  "topic": "Two Pointers",
+  "prompt": "A phrase is a palindrome if, after converting all uppercase letters into lowercase letters and removing all non-alphanumeric characters, it reads the same forward and backward. Given a string s, return true if it is a palindrome, or false otherwise.",
+  "examples": [
+    {"input": "s = \"A man, a plan, a canal: Panama\"", "output": "true"},
+    {"input": "s = \"race a car\"", "output": "false"},
+    {"input": "s = \" \"", "output": "true"}
+  ],
+  "constraints": [
+    "1 <= s.length <= 2 * 10^5",
+    "s consists only of printable ASCII characters."
+  ],
+  "jsStarter": "/**\n * Valid Palindrome\n * @param {string} s\n * @return {boolean}\n */\nfunction isPalindrome(s) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "#include <string>\n#include <cctype>\nusing namespace std;\n\nclass Solution {\npublic:\n    bool isPalindrome(string s) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [],
+  "hints": [
+    "Use two pointers: one at the start, one at the end. Move them toward each other.",
+    "Skip non-alphanumeric characters by advancing the pointer until you find a valid character.",
+    "Compare characters (convert to lowercase for comparison). If they don't match, return false.",
+    "Stop when left >= right. O(n) time, O(1) space."
+  ],
+  "solution": {
+    "javascript": "function isPalindrome(s) {\n  let left = 0, right = s.length - 1;\n  while (left < right) {\n    while (left < right && !/\\w/.test(s[left])) left++;\n    while (left < right && !/\\w/.test(s[right])) right--;\n    if (s[left].toLowerCase() !== s[right].toLowerCase()) return false;\n    left++; right--;\n  }\n  return true;\n}",
+    "cpp": "bool isPalindrome(string s) {\n    int left = 0, right = s.size() - 1;\n    while (left < right) {\n        while (left < right && !isalnum(s[left])) left++;\n        while (left < right && !isalnum(s[right])) right--;\n        if (tolower(s[left]) != tolower(s[right])) return false;\n        left++; right--;\n    }\n    return true;\n}"
+  }
+}

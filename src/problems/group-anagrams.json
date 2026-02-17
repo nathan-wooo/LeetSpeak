@@ -1,0 +1,30 @@
+{
+  "id": "group-anagrams",
+  "title": "Group Anagrams",
+  "difficulty": "Medium",
+  "topic": "Arrays & Hashing",
+  "prompt": "Given an array of strings strs, group the anagrams together. You can return the answer in any order. An Anagram is a word or phrase formed by rearranging the letters of a different word or phrase, typically using all the original letters exactly once.",
+  "examples": [
+    {"input": "strs = [\"eat\",\"tea\",\"tan\",\"ate\",\"nat\",\"bat\"]", "output": "[[\"bat\"],[\"nat\",\"tan\"],[\"ate\",\"eat\",\"tea\"]]"},
+    {"input": "strs = [\"\"]", "output": "[[\"\"]]"},
+    {"input": "strs = [\"a\"]", "output": "[[\"a\"]]"}
+  ],
+  "constraints": [
+    "1 <= strs.length <= 10^4",
+    "0 <= strs[i].length <= 100",
+    "strs[i] consists of lowercase English letters."
+  ],
+  "jsStarter": "/**\n * Group Anagrams\n * @param {string[]} strs\n * @return {string[][]}\n */\nfunction groupAnagrams(strs) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "#include <vector>\n#include <string>\n#include <unordered_map>\nusing namespace std;\n\nclass Solution {\npublic:\n    vector<vector<string>> groupAnagrams(vector<string>& strs) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [],
+  "hints": [
+    "Anagrams have the same sorted string. Use the sorted string as a key in a hash map.",
+    "For each string, sort it to get a canonical form. Group strings that share the same sorted form.",
+    "Alternatively, use character count (e.g., \"a1b2c3\") as the key instead of sorting.",
+    "Time: O(n * k log k) with sort, or O(n * k) with character count. k = max string length."
+  ],
+  "solution": {
+    "javascript": "function groupAnagrams(strs) {\n  const map = new Map();\n  for (const s of strs) {\n    const key = [...s].sort().join('');\n    if (!map.has(key)) map.set(key, []);\n    map.get(key).push(s);\n  }\n  return [...map.values()];\n}",
+    "cpp": "vector<vector<string>> groupAnagrams(vector<string>& strs) {\n    unordered_map<string, vector<string>> map;\n    for (string& s : strs) {\n        string key = s;\n        sort(key.begin(), key.end());\n        map[key].push_back(s);\n    }\n    vector<vector<string>> result;\n    for (auto& p : map) result.push_back(p.second);\n    return result;\n}"
+  }
+}

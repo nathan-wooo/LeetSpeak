@@ -1,0 +1,28 @@
+{
+  "id": "product-of-array-except-self",
+  "title": "Product of Array Except Self",
+  "difficulty": "Medium",
+  "topic": "Arrays & Hashing",
+  "prompt": "Given an integer array nums, return an array answer such that answer[i] is equal to the product of all the elements of nums except nums[i]. You must write an algorithm that runs in O(n) time and without using the division operation.",
+  "examples": [
+    {"input": "nums = [1,2,3,4]", "output": "[24,12,8,6]"},
+    {"input": "nums = [-1,1,0,-3,3]", "output": "[0,0,9,0,0]"}
+  ],
+  "constraints": [
+    "2 <= nums.length <= 10^5",
+    "-30 <= nums[i] <= 30"
+  ],
+  "jsStarter": "/**\n * Product of Array Except Self\n * @param {number[]} nums\n * @return {number[]}\n */\nfunction productExceptSelf(nums) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "#include <vector>\nusing namespace std;\n\nclass Solution {\npublic:\n    vector<int> productExceptSelf(vector<int>& nums) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [],
+  "hints": [
+    "For each index i, you need product of everything to the left × product of everything to the right.",
+    "First pass: build prefix array where prefix[i] = product of nums[0..i-1].",
+    "Second pass: build suffix (or use a running variable) and multiply with prefix to get answer.",
+    "You can do it in O(1) extra space by using the output array for prefix, then a single variable for suffix."
+  ],
+  "solution": {
+    "javascript": "function productExceptSelf(nums) {\n  const n = nums.length;\n  const result = new Array(n);\n  result[0] = 1;\n  for (let i = 1; i < n; i++) result[i] = result[i - 1] * nums[i - 1];\n  let suffix = 1;\n  for (let i = n - 1; i >= 0; i--) {\n    result[i] *= suffix;\n    suffix *= nums[i];\n  }\n  return result;\n}",
+    "cpp": "vector<int> productExceptSelf(vector<int>& nums) {\n    int n = nums.size();\n    vector<int> result(n);\n    result[0] = 1;\n    for (int i = 1; i < n; i++) result[i] = result[i-1] * nums[i-1];\n    int suffix = 1;\n    for (int i = n - 1; i >= 0; i--) {\n        result[i] *= suffix;\n        suffix *= nums[i];\n    }\n    return result;\n}"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "id": "daily-temperatures",
+  "title": "Daily Temperatures",
+  "difficulty": "Medium",
+  "topic": "Stack",
+  "prompt": "Given an array of integers temperatures represents the daily temperatures, return an array answer such that answer[i] is the number of days you have to wait after the ith day to get a warmer temperature. If there is no future day for which this is possible, keep answer[i] == 0 instead.",
+  "examples": [
+    {"input": "temperatures = [73,74,75,71,69,72,76,73]", "output": "[1,1,4,2,1,1,0,0]"},
+    {"input": "temperatures = [30,40,50,60]", "output": "[1,1,1,0]"}
+  ],
+  "constraints": [
+    "1 <= temperatures.length <= 10^5",
+    "30 <= temperatures[i] <= 100"
+  ],
+  "jsStarter": "/**\n * Daily Temperatures\n * @param {number[]} temperatures\n * @return {number[]}\n */\nfunction dailyTemperatures(temperatures) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "#include <vector>\n#include <stack>\nusing namespace std;\n\nclass Solution {\npublic:\n    vector<int> dailyTemperatures(vector<int>& temperatures) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [],
+  "hints": [
+    "Monotonic stack: store indices of temperatures in decreasing order. When we see a warmer day, it resolves previous colder days.",
+    "For each day, pop from stack while current temp > stack top's temp. The answer for stack top is (current index - stack top index).",
+    "Push current index onto stack after resolving. Stack stores indices of days waiting for a warmer day.",
+    "O(n) - each index pushed and popped at most once."
+  ],
+  "solution": {
+    "javascript": "function dailyTemperatures(temperatures) {\n  const stack = [];\n  const result = new Array(temperatures.length).fill(0);\n  for (let i = 0; i < temperatures.length; i++) {\n    while (stack.length && temperatures[i] > temperatures[stack[stack.length-1]]) {\n      const j = stack.pop();\n      result[j] = i - j;\n    }\n    stack.push(i);\n  }\n  return result;\n}",
+    "cpp": "vector<int> dailyTemperatures(vector<int>& temperatures) {\n    stack<int> st;\n    vector<int> result(temperatures.size(), 0);\n    for (int i = 0; i < temperatures.size(); i++) {\n        while (!st.empty() && temperatures[i] > temperatures[st.top()]) {\n            int j = st.top(); st.pop();\n            result[j] = i - j;\n        }\n        st.push(i);\n    }\n    return result;\n}"
+  }
+}

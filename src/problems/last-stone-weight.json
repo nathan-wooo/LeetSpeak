@@ -1,0 +1,28 @@
+{
+  "id": "last-stone-weight",
+  "title": "Last Stone Weight",
+  "difficulty": "Easy",
+  "topic": "Heaps",
+  "prompt": "You are given an array of integers stones where stones[i] is the weight of the ith stone. We are playing a game with the stones. On each turn, we choose the heaviest two stones and smash them together. Suppose the heaviest two stones have weights x and y with x <= y. The result of this smash is: if x == y, both stones are destroyed; if x != y, the stone of weight x is destroyed, and the stone of weight y has new weight y - x. At the end of the game, there is at most one stone left. Return the weight of the last remaining stone. If there are no stones left, return 0.",
+  "examples": [
+    {"input": "stones = [2,7,4,1,8,1]", "output": "1"},
+    {"input": "stones = [1]", "output": "1"}
+  ],
+  "constraints": [
+    "1 <= stones.length <= 30",
+    "1 <= stones[i] <= 1000"
+  ],
+  "jsStarter": "/**\n * Last Stone Weight\n * @param {number[]} stones\n * @return {number}\n */\nfunction lastStoneWeight(stones) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "class Solution {\npublic:\n    int lastStoneWeight(vector<int>& stones) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [],
+  "hints": [
+    "Use a max-heap. Repeatedly extract two largest, smash them, if difference > 0 push back the difference.",
+    "In JS: use negative values in a min-heap to simulate max-heap. Or sort and simulate.",
+    "While heap has more than 1 element: pop two, push abs(a-b) if non-zero.",
+    "O(n log n) time."
+  ],
+  "solution": {
+    "javascript": "function lastStoneWeight(stones) {\n  const heap = stones.slice().sort((a,b) => b - a);\n  while (heap.length > 1) {\n    const y = heap.shift(), x = heap.shift();\n    const diff = y - x;\n    if (diff > 0) {\n      let i = 0; while (i < heap.length && heap[i] > diff) i++;\n      heap.splice(i, 0, diff);\n    }\n  }\n  return heap[0] ?? 0;\n}",
+    "cpp": "int lastStoneWeight(vector<int>& stones) {\n    priority_queue<int> pq(stones.begin(), stones.end());\n    while (pq.size() > 1) {\n        int y = pq.top(); pq.pop();\n        int x = pq.top(); pq.pop();\n        if (y > x) pq.push(y - x);\n    }\n    return pq.empty() ? 0 : pq.top();\n}"
+  }
+}

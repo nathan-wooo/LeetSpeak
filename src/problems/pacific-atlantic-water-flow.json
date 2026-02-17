@@ -1,0 +1,26 @@
+{
+  "id": "pacific-atlantic-water-flow",
+  "title": "Pacific Atlantic Water Flow",
+  "difficulty": "Medium",
+  "topic": "Graphs",
+  "prompt": "There is an m x n rectangular island that borders both the Pacific Ocean and Atlantic Ocean. Water can only flow in four directions. A cell can flow to the ocean if its height is less than or equal to the neighboring cell. Return grid coordinates where water can flow to both oceans.",
+  "examples": [
+    {"input": "heights = [[1,2,2,3,5],[3,2,3,4,4],[2,4,5,3,1],[6,7,1,4,5],[5,1,1,2,4]]", "output": "[[0,4],[1,3],[1,4],[2,2],[3,0],[3,1],[4,0]]"}
+  ],
+  "constraints": [
+    "1 <= m, n <= 200"
+  ],
+  "jsStarter": "/**\n * Pacific Atlantic Water Flow\n * @param {number[][]} heights\n * @return {number[][]}\n */\nfunction pacificAtlantic(heights) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "class Solution {\npublic:\n    vector<vector<int>> pacificAtlantic(vector<vector<int>>& heights) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [],
+  "hints": [
+    "DFS from Pacific border (left, top) and Atlantic border (right, bottom). Mark cells reachable from each. Return cells in both.",
+    "Flow is reverse: from ocean to cell. Start at edges, go to higher or equal height.",
+    "Two visited sets. Cells in both go to result.",
+    "O(m*n) time."
+  ],
+  "solution": {
+    "javascript": "function pacificAtlantic(heights) {\n  const m = heights.length, n = heights[0].length;\n  const pac = new Set(), atl = new Set();\n  function dfs(r, c, visited, prev) {\n    if (r<0||r>=m||c<0||c>=n||visited.has(r+','+c)||heights[r][c]<prev) return;\n    visited.add(r+','+c);\n    const h = heights[r][c];\n    dfs(r+1,c,visited,h); dfs(r-1,c,visited,h); dfs(r,c+1,visited,h); dfs(r,c-1,visited,h);\n  }\n  for (let c = 0; c < n; c++) { dfs(0, c, pac, -1); dfs(m-1, c, atl, -1); }\n  for (let r = 0; r < m; r++) { dfs(r, 0, pac, -1); dfs(r, n-1, atl, -1); }\n  const result = [];\n  for (let r = 0; r < m; r++) for (let c = 0; c < n; c++) if (pac.has(r+','+c) && atl.has(r+','+c)) result.push([r,c]);\n  return result;\n}",
+    "cpp": "vector<vector<int>> pacificAtlantic(vector<vector<int>>& heights) {\n    int m = heights.size(), n = heights[0].size();\n    vector<vector<bool>> pac(m, vector<bool>(n)), atl(m, vector<bool>(n));\n    function<void(int,int,vector<vector<bool>>&,int)> dfs = [&](int r, int c, vector<vector<bool>>& v, int prev) {\n        if (r<0||r>=m||c<0||c>=n||v[r][c]||heights[r][c]<prev) return;\n        v[r][c] = true;\n        int h = heights[r][c];\n        dfs(r+1,c,v,h); dfs(r-1,c,v,h); dfs(r,c+1,v,h); dfs(r,c-1,v,h);\n    };\n    for (int c=0;c<n;c++) { dfs(0,c,pac,-1); dfs(m-1,c,atl,-1); }\n    for (int r=0;r<m;r++) { dfs(r,0,pac,-1); dfs(r,n-1,atl,-1); }\n    vector<vector<int>> result;\n    for (int r=0;r<m;r++) for (int c=0;c<n;c++) if (pac[r][c]&&atl[r][c]) result.push_back({r,c});\n    return result;\n}"
+  }
+}

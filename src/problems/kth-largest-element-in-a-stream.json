@@ -1,0 +1,28 @@
+{
+  "id": "kth-largest-element-in-a-stream",
+  "title": "Kth Largest Element In a Stream",
+  "difficulty": "Easy",
+  "topic": "Heaps",
+  "prompt": "Design a class to find the kth largest element in a stream. Note that it is the kth largest element in the sorted order, not the kth distinct element. Implement KthLargest: KthLargest(int k, int[] nums) - Initializes the object with the integer k and the stream of integers nums. int add(int val) - Appends the integer val to the stream and returns the element representing the kth largest element in the stream.",
+  "examples": [
+    {"input": "[\"KthLargest\", \"add\", \"add\", \"add\", \"add\", \"add\"]\n[[3, [4, 5, 8, 2]], [3], [5], [10], [9], [4]]", "output": "[null, 4, 5, 5, 8, 8]"}
+  ],
+  "constraints": [
+    "1 <= k <= 10^4",
+    "0 <= nums.length <= 10^4",
+    "-10^4 <= nums[i], val <= 10^4"
+  ],
+  "jsStarter": "/**\n * Kth Largest Element In a Stream\n * @param {number} k\n * @param {number[]} nums\n */\nfunction KthLargest(k, nums) {\n  // Talk through your approach out loud like an interview.\n}\n\nKthLargest.prototype.add = function(val) { };",
+  "cppStarter": "class KthLargest {\npublic:\n    KthLargest(int k, vector<int>& nums) { }\n    int add(int val) { }\n};",
+  "tests": [],
+  "hints": [
+    "Maintain a min-heap of size k. The kth largest is the smallest in that heap (top).",
+    "Initialize: add all nums to heap, if size > k pop the minimum. add(val): push val, if size > k pop. Return top.",
+    "In JS, implement a simple MinHeap or use an array and sort (O(n log n) per add - less optimal but works).",
+    "O(log k) per add with a proper heap."
+  ],
+  "solution": {
+    "javascript": "class MinHeap {\n  constructor() { this.heap = []; }\n  push(val) {\n    this.heap.push(val);\n    let i = this.heap.length - 1;\n    while (i > 0) {\n      const p = (i - 1) >> 1;\n      if (this.heap[p] <= this.heap[i]) break;\n      [this.heap[p], this.heap[i]] = [this.heap[i], this.heap[p]];\n      i = p;\n    }\n  }\n  pop() {\n    const top = this.heap[0];\n    this.heap[0] = this.heap.pop();\n    let i = 0;\n    while (true) {\n      const l = 2 * i + 1, r = 2 * i + 2;\n      let smallest = i;\n      if (l < this.heap.length && this.heap[l] < this.heap[smallest]) smallest = l;\n      if (r < this.heap.length && this.heap[r] < this.heap[smallest]) smallest = r;\n      if (smallest === i) break;\n      [this.heap[i], this.heap[smallest]] = [this.heap[smallest], this.heap[i]];\n      i = smallest;\n    }\n    return top;\n  }\n  peek() { return this.heap[0]; }\n  get size() { return this.heap.length; }\n}\nfunction KthLargest(k, nums) {\n  this.k = k; this.heap = new MinHeap();\n  for (const n of nums) { this.heap.push(n); if (this.heap.size > k) this.heap.pop(); }\n}\nKthLargest.prototype.add = function(val) {\n  this.heap.push(val);\n  if (this.heap.size > this.k) this.heap.pop();\n  return this.heap.peek();\n};",
+    "cpp": "class KthLargest {\npublic:\n    priority_queue<int, vector<int>, greater<int>> minHeap;\n    int k;\n    KthLargest(int k, vector<int>& nums) : k(k) {\n        for (int n : nums) { minHeap.push(n); if (minHeap.size() > k) minHeap.pop(); }\n    }\n    int add(int val) {\n        minHeap.push(val);\n        if (minHeap.size() > k) minHeap.pop();\n        return minHeap.top();\n    }\n};"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "reverse-integer",
+  "title": "Reverse Integer",
+  "difficulty": "Medium",
+  "topic": "Bit Manipulation",
+  "prompt": "See the full problem on LeetCode: https://leetcode.com/problems/reverse-integer/\n\nNeetcode walkthrough: https://www.youtube.com/watch?v=HAgLH58IgJQ\n\nThis is a placeholder. Add full problem content (prompt, examples, tests) to enable Run and hints.",
+  "examples": [],
+  "constraints": [],
+  "jsStarter": "/**\n * Reverse Integer\n * See: https://leetcode.com/problems/reverse-integer/\n */\nfunction solution(input) {\n  // Your code here\n  return null;\n}",
+  "cppStarter": "#include <vector>\nusing namespace std;\n\n// See: https://leetcode.com/problems/reverse-integer/\nclass Solution {\npublic:\n    // Implement your solution here\n};",
+  "tests": [],
+  "hints": [
+    "Watch Neetcode's explanation: https://www.youtube.com/watch?v=HAgLH58IgJQ",
+    "Full problem: https://leetcode.com/problems/reverse-integer/"
+  ],
+  "solution": {
+    "javascript": "// Add solution when you solve it",
+    "cpp": "// Add solution when you solve it"
+  }
+}

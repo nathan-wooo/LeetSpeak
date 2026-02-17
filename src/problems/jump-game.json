@@ -1,0 +1,20 @@
+{
+  "id": "jump-game",
+  "title": "Jump Game",
+  "difficulty": "Medium",
+  "topic": "Greedy",
+  "prompt": "See the full problem on LeetCode: https://leetcode.com/problems/jump-game/\n\nNeetcode walkthrough: https://www.youtube.com/watch?v=Yan0cv2cLy8\n\nThis is a placeholder. Add full problem content (prompt, examples, tests) to enable Run and hints.",
+  "examples": [],
+  "constraints": [],
+  "jsStarter": "/**\n * Jump Game\n * See: https://leetcode.com/problems/jump-game/\n */\nfunction solution(input) {\n  // Your code here\n  return null;\n}",
+  "cppStarter": "#include <vector>\nusing namespace std;\n\n// See: https://leetcode.com/problems/jump-game/\nclass Solution {\npublic:\n    // Implement your solution here\n};",
+  "tests": [],
+  "hints": [
+    "Watch Neetcode's explanation: https://www.youtube.com/watch?v=Yan0cv2cLy8",
+    "Full problem: https://leetcode.com/problems/jump-game/"
+  ],
+  "solution": {
+    "javascript": "// Add solution when you solve it",
+    "cpp": "// Add solution when you solve it"
+  }
+}

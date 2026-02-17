@@ -1,0 +1,28 @@
+{
+  "id": "permutation-in-string",
+  "title": "Permutation In String",
+  "difficulty": "Medium",
+  "topic": "Sliding Window",
+  "prompt": "Given two strings s1 and s2, return true if s2 contains a permutation of s1, or false otherwise. In other words, return true if one of s1's permutations is the substring of s2.",
+  "examples": [
+    {"input": "s1 = \"ab\", s2 = \"eidbaooo\"", "output": "true"},
+    {"input": "s1 = \"ab\", s2 = \"eidboaoo\"", "output": "false"}
+  ],
+  "constraints": [
+    "1 <= s1.length, s2.length <= 10^4",
+    "s1 and s2 consist of lowercase English letters."
+  ],
+  "jsStarter": "/**\n * Permutation In String\n * @param {string} s1\n * @param {string} s2\n * @return {boolean}\n */\nfunction checkInclusion(s1, s2) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "#include <string>\n#include <unordered_map>\nusing namespace std;\n\nclass Solution {\npublic:\n    bool checkInclusion(string s1, string s2) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [],
+  "hints": [
+    "A permutation of s1 has the same character counts as s1. Use a sliding window of length s1.length.",
+    "Count characters in s1. Slide a window of size len(s1) over s2, and check if the window has matching counts.",
+    "When sliding, decrement count for character leaving the window, increment for character entering. Compare with s1's counts.",
+    "O(n) time. Use two count arrays or a single array with diff tracking."
+  ],
+  "solution": {
+    "javascript": "function checkInclusion(s1, s2) {\n  if (s1.length > s2.length) return false;\n  const count1 = Array(26).fill(0), count2 = Array(26).fill(0);\n  for (let i = 0; i < s1.length; i++) {\n    count1[s1.charCodeAt(i) - 97]++;\n    count2[s2.charCodeAt(i) - 97]++;\n  }\n  let matches = count1.reduce((a, c, i) => a + (c === count2[i] ? 1 : 0), 0);\n  for (let i = s1.length; i < s2.length; i++) {\n    if (matches === 26) return true;\n    const r = s2.charCodeAt(i) - 97, l = s2.charCodeAt(i - s1.length) - 97;\n    count2[r]++;\n    if (count2[r] === count1[r]) matches++; else if (count2[r] === count1[r] + 1) matches--;\n    count2[l]--;\n    if (count2[l] === count1[l]) matches++; else if (count2[l] === count1[l] - 1) matches--;\n  }\n  return matches === 26;\n}",
+    "cpp": "bool checkInclusion(string s1, string s2) {\n    if (s1.size() > s2.size()) return false;\n    vector<int> count1(26), count2(26);\n    for (int i = 0; i < s1.size(); i++) {\n        count1[s1[i]-'a']++;\n        count2[s2[i]-'a']++;\n    }\n    int matches = 0;\n    for (int i = 0; i < 26; i++) if (count1[i] == count2[i]) matches++;\n    for (int i = s1.size(); i < s2.size(); i++) {\n        if (matches == 26) return true;\n        int r = s2[i] - 'a', l = s2[i - s1.size()] - 'a';\n        count2[r]++;\n        if (count2[r] == count1[r]) matches++; else if (count2[r] == count1[r] + 1) matches--;\n        count2[l]--;\n        if (count2[l] == count1[l]) matches++; else if (count2[l] == count1[l] - 1) matches--;\n    }\n    return matches == 26;\n}"
+  }
+}

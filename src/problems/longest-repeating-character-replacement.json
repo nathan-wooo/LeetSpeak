@@ -1,0 +1,29 @@
+{
+  "id": "longest-repeating-character-replacement",
+  "title": "Longest Repeating Character Replacement",
+  "difficulty": "Medium",
+  "topic": "Sliding Window",
+  "prompt": "You are given a string s and an integer k. You can choose any character of the string and change it to any other uppercase English character. You can perform this operation at most k times. Return the length of the longest substring containing the same letter you can get after performing the above operations.",
+  "examples": [
+    {"input": "s = \"ABAB\", k = 2", "output": "4"},
+    {"input": "s = \"AABABBA\", k = 1", "output": "4"}
+  ],
+  "constraints": [
+    "1 <= s.length <= 10^5",
+    "s consists of only uppercase English letters.",
+    "0 <= k <= s.length"
+  ],
+  "jsStarter": "/**\n * Longest Repeating Character Replacement\n * @param {string} s\n * @param {number} k\n * @return {number}\n */\nfunction characterReplacement(s, k) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "#include <string>\n#include <unordered_map>\nusing namespace std;\n\nclass Solution {\npublic:\n    int characterReplacement(string s, int k) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [],
+  "hints": [
+    "Sliding window. For a valid window: (window length - max frequency in window) <= k. That's the number of replacements needed.",
+    "Track character counts in the window. The key: we care about max frequency. If we can replace the rest within k, the window is valid.",
+    "When window becomes invalid, shrink from left. We don't need to shrink one-by-one; we can keep max window size and let it grow/slide.",
+    "Trick: we only expand the window. When invalid, we move the whole window right (left++, right++). maxLen stays because we had a valid window of that size."
+  ],
+  "solution": {
+    "javascript": "function characterReplacement(s, k) {\n  const count = {};\n  let maxFreq = 0, maxLen = 0, left = 0;\n  for (let right = 0; right < s.length; right++) {\n    count[s[right]] = (count[s[right]] || 0) + 1;\n    maxFreq = Math.max(maxFreq, count[s[right]]);\n    if (right - left + 1 - maxFreq > k) {\n      count[s[left]]--;\n      left++;\n    }\n    maxLen = Math.max(maxLen, right - left + 1);\n  }\n  return maxLen;\n}",
+    "cpp": "int characterReplacement(string s, int k) {\n    unordered_map<char, int> count;\n    int maxFreq = 0, maxLen = 0, left = 0;\n    for (int right = 0; right < s.size(); right++) {\n        count[s[right]]++;\n        maxFreq = max(maxFreq, count[s[right]]);\n        if (right - left + 1 - maxFreq > k) {\n            count[s[left]]--;\n            left++;\n        }\n        maxLen = max(maxLen, right - left + 1);\n    }\n    return maxLen;\n}"
+  }
+}

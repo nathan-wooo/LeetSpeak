@@ -1,0 +1,27 @@
+{
+  "id": "design-twitter",
+  "title": "Design Twitter",
+  "difficulty": "Medium",
+  "topic": "Heaps",
+  "prompt": "Design a simplified version of Twitter where users can post tweets, follow/unfollow other users, and see the 10 most recent tweets in their news feed. Implement the Twitter class: Twitter() - Initializes your twitter object. void postTweet(int userId, int tweetId) - Composes a new tweet. List<Integer> getNewsFeed(int userId) - Retrieves the 10 most recent tweet IDs in the user's news feed. void follow(int followerId, int followeeId) - Follower follows followee. void unfollow(int followerId, int followeeId) - Follower unfollows followee.",
+  "examples": [
+    {"input": "Twitter, postTweet, getNewsFeed, follow, postTweet, getNewsFeed, unfollow, getNewsFeed", "output": "Design class behavior"}
+  ],
+  "constraints": [
+    "1 <= userId, followerId, followeeId <= 500",
+    "0 <= tweetId <= 10^4"
+  ],
+  "jsStarter": "/**\n * Design Twitter\n */\nfunction Twitter() { }\nTwitter.prototype.postTweet = function(userId, tweetId) { };\nTwitter.prototype.getNewsFeed = function(userId) { };\nTwitter.prototype.follow = function(followerId, followeeId) { };\nTwitter.prototype.unfollow = function(followerId, followeeId) { };",
+  "cppStarter": "class Twitter {\npublic:\n    Twitter() { }\n    void postTweet(int userId, int tweetId) { }\n    vector<int> getNewsFeed(int userId) { }\n    void follow(int followerId, int followeeId) { }\n    void unfollow(int followerId, int followeeId) { }\n};",
+  "tests": [],
+  "hints": [
+    "Store tweets: { userId -> list of { tweetId, timestamp } }. Store follows: { followerId -> Set of followeeId }.",
+    "getNewsFeed: merge recent tweets from user + all followees. Use max-heap by timestamp, or collect and sort.",
+    "Each user has a list of tweets (newest first). Merge k sorted lists: heap of (timestamp, tweetId, listIndex, nextIndex).",
+    "O(1) post, follow, unfollow. O(k log k) for feed where k = total tweets from user + followees."
+  ],
+  "solution": {
+    "javascript": "function Twitter() {\n  this.time = 0;\n  this.tweets = new Map();\n  this.following = new Map();\n}\nTwitter.prototype.postTweet = function(userId, tweetId) {\n  if (!this.tweets.has(userId)) this.tweets.set(userId, []);\n  this.tweets.get(userId).unshift({ id: tweetId, time: this.time++ });\n};\nTwitter.prototype.getNewsFeed = function(userId) {\n  const ids = [userId, ...(this.following.get(userId) || [])];\n  const pointers = ids.map(() => 0);\n  const result = [];\n  for (let i = 0; i < 10; i++) {\n    let best = null, bestTime = -1, bestIdx = -1;\n    for (let j = 0; j < ids.length; j++) {\n      const list = this.tweets.get(ids[j]);\n      if (!list || pointers[j] >= list.length) continue;\n      const t = list[pointers[j]];\n      if (t.time > bestTime) { bestTime = t.time; best = t.id; bestIdx = j; }\n    }\n    if (best === null) break;\n    result.push(best); pointers[bestIdx]++;\n  }\n  return result;\n};\nTwitter.prototype.follow = function(followerId, followeeId) {\n  if (followerId === followeeId) return;\n  if (!this.following.has(followerId)) this.following.set(followerId, new Set());\n  this.following.get(followerId).add(followeeId);\n};\nTwitter.prototype.unfollow = function(followerId, followeeId) {\n  this.following.get(followerId)?.delete(followeeId);\n};",
+    "cpp": "class Twitter {\n    int time = 0;\n    unordered_map<int, vector<pair<int,int>>> tweets;\n    unordered_map<int, unordered_set<int>> following;\npublic:\n    void postTweet(int userId, int tweetId) {\n        tweets[userId].emplace_back(time++, tweetId);\n    }\n    vector<int> getNewsFeed(int userId) {\n        vector<int> ids = {userId};\n        for (int id : following[userId]) ids.push_back(id);\n        vector<int> ptr(ids.size());\n        vector<int> result;\n        for (int i = 0; i < 10; i++) {\n            int best = -1, bestTime = -1, bestIdx = -1;\n            for (int j = 0; j < ids.size(); j++) {\n                auto& list = tweets[ids[j]];\n                if (ptr[j] >= list.size()) continue;\n                auto [t, id] = list[ptr[j]];\n                if (t > bestTime) { bestTime = t; best = id; bestIdx = j; }\n            }\n            if (best == -1) break;\n            result.push_back(best); ptr[bestIdx]++;\n        }\n        return result;\n    }\n    void follow(int followerId, int followeeId) {\n        if (followerId != followeeId) following[followerId].insert(followeeId);\n    }\n    void unfollow(int followerId, int followeeId) {\n        following[followerId].erase(followeeId);\n    }\n};"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "id": "task-scheduler",
+  "title": "Task Scheduler",
+  "difficulty": "Medium",
+  "topic": "Heaps",
+  "prompt": "Given a characters array tasks, representing the tasks a CPU needs to do, where each letter represents a different task. Tasks could be done in any order. Each task is done in one unit of time. For each unit of time, the CPU could complete either one task or just be idle. However, there is a non-negative integer n that represents the cooldown period between two same tasks (the same letter in the array). Return the least number of units of times that the CPU will take to finish all the given tasks.",
+  "examples": [
+    {"input": "tasks = [\"A\",\"A\",\"A\",\"B\",\"B\",\"B\"], n = 2", "output": "8"},
+    {"input": "tasks = [\"A\",\"C\",\"A\",\"B\",\"D\",\"B\"], n = 1", "output": "6"},
+    {"input": "tasks = [\"A\",\"A\",\"A\", \"B\",\"B\",\"B\"], n = 0", "output": "6"}
+  ],
+  "constraints": [
+    "1 <= tasks.length <= 10^4",
+    "tasks[i] is upper-case English letter.",
+    "0 <= n <= 100"
+  ],
+  "jsStarter": "/**\n * Task Scheduler\n * @param {character[]} tasks\n * @param {number} n\n * @return {number}\n */\nfunction leastInterval(tasks, n) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "class Solution {\npublic:\n    int leastInterval(vector<char>& tasks, int n) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [],
+  "hints": [
+    "Max-heap of task counts. Each round: pick (n+1) different tasks (or as many as available), decrement counts, push back if > 0.",
+    "Greedy: always pick the most frequent task available. Use max-heap and a queue for cooldown.",
+    "Math: if maxFreq is M and there are numMax tasks with that count: answer = max(tasks.length, (M-1)*(n+1) + numMax).",
+    "O(n) with math formula. O(tasks.length) with heap simulation."
+  ],
+  "solution": {
+    "javascript": "function leastInterval(tasks, n) {\n  const count = {};\n  for (const t of tasks) count[t] = (count[t] || 0) + 1;\n  const max = Math.max(...Object.values(count));\n  const numMax = Object.values(count).filter(c => c === max).length;\n  return Math.max(tasks.length, (max - 1) * (n + 1) + numMax);\n}",
+    "cpp": "int leastInterval(vector<char>& tasks, int n) {\n    vector<int> count(26);\n    for (char c : tasks) count[c-'A']++;\n    int maxCnt = *max_element(count.begin(), count.end());\n    int numMax = count_if(count.begin(), count.end(), [maxCnt](int x){ return x == maxCnt; });\n    return max((int)tasks.size(), (maxCnt - 1) * (n + 1) + numMax);\n}"
+  }
+}

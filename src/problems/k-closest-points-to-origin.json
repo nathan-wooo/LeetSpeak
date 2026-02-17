@@ -1,0 +1,28 @@
+{
+  "id": "k-closest-points-to-origin",
+  "title": "K Closest Points to Origin",
+  "difficulty": "Medium",
+  "topic": "Heaps",
+  "prompt": "Given an array of points where points[i] = [xi, yi] represents a point on the X-Y plane and an integer k, return the k closest points to the origin (0, 0). The distance between two points on the X-Y plane is the Euclidean distance.",
+  "examples": [
+    {"input": "points = [[1,3],[-2,2]], k = 1", "output": "[[-2,2]]"},
+    {"input": "points = [[3,3],[5,-1],[-2,4]], k = 2", "output": "[[3,3],[-2,4]]"}
+  ],
+  "constraints": [
+    "1 <= k <= points.length <= 10^4",
+    "-10^4 <= xi, yi <= 10^4"
+  ],
+  "jsStarter": "/**\n * K Closest Points to Origin\n * @param {number[][]} points\n * @param {number} k\n * @return {number[][]}\n */\nfunction kClosest(points, k) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "class Solution {\npublic:\n    vector<vector<int>> kClosest(vector<vector<int>>& points, int k) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [],
+  "hints": [
+    "Sort by distance squared (avoid sqrt): d^2 = x^2 + y^2. Return first k points.",
+    "Or use a max-heap of size k: keep k smallest. When heap full and new point is closer than max, pop and push.",
+    "QuickSelect can do O(n) average. Sort is O(n log n) - simpler.",
+    "O(n log k) with heap, O(n log n) with sort."
+  ],
+  "solution": {
+    "javascript": "function kClosest(points, k) {\n  const dist = p => p[0]*p[0] + p[1]*p[1];\n  points.sort((a, b) => dist(a) - dist(b));\n  return points.slice(0, k);\n}",
+    "cpp": "vector<vector<int>> kClosest(vector<vector<int>>& points, int k) {\n    auto dist = [](vector<int>& p) { return p[0]*p[0] + p[1]*p[1]; };\n    nth_element(points.begin(), points.begin() + k, points.end(),\n        [&](auto& a, auto& b) { return dist(a) < dist(b); });\n    return vector<vector<int>>(points.begin(), points.begin() + k);\n}"
+  }
+}

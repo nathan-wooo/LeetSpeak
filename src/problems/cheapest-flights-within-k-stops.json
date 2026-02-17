@@ -1,0 +1,29 @@
+{
+  "id": "cheapest-flights-within-k-stops",
+  "title": "Cheapest Flights Within K Stops",
+  "difficulty": "Medium",
+  "topic": "Graphs",
+  "prompt": "There are n cities connected by some number of flights. You are given an array flights where flights[i] = [fromi, toi, pricei] indicates that there is a flight from city fromi to city toi with cost pricei. You are also given three integers src, dst, and k, return the cheapest price from src to dst with at most k stops. If there is no such route, return -1.",
+  "examples": [
+    {"input": "n = 4, flights = [[0,1,100],[1,2,100],[2,0,100],[1,3,600],[2,3,200]], src = 0, dst = 3, k = 1", "output": "700"},
+    {"input": "n = 3, flights = [[0,1,100],[1,2,100],[0,2,500]], src = 0, dst = 2, k = 1", "output": "200"}
+  ],
+  "constraints": [
+    "1 <= n <= 100",
+    "0 <= flights.length <= (n * (n - 1) / 2)",
+    "0 <= k < n"
+  ],
+  "jsStarter": "/**\n * Cheapest Flights Within K Stops\n * @param {number} n\n * @param {number[][]} flights\n * @param {number} src\n * @param {number} dst\n * @param {number} k\n * @return {number}\n */\nfunction findCheapestPrice(n, flights, src, dst, k) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "class Solution {\npublic:\n    int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst, int k) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [],
+  "hints": [
+    "BFS or Dijkstra with state (city, stops_used). We need shortest path with at most k+1 edges.",
+    "Bellman-Ford: relax edges k+1 times. Or modified Dijkstra: pop (cost, city, stops), only extend if stops <= k.",
+    "Alternative: dp[stops][city] = min cost to reach city using at most stops steps. Update for each stop level.",
+    "O(E * k) or O(V + E) with Bellman-Ford."
+  ],
+  "solution": {
+    "javascript": "function findCheapestPrice(n, flights, src, dst, k) {\n  let prices = Array(n).fill(Infinity); prices[src] = 0;\n  for (let i = 0; i <= k; i++) {\n    const next = [...prices];\n    for (const [from, to, price] of flights) if (prices[from] + price < next[to]) next[to] = prices[from] + price;\n    prices = next;\n  }\n  return prices[dst] === Infinity ? -1 : prices[dst];\n}",
+    "cpp": "int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst, int k) {\n    vector<int> prices(n, INT_MAX); prices[src] = 0;\n    for (int i = 0; i <= k; i++) {\n        vector<int> next = prices;\n        for (auto& f : flights) if (prices[f[0]] != INT_MAX && prices[f[0]] + f[2] < next[f[1]]) next[f[1]] = prices[f[0]] + f[2];\n        prices = next;\n    }\n    return prices[dst] == INT_MAX ? -1 : prices[dst];\n}"
+  }
+}

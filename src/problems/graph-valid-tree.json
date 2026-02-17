@@ -1,0 +1,28 @@
+{
+  "id": "graph-valid-tree",
+  "title": "Graph Valid Tree",
+  "difficulty": "Medium",
+  "topic": "Graphs",
+  "prompt": "Given n nodes labeled from 0 to n - 1 and a list of undirected edges, write a function to check whether these edges make up a valid tree. A valid tree has exactly n-1 edges and is connected.",
+  "examples": [
+    {"input": "n = 5, edges = [[0,1],[0,2],[0,3],[1,4]]", "output": "true"},
+    {"input": "n = 5, edges = [[0,1],[1,2],[2,3],[1,3],[1,4]]", "output": "false"}
+  ],
+  "constraints": [
+    "1 <= n <= 2000",
+    "0 <= edges.length <= 5000"
+  ],
+  "jsStarter": "/**\n * Graph Valid Tree\n * @param {number} n\n * @param {number[][]} edges\n * @return {boolean}\n */\nfunction validTree(n, edges) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "class Solution {\npublic:\n    bool validTree(int n, vector<vector<int>>& edges) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [],
+  "hints": [
+    "Tree: connected and no cycles. Need exactly n-1 edges. If edges.length != n-1, return false.",
+    "Union-Find: for each edge, if u and v already in same component, cycle - return false. Finally check single component.",
+    "Or DFS: if we see an already-visited node (that is not parent), cycle. Count visited nodes.",
+    "O(n + E) time."
+  ],
+  "solution": {
+    "javascript": "function validTree(n, edges) {\n  if (edges.length !== n - 1) return false;\n  const parent = Array(n).fill(0).map((_, i) => i);\n  function find(x) { return parent[x] === x ? x : (parent[x] = find(parent[x])); }\n  for (const [u, v] of edges) {\n    if (find(u) === find(v)) return false;\n    parent[find(u)] = find(v);\n  }\n  const root = find(0);\n  for (let i = 1; i < n; i++) if (find(i) !== root) return false;\n  return true;\n}",
+    "cpp": "bool validTree(int n, vector<vector<int>>& edges) {\n    if (edges.size() != n - 1) return false;\n    vector<int> parent(n);\n    iota(parent.begin(), parent.end(), 0);\n    function<int(int)> find = [&](int x) { return parent[x] == x ? x : parent[x] = find(parent[x]); };\n    for (auto& e : edges) {\n        if (find(e[0]) == find(e[1])) return false;\n        parent[find(e[0])] = find(e[1]);\n    }\n    int root = find(0);\n    for (int i = 1; i < n; i++) if (find(i) != root) return false;\n    return true;\n}"
+  }
+}

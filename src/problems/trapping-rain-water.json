@@ -1,0 +1,29 @@
+{
+  "id": "trapping-rain-water",
+  "title": "Trapping Rain Water",
+  "difficulty": "Hard",
+  "topic": "Two Pointers",
+  "prompt": "Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it can trap after raining.",
+  "examples": [
+    {"input": "height = [0,1,0,2,1,0,1,3,2,1,2,1]", "output": "6"},
+    {"input": "height = [4,2,0,3,2,5]", "output": "9"}
+  ],
+  "constraints": [
+    "n == height.length",
+    "1 <= n <= 2 * 10^4",
+    "0 <= height[i] <= 10^5"
+  ],
+  "jsStarter": "/**\n * Trapping Rain Water\n * @param {number[]} height\n * @return {number}\n */\nfunction trap(height) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "#include <vector>\nusing namespace std;\n\nclass Solution {\npublic:\n    int trap(vector<int>& height) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [],
+  "hints": [
+    "At each index, water trapped = min(maxLeft, maxRight) - height[i]. Water level is bounded by the shorter of the two sides.",
+    "Two pointers: left and right. Track maxLeft and maxRight. Water at current position depends on the smaller of the two maxes.",
+    "If maxLeft < maxRight, the water level at left is determined by maxLeft. Add water and move left. Symmetric for right.",
+    "O(n) time, O(1) space with two pointers. Alternative: precompute prefix max and suffix max arrays."
+  ],
+  "solution": {
+    "javascript": "function trap(height) {\n  let left = 0, right = height.length - 1;\n  let maxLeft = 0, maxRight = 0, water = 0;\n  while (left < right) {\n    if (height[left] <= height[right]) {\n      if (height[left] >= maxLeft) maxLeft = height[left];\n      else water += maxLeft - height[left];\n      left++;\n    } else {\n      if (height[right] >= maxRight) maxRight = height[right];\n      else water += maxRight - height[right];\n      right--;\n    }\n  }\n  return water;\n}",
+    "cpp": "int trap(vector<int>& height) {\n    int left = 0, right = height.size() - 1;\n    int maxLeft = 0, maxRight = 0, water = 0;\n    while (left < right) {\n        if (height[left] <= height[right]) {\n            if (height[left] >= maxLeft) maxLeft = height[left];\n            else water += maxLeft - height[left];\n            left++;\n        } else {\n            if (height[right] >= maxRight) maxRight = height[right];\n            else water += maxRight - height[right];\n            right--;\n        }\n    }\n    return water;\n}"
+  }
+}

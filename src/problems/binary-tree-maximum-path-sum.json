@@ -1,0 +1,28 @@
+{
+  "id": "binary-tree-maximum-path-sum",
+  "title": "Binary Tree Maximum Path Sum",
+  "difficulty": "Hard",
+  "topic": "Trees",
+  "prompt": "A path in a binary tree is a sequence of nodes where each pair of adjacent nodes in the sequence has an edge connecting them. A node can only appear in the sequence at most once. Note that the path does not need to pass through the root. The path sum of a path is the sum of the node's values in the path. Given the root of a binary tree, return the maximum path sum of any non-empty path.",
+  "examples": [
+    {"input": "root = [1,2,3]", "output": "6"},
+    {"input": "root = [-10,9,20,null,null,15,7]", "output": "42"}
+  ],
+  "constraints": [
+    "1 <= number of nodes <= 3 * 10^4",
+    "-1000 <= Node.val <= 1000"
+  ],
+  "jsStarter": "/**\n * Binary Tree Maximum Path Sum\n * @param {TreeNode} root\n * @return {number}\n */\nfunction maxPathSum(root) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "class Solution {\npublic:\n    int maxPathSum(TreeNode* root) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [],
+  "hints": [
+    "For each node, the max path through it = node.val + max(0, leftMax) + max(0, rightMax). Left/right max = max path from that child (can only go down one branch).",
+    "Helper returns the max sum of a path going from node downward (at most one child). Use 0 if negative.",
+    "While computing, also consider the path that goes through the current node and both children - that's a full path. Update global max.",
+    "O(n) time. Post-order traversal."
+  ],
+  "solution": {
+    "javascript": "function maxPathSum(root) {\n  let maxSum = -Infinity;\n  function gain(node) {\n    if (!node) return 0;\n    const left = Math.max(0, gain(node.left)), right = Math.max(0, gain(node.right));\n    maxSum = Math.max(maxSum, node.val + left + right);\n    return node.val + Math.max(left, right);\n  }\n  gain(root);\n  return maxSum;\n}",
+    "cpp": "int maxPathSum(TreeNode* root) {\n    int maxSum = INT_MIN;\n    function<int(TreeNode*)> gain = [&](TreeNode* node) {\n        if (!node) return 0;\n        int left = max(0, gain(node->left)), right = max(0, gain(node->right));\n        maxSum = max(maxSum, node->val + left + right);\n        return node->val + max(left, right);\n    };\n    gain(root);\n    return maxSum;\n}"
+  }
+}

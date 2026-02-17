@@ -969,11 +969,11 @@ export default function Practice() {
               console.error('Error logging out:', error);
             }
           }}
-          className="flex items-center gap-2 px-3 py-2 text-slate-400 hover:text-white hover:bg-slate-800/50 rounded-lg transition-all text-sm"
-          title="Logout"
+          className="group inline-flex items-center gap-2 px-5 py-2.5 bg-white text-slate-950 font-semibold text-sm rounded-lg hover:bg-purple-400 hover:text-white transition-all duration-300 shadow-lg shadow-purple-500/20 hover:shadow-purple-500/40 hover:scale-105"
+          title="Log Out"
         >
           <LogOut className="w-4 h-4" />
-          <span className="hidden sm:inline">Logout</span>
+          <span className="hidden sm:inline">Log Out</span>
         </button>
       </nav>
       <div className="mx-auto flex h-[calc(100vh-4rem)] w-full max-w-[1600px] flex-col gap-3 p-3">

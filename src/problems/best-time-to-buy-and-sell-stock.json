@@ -1,0 +1,28 @@
+{
+  "id": "best-time-to-buy-and-sell-stock",
+  "title": "Best Time to Buy And Sell Stock",
+  "difficulty": "Easy",
+  "topic": "Sliding Window",
+  "prompt": "You are given an array prices where prices[i] is the price of a given stock on the ith day. You want to maximize your profit by choosing a single day to buy one stock and choosing a different day in the future to sell that stock. Return the maximum profit you can achieve from this transaction. If you cannot achieve any profit, return 0.",
+  "examples": [
+    {"input": "prices = [7,1,5,3,6,4]", "output": "5"},
+    {"input": "prices = [7,6,4,3,1]", "output": "0"}
+  ],
+  "constraints": [
+    "1 <= prices.length <= 10^5",
+    "0 <= prices[i] <= 10^4"
+  ],
+  "jsStarter": "/**\n * Best Time to Buy And Sell Stock\n * @param {number[]} prices\n * @return {number}\n */\nfunction maxProfit(prices) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "#include <vector>\nusing namespace std;\n\nclass Solution {\npublic:\n    int maxProfit(vector<int>& prices) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [],
+  "hints": [
+    "Track the minimum price seen so far. For each day, profit = price - minSoFar.",
+    "Single pass: update min price when you see a lower price; when you see a higher price, check if selling today gives a better profit.",
+    "No need for nested loops - keep one variable for min price and one for max profit.",
+    "O(n) time, O(1) space."
+  ],
+  "solution": {
+    "javascript": "function maxProfit(prices) {\n  let minPrice = Infinity, maxProfit = 0;\n  for (const p of prices) {\n    minPrice = Math.min(minPrice, p);\n    maxProfit = Math.max(maxProfit, p - minPrice);\n  }\n  return maxProfit;\n}",
+    "cpp": "int maxProfit(vector<int>& prices) {\n    int minPrice = 1e9, maxProfit = 0;\n    for (int p : prices) {\n        minPrice = min(minPrice, p);\n        maxProfit = max(maxProfit, p - minPrice);\n    }\n    return maxProfit;\n}"
+  }
+}

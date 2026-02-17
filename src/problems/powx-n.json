@@ -1,0 +1,20 @@
+{
+  "id": "powx-n",
+  "title": "Pow(x, n)",
+  "difficulty": "Medium",
+  "topic": "Math & Geometry",
+  "prompt": "See the full problem on LeetCode: https://leetcode.com/problems/powx-n/\n\nNeetcode walkthrough: https://www.youtube.com/watch?v=g9YQyYi4IQQ\n\nThis is a placeholder. Add full problem content (prompt, examples, tests) to enable Run and hints.",
+  "examples": [],
+  "constraints": [],
+  "jsStarter": "/**\n * Pow(x, n)\n * See: https://leetcode.com/problems/powx-n/\n */\nfunction solution(input) {\n  // Your code here\n  return null;\n}",
+  "cppStarter": "#include <vector>\nusing namespace std;\n\n// See: https://leetcode.com/problems/powx-n/\nclass Solution {\npublic:\n    // Implement your solution here\n};",
+  "tests": [],
+  "hints": [
+    "Watch Neetcode's explanation: https://www.youtube.com/watch?v=g9YQyYi4IQQ",
+    "Full problem: https://leetcode.com/problems/powx-n/"
+  ],
+  "solution": {
+    "javascript": "// Add solution when you solve it",
+    "cpp": "// Add solution when you solve it"
+  }
+}

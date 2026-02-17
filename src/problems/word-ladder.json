@@ -1,0 +1,29 @@
+{
+  "id": "word-ladder",
+  "title": "Word Ladder",
+  "difficulty": "Hard",
+  "topic": "Graphs",
+  "prompt": "A transformation sequence from word beginWord to word endWord using a dictionary wordList is a sequence of words such that: the first word is beginWord, the last word is endWord, each adjacent pair of words differs by exactly one letter, and every word in the sequence is in wordList. Return the number of words in the shortest transformation sequence, or 0 if no such sequence exists.",
+  "examples": [
+    {"input": "beginWord = \"hit\", endWord = \"cog\", wordList = [\"hot\",\"dot\",\"dog\",\"lot\",\"log\",\"cog\"]", "output": "5"},
+    {"input": "beginWord = \"hit\", endWord = \"cog\", wordList = [\"hot\",\"dot\",\"dog\",\"lot\",\"log\"]", "output": "0"}
+  ],
+  "constraints": [
+    "1 <= beginWord.length <= 10",
+    "endWord.length == beginWord.length",
+    "1 <= wordList.length <= 5000"
+  ],
+  "jsStarter": "/**\n * Word Ladder\n * @param {string} beginWord\n * @param {string} endWord\n * @param {string[]} wordList\n * @return {number}\n */\nfunction ladderLength(beginWord, endWord, wordList) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "class Solution {\npublic:\n    int ladderLength(string beginWord, string endWord, vector<string>& wordList) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [],
+  "hints": [
+    "BFS from beginWord. Each level = one transformation. Try changing each position to each letter a-z.",
+    "Add wordList to a set for O(1) lookup. Queue (word, dist). For each word, generate all one-edit neighbors.",
+    "If neighbor is in set and unvisited, add to queue. If we reach endWord, return dist+1.",
+    "O(M^2 * N) where M = word length, N = list size. Bidirectional BFS can optimize."
+  ],
+  "solution": {
+    "javascript": "function ladderLength(beginWord, endWord, wordList) {\n  const set = new Set(wordList);\n  if (!set.has(endWord)) return 0;\n  const q = [[beginWord, 1]];\n  set.delete(beginWord);\n  while (q.length) {\n    const [word, len] = q.shift();\n    if (word === endWord) return len;\n    const arr = word.split('');\n    for (let i = 0; i < arr.length; i++) {\n      const orig = arr[i];\n      for (let c = 97; c <= 122; c++) {\n        arr[i] = String.fromCharCode(c);\n        const next = arr.join('');\n        if (set.has(next)) { set.delete(next); q.push([next, len + 1]); }\n      }\n      arr[i] = orig;\n    }\n  }\n  return 0;\n}",
+    "cpp": "int ladderLength(string beginWord, string endWord, vector<string>& wordList) {\n    unordered_set<string> set(wordList.begin(), wordList.end());\n    if (!set.count(endWord)) return 0;\n    queue<pair<string,int>> q; q.push({beginWord, 1});\n    set.erase(beginWord);\n    while (!q.empty()) {\n        auto [word, len] = q.front(); q.pop();\n        if (word == endWord) return len;\n        for (int i = 0; i < word.size(); i++) {\n            char orig = word[i];\n            for (char c = 'a'; c <= 'z'; c++) {\n                word[i] = c;\n                if (set.count(word)) { set.erase(word); q.push({word, len+1}); }\n            }\n            word[i] = orig;\n        }\n    }\n    return 0;\n}"
+  }
+}

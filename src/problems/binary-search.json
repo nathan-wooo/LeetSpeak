@@ -1,0 +1,29 @@
+{
+  "id": "binary-search",
+  "title": "Binary Search",
+  "difficulty": "Easy",
+  "topic": "Binary Search",
+  "prompt": "Given an array of integers nums which is sorted in ascending order, and an integer target, write a function to search target in nums. If target exists, then return its index. Otherwise, return -1.",
+  "examples": [
+    {"input": "nums = [-1,0,3,5,9,12], target = 9", "output": "4"},
+    {"input": "nums = [-1,0,3,5,9,12], target = 2", "output": "-1"}
+  ],
+  "constraints": [
+    "1 <= nums.length <= 10^4",
+    "-10^4 < nums[i], target < 10^4",
+    "nums is sorted in ascending order."
+  ],
+  "jsStarter": "/**\n * Binary Search\n * @param {number[]} nums\n * @param {number} target\n * @return {number}\n */\nfunction search(nums, target) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "#include <vector>\nusing namespace std;\n\nclass Solution {\npublic:\n    int search(vector<int>& nums, int target) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [],
+  "hints": [
+    "Classic binary search: left = 0, right = n-1. While left <= right, mid = (left+right)/2.",
+    "If nums[mid] == target, return mid. If nums[mid] < target, search right (left = mid+1). Else search left (right = mid-1).",
+    "Return -1 if not found. Watch for overflow: use left + (right-left)/2 for mid in some languages.",
+    "O(log n) time, O(1) space."
+  ],
+  "solution": {
+    "javascript": "function search(nums, target) {\n  let left = 0, right = nums.length - 1;\n  while (left <= right) {\n    const mid = Math.floor((left + right) / 2);\n    if (nums[mid] === target) return mid;\n    if (nums[mid] < target) left = mid + 1;\n    else right = mid - 1;\n  }\n  return -1;\n}",
+    "cpp": "int search(vector<int>& nums, int target) {\n    int left = 0, right = nums.size() - 1;\n    while (left <= right) {\n        int mid = left + (right - left) / 2;\n        if (nums[mid] == target) return mid;\n        if (nums[mid] < target) left = mid + 1;\n        else right = mid - 1;\n    }\n    return -1;\n}"
+  }
+}

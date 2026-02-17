@@ -1,0 +1,28 @@
+{
+  "id": "palindrome-partitioning",
+  "title": "Palindrome Partitioning",
+  "difficulty": "Medium",
+  "topic": "Backtracking",
+  "prompt": "Given a string s, partition s such that every substring of the partition is a palindrome. Return all possible palindrome partitionings of s.",
+  "examples": [
+    {"input": "s = \"aab\"", "output": "[[\"a\",\"a\",\"b\"],[\"aa\",\"b\"]]"},
+    {"input": "s = \"a\"", "output": "[[\"a\"]]"}
+  ],
+  "constraints": [
+    "1 <= s.length <= 16",
+    "s contains only lowercase English letters."
+  ],
+  "jsStarter": "/**\n * Palindrome Partitioning\n * @param {string} s\n * @return {string[][]}\n */\nfunction partition(s) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "class Solution {\npublic:\n    vector<vector<string>> partition(string s) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [],
+  "hints": [
+    "Backtrack: at each position, try cutting after 1 char, 2 chars, etc. as long as the substring is a palindrome.",
+    "For start index: for end from start+1 to s.length, if s[start:end] is palindrome, add to path, recurse from end, backtrack.",
+    "Helper isPal(s, i, j) checks if s[i:j] is palindrome.",
+    "O(2^n * n) - at each position we can cut or not."
+  ],
+  "solution": {
+    "javascript": "function partition(s) {\n  const result = [];\n  function isPal(l, r) {\n    while (l < r) if (s[l++] !== s[r--]) return false;\n    return true;\n  }\n  function backtrack(start, path) {\n    if (start === s.length) { result.push([...path]); return; }\n    for (let end = start + 1; end <= s.length; end++) {\n      if (!isPal(start, end - 1)) continue;\n      path.push(s.slice(start, end));\n      backtrack(end, path);\n      path.pop();\n    }\n  }\n  backtrack(0, []);\n  return result;\n}",
+    "cpp": "vector<vector<string>> partition(string s) {\n    vector<vector<string>> result;\n    vector<string> path;\n    auto isPal = [&](int l, int r) {\n        while (l < r) if (s[l++] != s[r--]) return false;\n        return true;\n    };\n    function<void(int)> bt = [&](int start) {\n        if (start == s.size()) { result.push_back(path); return; }\n        for (int end = start + 1; end <= s.size(); end++) {\n            if (!isPal(start, end - 1)) continue;\n            path.push_back(s.substr(start, end - start));\n            bt(end);\n            path.pop_back();\n        }\n    };\n    bt(0);\n    return result;\n}"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "id": "valid-sudoku",
+  "title": "Valid Sudoku",
+  "difficulty": "Medium",
+  "topic": "Arrays & Hashing",
+  "prompt": "Determine if a 9 x 9 Sudoku board is valid. Only the filled cells need to be validated. A Sudoku board (partially filled) could be valid but is not necessarily solvable. Rules: Each row must contain digits 1-9 without repetition. Each column must contain digits 1-9 without repetition. Each of the nine 3 x 3 sub-boxes must contain digits 1-9 without repetition.",
+  "examples": [
+    {"input": "board = [[\"5\",\"3\",\".\",...], ...]", "output": "true"},
+    {"input": "board with duplicate in row", "output": "false"}
+  ],
+  "constraints": [
+    "board.length == 9",
+    "board[i].length == 9",
+    "board[i][j] is a digit 1-9 or '.'."
+  ],
+  "jsStarter": "/**\n * Valid Sudoku\n * @param {character[][]} board\n * @return {boolean}\n */\nfunction isValidSudoku(board) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "#include <vector>\n#include <unordered_set>\nusing namespace std;\n\nclass Solution {\npublic:\n    bool isValidSudoku(vector<vector<char>>& board) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [],
+  "hints": [
+    "Use sets to track what you've seen in each row, column, and 3x3 box.",
+    "For box index: boxIdx = (row/3)*3 + col/3. This maps each cell to one of 9 boxes.",
+    "Create 9 sets for rows, 9 for columns, 9 for boxes. Iterate and check for duplicates.",
+    "You can use a single pass: for each non-empty cell, check if it already exists in its row/col/box sets."
+  ],
+  "solution": {
+    "javascript": "function isValidSudoku(board) {\n  const rows = Array(9).fill(null).map(() => new Set());\n  const cols = Array(9).fill(null).map(() => new Set());\n  const boxes = Array(9).fill(null).map(() => new Set());\n  for (let r = 0; r < 9; r++) {\n    for (let c = 0; c < 9; c++) {\n      const ch = board[r][c];\n      if (ch === '.') continue;\n      const b = Math.floor(r/3)*3 + Math.floor(c/3);\n      if (rows[r].has(ch) || cols[c].has(ch) || boxes[b].has(ch)) return false;\n      rows[r].add(ch); cols[c].add(ch); boxes[b].add(ch);\n    }\n  }\n  return true;\n}",
+    "cpp": "bool isValidSudoku(vector<vector<char>>& board) {\n    vector<unordered_set<char>> rows(9), cols(9), boxes(9);\n    for (int r = 0; r < 9; r++)\n        for (int c = 0; c < 9; c++) {\n            char ch = board[r][c];\n            if (ch == '.') continue;\n            int b = (r/3)*3 + c/3;\n            if (rows[r].count(ch) || cols[c].count(ch) || boxes[b].count(ch)) return false;\n            rows[r].insert(ch); cols[c].insert(ch); boxes[b].insert(ch);\n        }\n    return true;\n}"
+  }
+}

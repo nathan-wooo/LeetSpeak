@@ -1,0 +1,28 @@
+{
+  "id": "copy-list-with-random-pointer",
+  "title": "Copy List With Random Pointer",
+  "difficulty": "Medium",
+  "topic": "Linked List",
+  "prompt": "A linked list of length n is given such that each node contains an additional random pointer, which could point to any node in the list, or null. Construct a deep copy of the list. The deep copy should consist of exactly n brand new nodes.",
+  "examples": [
+    {"input": "head = [[7,null],[13,0],[11,4],[10,2],[1,0]]", "output": "[[7,null],[13,0],[11,4],[10,2],[1,0]]"}
+  ],
+  "constraints": [
+    "0 <= n <= 1000",
+    "-10^4 <= Node.val <= 10^4",
+    "Node.random is null or points to a node in the linked list."
+  ],
+  "jsStarter": "/**\n * Copy List With Random Pointer\n * @param {Node} head\n * @return {Node}\n */\nfunction copyRandomList(head) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "class Solution {\npublic:\n    Node* copyRandomList(Node* head) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [],
+  "hints": [
+    "Use a map: old node -> new node. First pass: create all new nodes and build the map.",
+    "Second pass: for each old node, set new node's next and random using the map.",
+    "Alternative: interweave. For each node, insert a copy right after it. Then set random: copy.random = orig.random.next.",
+    "Third pass: unweave the lists. O(n) time, O(1) space with interweaving."
+  ],
+  "solution": {
+    "javascript": "function copyRandomList(head) {\n  if (!head) return null;\n  const map = new Map();\n  let cur = head;\n  while (cur) { map.set(cur, new Node(cur.val)); cur = cur.next; }\n  cur = head;\n  while (cur) {\n    map.get(cur).next = cur.next ? map.get(cur.next) : null;\n    map.get(cur).random = cur.random ? map.get(cur.random) : null;\n    cur = cur.next;\n  }\n  return map.get(head);\n}",
+    "cpp": "Node* copyRandomList(Node* head) {\n    if (!head) return nullptr;\n    unordered_map<Node*, Node*> map;\n    for (Node* cur = head; cur; cur = cur->next) map[cur] = new Node(cur->val);\n    for (Node* cur = head; cur; cur = cur->next) {\n        map[cur]->next = cur->next ? map[cur->next] : nullptr;\n        map[cur]->random = cur->random ? map[cur->random] : nullptr;\n    }\n    return map[head];\n}"
+  }
+}

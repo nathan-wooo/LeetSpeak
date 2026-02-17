@@ -1,0 +1,20 @@
+{
+  "id": "partition-equal-subset-sum",
+  "title": "Partition Equal Subset Sum",
+  "difficulty": "Medium",
+  "topic": "1-D Dynamic Programming",
+  "prompt": "See the full problem on LeetCode: https://leetcode.com/problems/partition-equal-subset-sum/\n\nNeetcode walkthrough: https://www.youtube.com/watch?v=IsvocB5BJhw\n\nThis is a placeholder. Add full problem content (prompt, examples, tests) to enable Run and hints.",
+  "examples": [],
+  "constraints": [],
+  "jsStarter": "/**\n * Partition Equal Subset Sum\n * See: https://leetcode.com/problems/partition-equal-subset-sum/\n */\nfunction solution(input) {\n  // Your code here\n  return null;\n}",
+  "cppStarter": "#include <vector>\nusing namespace std;\n\n// See: https://leetcode.com/problems/partition-equal-subset-sum/\nclass Solution {\npublic:\n    // Implement your solution here\n};",
+  "tests": [],
+  "hints": [
+    "Watch Neetcode's explanation: https://www.youtube.com/watch?v=IsvocB5BJhw",
+    "Full problem: https://leetcode.com/problems/partition-equal-subset-sum/"
+  ],
+  "solution": {
+    "javascript": "// Add solution when you solve it",
+    "cpp": "// Add solution when you solve it"
+  }
+}

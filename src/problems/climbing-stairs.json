@@ -1,0 +1,20 @@
+{
+  "id": "climbing-stairs",
+  "title": "Climbing Stairs",
+  "difficulty": "Easy",
+  "topic": "1-D Dynamic Programming",
+  "prompt": "See the full problem on LeetCode: https://leetcode.com/problems/climbing-stairs/\n\nNeetcode walkthrough: https://www.youtube.com/watch?v=Y0lT9Fck7qI\n\nThis is a placeholder. Add full problem content (prompt, examples, tests) to enable Run and hints.",
+  "examples": [],
+  "constraints": [],
+  "jsStarter": "/**\n * Climbing Stairs\n * See: https://leetcode.com/problems/climbing-stairs/\n */\nfunction solution(input) {\n  // Your code here\n  return null;\n}",
+  "cppStarter": "#include <vector>\nusing namespace std;\n\n// See: https://leetcode.com/problems/climbing-stairs/\nclass Solution {\npublic:\n    // Implement your solution here\n};",
+  "tests": [],
+  "hints": [
+    "Watch Neetcode's explanation: https://www.youtube.com/watch?v=Y0lT9Fck7qI",
+    "Full problem: https://leetcode.com/problems/climbing-stairs/"
+  ],
+  "solution": {
+    "javascript": "// Add solution when you solve it",
+    "cpp": "// Add solution when you solve it"
+  }
+}

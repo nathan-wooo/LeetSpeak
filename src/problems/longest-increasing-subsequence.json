@@ -1,0 +1,20 @@
+{
+  "id": "longest-increasing-subsequence",
+  "title": "Longest Increasing Subsequence",
+  "difficulty": "Medium",
+  "topic": "1-D Dynamic Programming",
+  "prompt": "See the full problem on LeetCode: https://leetcode.com/problems/longest-increasing-subsequence/\n\nNeetcode walkthrough: https://www.youtube.com/watch?v=cjWnW0hdF1Y\n\nThis is a placeholder. Add full problem content (prompt, examples, tests) to enable Run and hints.",
+  "examples": [],
+  "constraints": [],
+  "jsStarter": "/**\n * Longest Increasing Subsequence\n * See: https://leetcode.com/problems/longest-increasing-subsequence/\n */\nfunction solution(input) {\n  // Your code here\n  return null;\n}",
+  "cppStarter": "#include <vector>\nusing namespace std;\n\n// See: https://leetcode.com/problems/longest-increasing-subsequence/\nclass Solution {\npublic:\n    // Implement your solution here\n};",
+  "tests": [],
+  "hints": [
+    "Watch Neetcode's explanation: https://www.youtube.com/watch?v=cjWnW0hdF1Y",
+    "Full problem: https://leetcode.com/problems/longest-increasing-subsequence/"
+  ],
+  "solution": {
+    "javascript": "// Add solution when you solve it",
+    "cpp": "// Add solution when you solve it"
+  }
+}

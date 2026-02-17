@@ -1,0 +1,20 @@
+{
+  "id": "coin-change-ii",
+  "title": "Coin Change II",
+  "difficulty": "Medium",
+  "topic": "2-D Dynamic Programming",
+  "prompt": "See the full problem on LeetCode: https://leetcode.com/problems/coin-change-ii/\n\nNeetcode walkthrough: https://www.youtube.com/watch?v=Mjy4hd2xgrs\n\nThis is a placeholder. Add full problem content (prompt, examples, tests) to enable Run and hints.",
+  "examples": [],
+  "constraints": [],
+  "jsStarter": "/**\n * Coin Change II\n * See: https://leetcode.com/problems/coin-change-ii/\n */\nfunction solution(input) {\n  // Your code here\n  return null;\n}",
+  "cppStarter": "#include <vector>\nusing namespace std;\n\n// See: https://leetcode.com/problems/coin-change-ii/\nclass Solution {\npublic:\n    // Implement your solution here\n};",
+  "tests": [],
+  "hints": [
+    "Watch Neetcode's explanation: https://www.youtube.com/watch?v=Mjy4hd2xgrs",
+    "Full problem: https://leetcode.com/problems/coin-change-ii/"
+  ],
+  "solution": {
+    "javascript": "// Add solution when you solve it",
+    "cpp": "// Add solution when you solve it"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "detect-squares",
+  "title": "Detect Squares",
+  "difficulty": "Medium",
+  "topic": "Math & Geometry",
+  "prompt": "See the full problem on LeetCode: https://leetcode.com/problems/detect-squares/\n\nNeetcode walkthrough: https://www.youtube.com/watch?v=bahebearrDc\n\nThis is a placeholder. Add full problem content (prompt, examples, tests) to enable Run and hints.",
+  "examples": [],
+  "constraints": [],
+  "jsStarter": "/**\n * Detect Squares\n * See: https://leetcode.com/problems/detect-squares/\n */\nfunction solution(input) {\n  // Your code here\n  return null;\n}",
+  "cppStarter": "#include <vector>\nusing namespace std;\n\n// See: https://leetcode.com/problems/detect-squares/\nclass Solution {\npublic:\n    // Implement your solution here\n};",
+  "tests": [],
+  "hints": [
+    "Watch Neetcode's explanation: https://www.youtube.com/watch?v=bahebearrDc",
+    "Full problem: https://leetcode.com/problems/detect-squares/"
+  ],
+  "solution": {
+    "javascript": "// Add solution when you solve it",
+    "cpp": "// Add solution when you solve it"
+  }
+}

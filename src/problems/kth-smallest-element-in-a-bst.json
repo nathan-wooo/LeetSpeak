@@ -1,0 +1,28 @@
+{
+  "id": "kth-smallest-element-in-a-bst",
+  "title": "Kth Smallest Element In a Bst",
+  "difficulty": "Medium",
+  "topic": "Trees",
+  "prompt": "Given the root of a binary search tree, and an integer k, return the kth smallest value (1-indexed) of all the values of the nodes in the tree.",
+  "examples": [
+    {"input": "root = [3,1,4,null,2], k = 1", "output": "1"},
+    {"input": "root = [5,3,6,2,4,null,null,1], k = 3", "output": "3"}
+  ],
+  "constraints": [
+    "1 <= number of nodes <= 10^4",
+    "1 <= k <= number of nodes"
+  ],
+  "jsStarter": "/**\n * Kth Smallest Element In a Bst\n * @param {TreeNode} root\n * @param {number} k\n * @return {number}\n */\nfunction kthSmallest(root, k) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "class Solution {\npublic:\n    int kthSmallest(TreeNode* root, int k) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [],
+  "hints": [
+    "In-order traversal of BST gives sorted order. The kth node visited is the kth smallest.",
+    "Recursive: traverse left, process node (increment count), traverse right. When count reaches k, save/return the value.",
+    "Iterative: use a stack. Push left nodes, pop and process, then go right. Stop when we've processed k nodes.",
+    "O(h + k) time with iterative, O(n) with recursive."
+  ],
+  "solution": {
+    "javascript": "function kthSmallest(root, k) {\n  const stack = [];\n  let cur = root, count = 0;\n  while (cur || stack.length) {\n    while (cur) { stack.push(cur); cur = cur.left; }\n    cur = stack.pop();\n    if (++count === k) return cur.val;\n    cur = cur.right;\n  }\n  return -1;\n}",
+    "cpp": "int kthSmallest(TreeNode* root, int k) {\n    stack<TreeNode*> st;\n    TreeNode* cur = root;\n    int count = 0;\n    while (cur || !st.empty()) {\n        while (cur) { st.push(cur); cur = cur->left; }\n        cur = st.top(); st.pop();\n        if (++count == k) return cur->val;\n        cur = cur->right;\n    }\n    return -1;\n}"
+  }
+}

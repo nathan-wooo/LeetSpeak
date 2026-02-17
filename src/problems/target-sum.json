@@ -1,0 +1,20 @@
+{
+  "id": "target-sum",
+  "title": "Target Sum",
+  "difficulty": "Medium",
+  "topic": "2-D Dynamic Programming",
+  "prompt": "See the full problem on LeetCode: https://leetcode.com/problems/target-sum/\n\nNeetcode walkthrough: https://www.youtube.com/watch?v=g0npyaQtAQM\n\nThis is a placeholder. Add full problem content (prompt, examples, tests) to enable Run and hints.",
+  "examples": [],
+  "constraints": [],
+  "jsStarter": "/**\n * Target Sum\n * See: https://leetcode.com/problems/target-sum/\n */\nfunction solution(input) {\n  // Your code here\n  return null;\n}",
+  "cppStarter": "#include <vector>\nusing namespace std;\n\n// See: https://leetcode.com/problems/target-sum/\nclass Solution {\npublic:\n    // Implement your solution here\n};",
+  "tests": [],
+  "hints": [
+    "Watch Neetcode's explanation: https://www.youtube.com/watch?v=g0npyaQtAQM",
+    "Full problem: https://leetcode.com/problems/target-sum/"
+  ],
+  "solution": {
+    "javascript": "// Add solution when you solve it",
+    "cpp": "// Add solution when you solve it"
+  }
+}

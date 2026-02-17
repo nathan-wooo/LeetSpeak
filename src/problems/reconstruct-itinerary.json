@@ -1,0 +1,26 @@
+{
+  "id": "reconstruct-itinerary",
+  "title": "Reconstruct Itinerary",
+  "difficulty": "Hard",
+  "topic": "Graphs",
+  "prompt": "You are given a list of airline tickets where tickets[i] = [fromi, toi] represents the departure and arrival airports of one flight. Reconstruct the itinerary in order and return it. All of the tickets belong to a man who departs from JFK, thus the itinerary must begin with JFK. If multiple valid itineraries exist, return the smallest lexical order.",
+  "examples": [
+    {"input": "tickets = [[\"MUC\",\"LHR\"],[\"JFK\",\"MUC\"],[\"SFO\",\"SJC\"],[\"LHR\",\"SFO\"]]", "output": "[\"JFK\",\"MUC\",\"LHR\",\"SFO\",\"SJC\"]"}
+  ],
+  "constraints": [
+    "1 <= tickets.length <= 300"
+  ],
+  "jsStarter": "/**\n * Reconstruct Itinerary\n * @param {string[][]} tickets\n * @return {string[]}\n */\nfunction findItinerary(tickets) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "class Solution {\npublic:\n    vector<string> findItinerary(vector<vector<string>>& tickets) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [],
+  "hints": [
+    "Eulerian path: we must use every edge exactly once. Start at JFK. Use smallest lexical next at each step.",
+    "Build graph: from -> sorted list of destinations. DFS: pop from front when visiting. Add to result in post-order (reverse).",
+    "Use a multiset or min-heap per node, or sort and reverse so we can pop from back (lex order).",
+    "O(E log E) for sorting. Hierholzer algorithm."
+  ],
+  "solution": {
+    "javascript": "function findItinerary(tickets) {\n  const graph = {};\n  for (const [from, to] of tickets) { if (!graph[from]) graph[from] = []; graph[from].push(to); }\n  for (const k in graph) graph[k].sort().reverse();\n  const result = [];\n  function dfs(node) {\n    while (graph[node]?.length) dfs(graph[node].pop());\n    result.push(node);\n  }\n  dfs('JFK');\n  return result.reverse();\n}",
+    "cpp": "vector<string> findItinerary(vector<vector<string>>& tickets) {\n    unordered_map<string, vector<string>> graph;\n    for (auto& t : tickets) graph[t[0]].push_back(t[1]);\n    for (auto& [k, v] : graph) sort(v.rbegin(), v.rend());\n    vector<string> result;\n    function<void(string)> dfs = [&](string node) {\n        while (!graph[node].empty()) { string next = graph[node].back(); graph[node].pop_back(); dfs(next); }\n        result.push_back(node);\n    };\n    dfs(\"JFK\");\n    reverse(result.begin(), result.end());\n    return result;\n}"
+  }
+}

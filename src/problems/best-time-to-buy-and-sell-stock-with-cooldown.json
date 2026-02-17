@@ -1,0 +1,20 @@
+{
+  "id": "best-time-to-buy-and-sell-stock-with-cooldown",
+  "title": "Best Time to Buy And Sell Stock With Cooldown",
+  "difficulty": "Medium",
+  "topic": "2-D Dynamic Programming",
+  "prompt": "See the full problem on LeetCode: https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/\n\nNeetcode walkthrough: https://www.youtube.com/watch?v=I7j0F7AHpb8\n\nThis is a placeholder. Add full problem content (prompt, examples, tests) to enable Run and hints.",
+  "examples": [],
+  "constraints": [],
+  "jsStarter": "/**\n * Best Time to Buy And Sell Stock With Cooldown\n * See: https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/\n */\nfunction solution(input) {\n  // Your code here\n  return null;\n}",
+  "cppStarter": "#include <vector>\nusing namespace std;\n\n// See: https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/\nclass Solution {\npublic:\n    // Implement your solution here\n};",
+  "tests": [],
+  "hints": [
+    "Watch Neetcode's explanation: https://www.youtube.com/watch?v=I7j0F7AHpb8",
+    "Full problem: https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/"
+  ],
+  "solution": {
+    "javascript": "// Add solution when you solve it",
+    "cpp": "// Add solution when you solve it"
+  }
+}

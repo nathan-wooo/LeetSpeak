@@ -1,0 +1,29 @@
+{
+  "id": "invert-binary-tree",
+  "title": "Invert Binary Tree",
+  "difficulty": "Easy",
+  "topic": "Trees",
+  "prompt": "Given the root of a binary tree, invert the tree, and return its root.",
+  "examples": [
+    {"input": "root = [4,2,7,1,3,6,9]", "output": "[4,7,2,9,6,3,1]"},
+    {"input": "root = [2,1,3]", "output": "[2,3,1]"},
+    {"input": "root = []", "output": "[]"}
+  ],
+  "constraints": [
+    "0 <= number of nodes <= 100",
+    "-100 <= Node.val <= 100"
+  ],
+  "jsStarter": "/**\n * Invert Binary Tree\n * @param {TreeNode} root\n * @return {TreeNode}\n */\nfunction invertTree(root) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "class Solution {\npublic:\n    TreeNode* invertTree(TreeNode* root) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [],
+  "hints": [
+    "Recursive: swap left and right children of the current node, then recursively invert left and right subtrees.",
+    "Base case: if root is null, return null.",
+    "Post-order or pre-order both work. Swap before or after the recursive calls.",
+    "O(n) time, O(h) space for recursion stack."
+  ],
+  "solution": {
+    "javascript": "function invertTree(root) {\n  if (!root) return null;\n  [root.left, root.right] = [root.right, root.left];\n  invertTree(root.left);\n  invertTree(root.right);\n  return root;\n}",
+    "cpp": "TreeNode* invertTree(TreeNode* root) {\n    if (!root) return nullptr;\n    swap(root->left, root->right);\n    invertTree(root->left);\n    invertTree(root->right);\n    return root;\n}"
+  }
+}

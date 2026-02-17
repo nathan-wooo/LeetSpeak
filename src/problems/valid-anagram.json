@@ -1,0 +1,31 @@
+{
+  "id": "valid-anagram",
+  "title": "Valid Anagram",
+  "difficulty": "Easy",
+  "topic": "Arrays & Hashing",
+  "prompt": "Given two strings s and t, return true if t is an anagram of s, and false otherwise. An Anagram is a word or phrase formed by rearranging the letters of a different word or phrase, typically using all the original letters exactly once.",
+  "examples": [
+    {"input": "s = \"anagram\", t = \"nagaram\"", "output": "true"},
+    {"input": "s = \"rat\", t = \"car\"", "output": "false"}
+  ],
+  "constraints": [
+    "1 <= s.length, t.length <= 5 * 10^4",
+    "s and t consist of lowercase English letters."
+  ],
+  "jsStarter": "/**\n * Valid Anagram\n * @param {string} s\n * @param {string} t\n * @return {boolean}\n */\nfunction isAnagram(s, t) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "#include <string>\n#include <unordered_map>\nusing namespace std;\n\nclass Solution {\npublic:\n    bool isAnagram(string s, string t) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [
+    {"name": "Example 1", "input": ["anagram", "nagaram"], "expected": true},
+    {"name": "Example 2", "input": ["rat", "car"], "expected": false}
+  ],
+  "hints": [
+    "An anagram has the same character counts. Two approaches: sort both strings and compare, or use a hash map to count characters.",
+    "For the hash map approach: count each character in s, then decrement for each character in t. If any count goes negative or doesn't exist, it's not an anagram.",
+    "You can use a single array of 26 integers (one per letter) instead of a hash map for a clean O(1) space approach.",
+    "Time: O(n), Space: O(1) with character count array."
+  ],
+  "solution": {
+    "javascript": "function isAnagram(s, t) {\n  if (s.length !== t.length) return false;\n  const count = new Array(26).fill(0);\n  for (let i = 0; i < s.length; i++) {\n    count[s.charCodeAt(i) - 97]++;\n    count[t.charCodeAt(i) - 97]--;\n  }\n  return count.every(c => c === 0);\n}",
+    "cpp": "bool isAnagram(string s, string t) {\n    if (s.size() != t.size()) return false;\n    int count[26] = {};\n    for (int i = 0; i < s.size(); i++) {\n        count[s[i] - 'a']++;\n        count[t[i] - 'a']--;\n    }\n    for (int c : count) if (c != 0) return false;\n    return true;\n}"
+  }
+}

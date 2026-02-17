@@ -1,0 +1,27 @@
+{
+  "id": "clone-graph",
+  "title": "Clone Graph",
+  "difficulty": "Medium",
+  "topic": "Graphs",
+  "prompt": "Given a reference of a node in a connected undirected graph, return a deep copy (clone) of the graph. Each node in the graph contains a val (int) and a list (List[Node]) of its neighbors.",
+  "examples": [
+    {"input": "adjList = [[2,4],[1,3],[2,4],[1,3]]", "output": "Clone of the graph"}
+  ],
+  "constraints": [
+    "0 <= number of nodes <= 100",
+    "1 <= Node.val <= 100"
+  ],
+  "jsStarter": "/**\n * Clone Graph\n * @param {Node} node\n * @return {Node}\n */\nfunction cloneGraph(node) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "class Solution {\npublic:\n    Node* cloneGraph(Node* node) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [],
+  "hints": [
+    "BFS or DFS with a map: old node -> new node. When visiting a node, create clone if not in map, add neighbors.",
+    "For each neighbor: if not cloned, clone and add to queue/stack. Add clone of neighbor to current node's neighbors.",
+    "Handle null input. Start from given node.",
+    "O(V+E) time."
+  ],
+  "solution": {
+    "javascript": "function cloneGraph(node) {\n  if (!node) return null;\n  const map = new Map();\n  function dfs(n) {\n    if (map.has(n)) return map.get(n);\n    const copy = new Node(n.val);\n    map.set(n, copy);\n    for (const nb of n.neighbors) copy.neighbors.push(dfs(nb));\n    return copy;\n  }\n  return dfs(node);\n}",
+    "cpp": "Node* cloneGraph(Node* node) {\n    if (!node) return nullptr;\n    unordered_map<Node*, Node*> map;\n    function<Node*(Node*)> dfs = [&](Node* n) {\n        if (map.count(n)) return map[n];\n        Node* copy = new Node(n->val);\n        map[n] = copy;\n        for (Node* nb : n->neighbors) copy->neighbors.push_back(dfs(nb));\n        return copy;\n    };\n    return dfs(node);\n}"
+  }
+}

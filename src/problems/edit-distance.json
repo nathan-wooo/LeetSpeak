@@ -1,0 +1,20 @@
+{
+  "id": "edit-distance",
+  "title": "Edit Distance",
+  "difficulty": "Medium",
+  "topic": "2-D Dynamic Programming",
+  "prompt": "See the full problem on LeetCode: https://leetcode.com/problems/edit-distance/\n\nNeetcode walkthrough: https://www.youtube.com/watch?v=XYi2-LPrwm4\n\nThis is a placeholder. Add full problem content (prompt, examples, tests) to enable Run and hints.",
+  "examples": [],
+  "constraints": [],
+  "jsStarter": "/**\n * Edit Distance\n * See: https://leetcode.com/problems/edit-distance/\n */\nfunction solution(input) {\n  // Your code here\n  return null;\n}",
+  "cppStarter": "#include <vector>\nusing namespace std;\n\n// See: https://leetcode.com/problems/edit-distance/\nclass Solution {\npublic:\n    // Implement your solution here\n};",
+  "tests": [],
+  "hints": [
+    "Watch Neetcode's explanation: https://www.youtube.com/watch?v=XYi2-LPrwm4",
+    "Full problem: https://leetcode.com/problems/edit-distance/"
+  ],
+  "solution": {
+    "javascript": "// Add solution when you solve it",
+    "cpp": "// Add solution when you solve it"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "id": "combination-sum-ii",
+  "title": "Combination Sum II",
+  "difficulty": "Medium",
+  "topic": "Backtracking",
+  "prompt": "Given a collection of candidate numbers (candidates) and a target number (target), find all unique combinations in candidates where the candidate numbers sum to target. Each number in candidates may only be used once in the combination. Note: The solution set must not contain duplicate combinations.",
+  "examples": [
+    {"input": "candidates = [10,1,2,7,6,1,5], target = 8", "output": "[[1,1,6],[1,2,5],[1,7],[2,6]]"},
+    {"input": "candidates = [2,5,2,1,2], target = 5", "output": "[[1,2,2],[5]]"}
+  ],
+  "constraints": [
+    "1 <= candidates.length <= 100",
+    "1 <= candidates[i] <= 50",
+    "1 <= target <= 30"
+  ],
+  "jsStarter": "/**\n * Combination Sum II\n * @param {number[]} candidates\n * @param {number} target\n * @return {number[][]}\n */\nfunction combinationSum2(candidates, target) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "class Solution {\npublic:\n    vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [],
+  "hints": [
+    "Sort candidates. Same as Combination Sum but: use each candidate at most once (i+1 in recurse), and skip duplicates: if i > start and nums[i] === nums[i-1], skip.",
+    "Backtrack: for each index i from start, if duplicate (i > start && same as prev), skip. Else add, recurse with i+1, backtrack.",
+    "The skip avoids generating [1,1,6] twice when we have two 1's.",
+    "O(2^n) time."
+  ],
+  "solution": {
+    "javascript": "function combinationSum2(candidates, target) {\n  candidates.sort((a,b) => a - b);\n  const result = [];\n  function backtrack(start, path, remaining) {\n    if (remaining === 0) { result.push([...path]); return; }\n    if (remaining < 0) return;\n    for (let i = start; i < candidates.length; i++) {\n      if (i > start && candidates[i] === candidates[i-1]) continue;\n      path.push(candidates[i]);\n      backtrack(i + 1, path, remaining - candidates[i]);\n      path.pop();\n    }\n  }\n  backtrack(0, [], target);\n  return result;\n}",
+    "cpp": "vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {\n    sort(candidates.begin(), candidates.end());\n    vector<vector<int>> result;\n    vector<int> path;\n    function<void(int,int)> bt = [&](int start, int rem) {\n        if (rem == 0) { result.push_back(path); return; }\n        if (rem < 0) return;\n        for (int i = start; i < candidates.size(); i++) {\n            if (i > start && candidates[i] == candidates[i-1]) continue;\n            path.push_back(candidates[i]);\n            bt(i + 1, rem - candidates[i]);\n            path.pop_back();\n        }\n    };\n    bt(0, target);\n    return result;\n}"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "house-robber",
+  "title": "House Robber",
+  "difficulty": "Medium",
+  "topic": "1-D Dynamic Programming",
+  "prompt": "See the full problem on LeetCode: https://leetcode.com/problems/house-robber/\n\nNeetcode walkthrough: https://www.youtube.com/watch?v=73r3KWiEvyk\n\nThis is a placeholder. Add full problem content (prompt, examples, tests) to enable Run and hints.",
+  "examples": [],
+  "constraints": [],
+  "jsStarter": "/**\n * House Robber\n * See: https://leetcode.com/problems/house-robber/\n */\nfunction solution(input) {\n  // Your code here\n  return null;\n}",
+  "cppStarter": "#include <vector>\nusing namespace std;\n\n// See: https://leetcode.com/problems/house-robber/\nclass Solution {\npublic:\n    // Implement your solution here\n};",
+  "tests": [],
+  "hints": [
+    "Watch Neetcode's explanation: https://www.youtube.com/watch?v=73r3KWiEvyk",
+    "Full problem: https://leetcode.com/problems/house-robber/"
+  ],
+  "solution": {
+    "javascript": "// Add solution when you solve it",
+    "cpp": "// Add solution when you solve it"
+  }
+}

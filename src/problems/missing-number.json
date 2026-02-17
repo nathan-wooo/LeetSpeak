@@ -1,0 +1,20 @@
+{
+  "id": "missing-number",
+  "title": "Missing Number",
+  "difficulty": "Easy",
+  "topic": "Bit Manipulation",
+  "prompt": "See the full problem on LeetCode: https://leetcode.com/problems/missing-number/\n\nNeetcode walkthrough: https://www.youtube.com/watch?v=WnPLSRLSANE\n\nThis is a placeholder. Add full problem content (prompt, examples, tests) to enable Run and hints.",
+  "examples": [],
+  "constraints": [],
+  "jsStarter": "/**\n * Missing Number\n * See: https://leetcode.com/problems/missing-number/\n */\nfunction solution(input) {\n  // Your code here\n  return null;\n}",
+  "cppStarter": "#include <vector>\nusing namespace std;\n\n// See: https://leetcode.com/problems/missing-number/\nclass Solution {\npublic:\n    // Implement your solution here\n};",
+  "tests": [],
+  "hints": [
+    "Watch Neetcode's explanation: https://www.youtube.com/watch?v=WnPLSRLSANE",
+    "Full problem: https://leetcode.com/problems/missing-number/"
+  ],
+  "solution": {
+    "javascript": "// Add solution when you solve it",
+    "cpp": "// Add solution when you solve it"
+  }
+}

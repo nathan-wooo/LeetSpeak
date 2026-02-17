@@ -1,0 +1,29 @@
+{
+  "id": "koko-eating-bananas",
+  "title": "Koko Eating Bananas",
+  "difficulty": "Medium",
+  "topic": "Binary Search",
+  "prompt": "Koko loves to eat bananas. There are n piles of bananas, the ith pile has piles[i] bananas. The guards have gone and will come back in h hours. Koko can decide her bananas-per-hour eating speed of k. Each hour she chooses some pile and eats k bananas from that pile. Return the minimum integer k such that she can eat all the bananas within h hours.",
+  "examples": [
+    {"input": "piles = [3,6,7,11], h = 8", "output": "4"},
+    {"input": "piles = [30,11,23,4,20], h = 5", "output": "30"}
+  ],
+  "constraints": [
+    "1 <= piles.length <= 10^4",
+    "piles.length <= h <= 10^9",
+    "1 <= piles[i] <= 10^9"
+  ],
+  "jsStarter": "/**\n * Koko Eating Bananas\n * @param {number[]} piles\n * @param {number} h\n * @return {number}\n */\nfunction minEatingSpeed(piles, h) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "#include <vector>\n#include <algorithm>\nusing namespace std;\n\nclass Solution {\npublic:\n    int minEatingSpeed(vector<int>& piles, int h) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [],
+  "hints": [
+    "Binary search on k (eating speed). k ranges from 1 to max(piles). For each k, compute hours needed = sum(ceil(pile/k)).",
+    "If hours <= h, k works - try smaller k (right = mid). If hours > h, need faster - try larger k (left = mid+1).",
+    "Hours for one pile: Math.ceil(pile / k) or (pile + k - 1) / k in integer math.",
+    "O(n log max) time."
+  ],
+  "solution": {
+    "javascript": "function minEatingSpeed(piles, h) {\n  let left = 1, right = Math.max(...piles);\n  while (left < right) {\n    const mid = Math.floor((left + right) / 2);\n    const hours = piles.reduce((acc, p) => acc + Math.ceil(p / mid), 0);\n    if (hours <= h) right = mid;\n    else left = mid + 1;\n  }\n  return left;\n}",
+    "cpp": "int minEatingSpeed(vector<int>& piles, int h) {\n    int left = 1, right = *max_element(piles.begin(), piles.end());\n    while (left < right) {\n        int mid = left + (right - left) / 2;\n        long hours = 0;\n        for (int p : piles) hours += (p + mid - 1) / mid;\n        if (hours <= h) right = mid;\n        else left = mid + 1;\n    }\n    return left;\n}"
+  }
+}

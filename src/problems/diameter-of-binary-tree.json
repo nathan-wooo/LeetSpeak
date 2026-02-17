@@ -1,0 +1,28 @@
+{
+  "id": "diameter-of-binary-tree",
+  "title": "Diameter of Binary Tree",
+  "difficulty": "Easy",
+  "topic": "Trees",
+  "prompt": "Given the root of a binary tree, return the length of the diameter of the tree. The diameter is the length of the longest path between any two nodes in a tree. This path may or may not pass through the root. The length of a path between two nodes is the number of edges between them.",
+  "examples": [
+    {"input": "root = [1,2,3,4,5]", "output": "3"},
+    {"input": "root = [1,2]", "output": "1"}
+  ],
+  "constraints": [
+    "1 <= number of nodes <= 10^4",
+    "-100 <= Node.val <= 100"
+  ],
+  "jsStarter": "/**\n * Diameter of Binary Tree\n * @param {TreeNode} root\n * @return {number}\n */\nfunction diameterOfBinaryTree(root) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "class Solution {\npublic:\n    int diameterOfBinaryTree(TreeNode* root) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [],
+  "hints": [
+    "For each node, the longest path through it = max depth of left subtree + max depth of right subtree.",
+    "Use a helper that returns the max depth from a node. While computing depth, also compute diameter through that node.",
+    "Track a global max diameter. At each node: diameter = leftDepth + rightDepth; update max.",
+    "O(n) time. Post-order traversal."
+  ],
+  "solution": {
+    "javascript": "function diameterOfBinaryTree(root) {\n  let maxD = 0;\n  function depth(node) {\n    if (!node) return 0;\n    const left = depth(node.left), right = depth(node.right);\n    maxD = Math.max(maxD, left + right);\n    return 1 + Math.max(left, right);\n  }\n  depth(root);\n  return maxD;\n}",
+    "cpp": "int diameterOfBinaryTree(TreeNode* root) {\n    int maxD = 0;\n    function<int(TreeNode*)> depth = [&](TreeNode* node) {\n        if (!node) return 0;\n        int left = depth(node->left), right = depth(node->right);\n        maxD = max(maxD, left + right);\n        return 1 + max(left, right);\n    };\n    depth(root);\n    return maxD;\n}"
+  }
+}

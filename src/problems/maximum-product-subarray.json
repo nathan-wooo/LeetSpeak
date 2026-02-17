@@ -1,0 +1,20 @@
+{
+  "id": "maximum-product-subarray",
+  "title": "Maximum Product Subarray",
+  "difficulty": "Medium",
+  "topic": "1-D Dynamic Programming",
+  "prompt": "See the full problem on LeetCode: https://leetcode.com/problems/maximum-product-subarray/\n\nNeetcode walkthrough: https://www.youtube.com/watch?v=lXVy6YWFcRM\n\nThis is a placeholder. Add full problem content (prompt, examples, tests) to enable Run and hints.",
+  "examples": [],
+  "constraints": [],
+  "jsStarter": "/**\n * Maximum Product Subarray\n * See: https://leetcode.com/problems/maximum-product-subarray/\n */\nfunction solution(input) {\n  // Your code here\n  return null;\n}",
+  "cppStarter": "#include <vector>\nusing namespace std;\n\n// See: https://leetcode.com/problems/maximum-product-subarray/\nclass Solution {\npublic:\n    // Implement your solution here\n};",
+  "tests": [],
+  "hints": [
+    "Watch Neetcode's explanation: https://www.youtube.com/watch?v=lXVy6YWFcRM",
+    "Full problem: https://leetcode.com/problems/maximum-product-subarray/"
+  ],
+  "solution": {
+    "javascript": "// Add solution when you solve it",
+    "cpp": "// Add solution when you solve it"
+  }
+}

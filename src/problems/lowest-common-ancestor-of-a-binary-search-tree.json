@@ -1,0 +1,29 @@
+{
+  "id": "lowest-common-ancestor-of-a-binary-search-tree",
+  "title": "Lowest Common Ancestor of a Binary Search Tree",
+  "difficulty": "Medium",
+  "topic": "Trees",
+  "prompt": "Given a binary search tree (BST), find the lowest common ancestor (LCA) of two given nodes in the BST. The lowest common ancestor is defined between two nodes p and q as the lowest node in the tree that has both p and q as descendants (where we allow a node to be a descendant of itself).",
+  "examples": [
+    {"input": "root = [6,2,8,0,4,7,9,null,null,3,5], p = 2, q = 8", "output": "6"},
+    {"input": "root = [6,2,8,0,4,7,9,null,null,3,5], p = 2, q = 4", "output": "2"}
+  ],
+  "constraints": [
+    "2 <= number of nodes <= 10^5",
+    "-10^9 <= Node.val <= 10^9",
+    "All Node.val are unique."
+  ],
+  "jsStarter": "/**\n * Lowest Common Ancestor of a Binary Search Tree\n * @param {TreeNode} root\n * @param {TreeNode} p\n * @param {TreeNode} q\n * @return {TreeNode}\n */\nfunction lowestCommonAncestor(root, p, q) {\n  // Talk through your approach out loud like an interview.\n}",
+  "cppStarter": "class Solution {\npublic:\n    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {\n        // Talk through your approach out loud like an interview.\n    }\n};",
+  "tests": [],
+  "hints": [
+    "Use BST property: if p and q are both less than root, LCA is in left subtree. Both greater -> right subtree.",
+    "If one is less and one is greater (or one equals root), then root is the LCA.",
+    "Recursive: if p.val < root.val and q.val < root.val, go left. Else if both > root.val, go right. Else return root.",
+    "O(h) time, O(1) space with iterative approach."
+  ],
+  "solution": {
+    "javascript": "function lowestCommonAncestor(root, p, q) {\n  while (root) {\n    if (p.val < root.val && q.val < root.val) root = root.left;\n    else if (p.val > root.val && q.val > root.val) root = root.right;\n    else return root;\n  }\n  return root;\n}",
+    "cpp": "TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {\n    while (root) {\n        if (p->val < root->val && q->val < root->val) root = root->left;\n        else if (p->val > root->val && q->val > root->val) root = root->right;\n        else return root;\n    }\n    return root;\n}"
+  }
+}
