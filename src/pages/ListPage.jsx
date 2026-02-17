@@ -1,24 +1,32 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, Filter, ArrowLeft, Lock, CheckCircle2, LogOut } from 'lucide-react';
+import { Search, ArrowLeft, Lock, CheckCircle2, LogOut, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { db } from '../utils/firebase';
 import { collection, getDocs } from 'firebase/firestore';
 import neetcode150 from '../data/neetcode150.json';
 
+const TOPIC_ORDER = [
+  'Arrays & Hashing', 'Stack', 'Two Pointers', 'Linked List', 'Sliding Window',
+  'Binary Search', 'Trees', 'Tries', 'Heap / Priority Queue', 'Backtracking'
+];
+
 const ListPage = () => {
   const navigate = useNavigate();
   const { currentUser, logout } = useAuth();
+  const topicScrollRef = useRef(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDifficulty, setSelectedDifficulty] = useState('All');
   const [selectedTopic, setSelectedTopic] = useState('All Topics');
   const [completedProblems, setCompletedProblems] = useState(new Set());
 
   const questions = neetcode150;
-  const topics = useMemo(
-    () => ['All Topics', ...[...new Set(neetcode150.map((q) => q.topic).filter(Boolean))].sort()],
-    []
-  );
+  const topics = useMemo(() => {
+    const unique = [...new Set(neetcode150.map((q) => q.topic).filter(Boolean))];
+    const ordered = TOPIC_ORDER.filter((t) => unique.includes(t));
+    const rest = unique.filter((t) => !TOPIC_ORDER.includes(t)).sort();
+    return ['All Topics', ...ordered, ...rest];
+  }, []);
 
   // Fetch completed problems from Firestore
   useEffect(() => {
@@ -50,10 +58,6 @@ const ListPage = () => {
       case "Hard": return "text-red-400";
       default: return "text-slate-400";
     }
-  };
-
-  const getTopicColor = () => {
-    return "bg-slate-500/10 text-slate-400 border-slate-500/30";
   };
 
   const handleStartQuestion = (problemId) => {
@@ -114,10 +118,9 @@ const ListPage = () => {
           <p className="text-slate-400">Choose a problem and start practicing with voice guidance</p>
         </div>
 
-        {/* Filters */}
-        <div className="flex flex-col md:flex-row gap-4 mb-6">
-          {/* Search */}
-          <div className="flex-1 relative">
+        {/* Search - full width */}
+        <div className="mb-4">
+          <div className="relative max-w-2xl">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
             <input
               type="text"
@@ -127,14 +130,28 @@ const ListPage = () => {
               className="w-full pl-10 pr-4 py-3 bg-slate-800/50 border border-slate-700 rounded-lg text-slate-200 placeholder-slate-500 focus:outline-none focus:border-purple-500/50 transition-colors"
             />
           </div>
+        </div>
 
-          {/* Topic Filter */}
-          <div className="flex gap-2 overflow-x-auto pb-2 md:pb-0">
+        {/* Topic Filter - row with scroll arrows */}
+        <div className="flex items-center gap-2 mb-6">
+          <button
+            onClick={() => {
+              topicScrollRef.current?.scrollBy({ left: -400, behavior: 'smooth' });
+            }}
+            className="flex-shrink-0 p-2 rounded-lg bg-slate-800/50 text-slate-400 hover:text-white hover:bg-slate-700 border border-slate-700 transition-colors"
+            title="Show previous topics"
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+          <div
+            ref={topicScrollRef}
+            className="flex gap-2 overflow-x-auto flex-1 min-w-0 scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+          >
             {topics.map(topic => (
               <button
                 key={topic}
                 onClick={() => setSelectedTopic(topic)}
-                className={`px-4 py-2 rounded-lg whitespace-nowrap transition-all ${
+                className={`flex-shrink-0 px-4 py-2 rounded-lg whitespace-nowrap transition-all ${
                   selectedTopic === topic
                     ? 'bg-purple-500 text-white'
                     : 'bg-slate-800/50 text-slate-400 hover:bg-slate-800 border border-slate-700'
@@ -144,6 +161,15 @@ const ListPage = () => {
               </button>
             ))}
           </div>
+          <button
+            onClick={() => {
+              topicScrollRef.current?.scrollBy({ left: 400, behavior: 'smooth' });
+            }}
+            className="flex-shrink-0 p-2 rounded-lg bg-slate-800/50 text-slate-400 hover:text-white hover:bg-slate-700 border border-slate-700 transition-colors"
+            title="Show more topics"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </button>
         </div>
 
         {/* Difficulty Tabs */}
@@ -196,9 +222,9 @@ const ListPage = () => {
                 </div>
               </div>
 
-              {/* Topic Badge */}
+              {/* Topic */}
               <div className="hidden text-center min-w-[80px] sm:block">
-                <span className={`px-3 py-1 rounded-full text-xs font-medium border ${getTopicColor(question.topic)}`}>
+                <span className="text-sm font-semibold text-slate-400">
                   {question.topic}
                 </span>
               </div>
