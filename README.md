@@ -92,16 +92,12 @@ Create a `.env` file in the root directory:
 
 ```env
 # Required: Google Gemini API Key
-# Get yours at: https://makersuite.google.com/app/apikey
 VITE_GEMINI_API_KEY=your_gemini_api_key_here
 
-# Optional: Inworld AI API Key (for better TTS)
-# Get yours at: https://studio.inworld.ai/
-VITE_INWORLD_API_KEY=your_inworld_api_key_here
-VITE_INWORLD_VOICE_ID=Timothy  # Or any Inworld voice name
-```
+# Required: Elevenlabs Text to Speech
+VITE_ELEVENLABS_API_KEY=your_elevenlabs_api_key_here
 
-**Note**: The app will work with just the Gemini API key. Inworld AI is optional and provides better text-to-speech quality. If not provided, the browser's native speech synthesis will be used.
+
 
 ### 5. Start the Development Servers
 
