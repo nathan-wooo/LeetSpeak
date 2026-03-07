@@ -48,9 +48,9 @@ LeetSpeak bridges this gap by:
 - **Elevenlabs API** - AI Voice
 
 ### Backend
-- **Node.js/Express** 
-- **g++**
-- **Firebase**
+- **Node.js/Express** - API server (Gemini proxy, C++ compilation)
+- **Firebase Admin** - Server-side auth verification
+- **g++** - C++ code compilation (optional)
 
 ### Deployment
 - **Netlify** - Frontend hosting with a .tech domain
@@ -88,16 +88,30 @@ cd ..
 
 ### 4. Set Up Environment Variables
 
-Create a `.env` file in the root directory:
+Create a `.env` file in the **root** directory:
 
 ```env
-# Required: Google Gemini API Key
-VITE_GEMINI_API_KEY=your_gemini_api_key_here
-
 # Required: Elevenlabs Text to Speech
 VITE_ELEVENLABS_API_KEY=your_elevenlabs_api_key_here
 
+# Required: Firebase config (from Firebase Console)
+VITE_FIREBASE_API_KEY=your_firebase_api_key_here
+VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=your_project_id
+VITE_FIREBASE_STORAGE_BUCKET=your_project.firebasestorage.app
+VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+VITE_FIREBASE_APP_ID=your_app_id
+```
 
+Create a `.env` file in the **server/** directory:
+
+```env
+# Required: Google Gemini API Key (get from https://aistudio.google.com/apikey)
+GEMINI_API_KEY=your_gemini_api_key_here
+
+# Required: Firebase project ID (same as VITE_FIREBASE_PROJECT_ID above)
+FIREBASE_PROJECT_ID=your_firebase_project_id_here
+```
 
 ### 5. Start the Development Servers
 
@@ -106,7 +120,7 @@ VITE_ELEVENLABS_API_KEY=your_elevenlabs_api_key_here
 npm run dev
 ```
 
-**Terminal 2 - Backend (for C++ support):**
+**Terminal 2 - Backend (required for AI coaching and C++ support):**
 ```bash
 cd server
 npm start
@@ -114,7 +128,7 @@ npm start
 
 The frontend will be available at `http://localhost:5173` (or the port Vite assigns).
 
-The backend server runs on `http://localhost:3001` by default.
+The backend server runs on `http://localhost:3001` by default. The AI coaching features require the backend to be running.
 
 ### 6. Access the Application
 
@@ -188,16 +202,16 @@ After adding a problem JSON file, run `npm run fetch-neetcode` to regenerate the
 
 ### Changing the Gemini Model
 
-Edit `src/utils/gemini.js`:
+Set `GEMINI_MODEL` in `server/.env`:
 
-```javascript
-const GEMINI_MODEL = 'gemini-2.5-pro'; // or 'gemini-2.5-flash' for faster responses
+```env
+GEMINI_MODEL=gemini-2.5-pro  # or gemini-2.5-flash (default) for faster responses
 ```
 
 ### Changing the Voice
 
-Edit `src/utils/inworld.js` or set in `.env`:
+Set `VITE_ELEVENLABS_VOICE_ID` in the root `.env`, or edit `src/utils/elevenlabs.js`:
 
 ```javascript
-const INWORLD_VOICE_ID = "Nova"; // Options: Ronald, Nova, Adam, Ashley, etc.
+const ELEVENLABS_VOICE_ID = '21m00Tcm4TlvDq8ikWAM'; // Default: Rachel
 ```
