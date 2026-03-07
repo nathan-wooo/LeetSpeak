@@ -5,7 +5,7 @@ import Editor from '@monaco-editor/react';
 import { analyzeWithGemini, chatWithGemini } from '../utils/gemini';
 import { speakText, stopSpeech } from '../utils/elevenlabs';
 import { useAuth } from '../contexts/AuthContext';
-import { auth, db } from '../utils/firebase';
+import { db } from '../utils/firebase';
 import { doc, setDoc } from 'firebase/firestore';
 
 function analyze({ transcript, code }) {
@@ -248,21 +248,14 @@ function runJavaScriptSolution(code, tests) {
 }
 
 async function runCppSolution(code, tests) {
+  // Call the backend C++ compilation server
+  // Make sure the server is running on http://localhost:3001
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
   
   try {
-    const user = auth.currentUser;
-    if (!user) {
-      return { ok: false, logs: [], results: [], error: 'Please sign in to run C++ code.' };
-    }
-    const token = await user.getIdToken();
-
     const response = await fetch(`${API_URL}/api/compile-cpp`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ code, tests }),
     });
 
@@ -431,8 +424,8 @@ export default function Practice() {
       try {
         const response = await analyzeWithGemini({
           transcript,
-          conversationHistory: newHistory,
-          code,
+          conversationHistory: newHistory, // Send full conversation context
+          code, // Still send code for context, but don't trigger on code changes
           problemTitle: problem?.title || '',
           problemPrompt: problem?.prompt || '',
         });
@@ -613,7 +606,7 @@ export default function Practice() {
 
       try {
         const response = await analyzeWithGemini({
-          transcript: 'Analyzing code progress...',
+          transcript: 'Analyzing code progress...', // Silent analysis during coding
           conversationHistory: conversationHistoryRef.current,
           code,
           problemTitle: problem?.title || '',
