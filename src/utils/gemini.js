@@ -10,6 +10,47 @@ const GEMINI_MODEL = 'gemini-2.5-flash'; // Fast and efficient for coaching hint
 // Use v1beta API
 const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
 
+// --- Client-side rate limiting ---
+const RATE_LIMIT_KEY = 'gemini_rate_limit';
+const RATE_LIMIT_MAX = 30;          // max requests per window
+const RATE_LIMIT_WINDOW = 60 * 60 * 1000; // 1 hour
+
+function _getRateLimitData() {
+  try {
+    const raw = localStorage.getItem(RATE_LIMIT_KEY);
+    if (!raw) return null;
+    return JSON.parse(raw);
+  } catch { return null; }
+}
+
+function _checkRateLimit() {
+  const now = Date.now();
+  let data = _getRateLimitData();
+
+  if (!data || now - data.windowStart > RATE_LIMIT_WINDOW) {
+    data = { count: 0, windowStart: now };
+  }
+
+  if (data.count >= RATE_LIMIT_MAX) {
+    const retryMs = data.windowStart + RATE_LIMIT_WINDOW - now;
+    const minutes = Math.max(1, Math.ceil(retryMs / 60000));
+    return { allowed: false, minutes };
+  }
+
+  data.count++;
+  localStorage.setItem(RATE_LIMIT_KEY, JSON.stringify(data));
+  return { allowed: true };
+}
+
+export function getRateLimitStatus() {
+  const now = Date.now();
+  const data = _getRateLimitData();
+  if (!data || now - data.windowStart > RATE_LIMIT_WINDOW) {
+    return { remaining: RATE_LIMIT_MAX, total: RATE_LIMIT_MAX };
+  }
+  return { remaining: Math.max(0, RATE_LIMIT_MAX - data.count), total: RATE_LIMIT_MAX };
+}
+
 /**
  * Analyze user's thought process and code to provide coaching hints
  * @param {Object} params
@@ -30,13 +71,16 @@ const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/
  * @returns {Promise<{message: string, suggestedCode?: string}>}
  */
 export async function chatWithGemini({ question, code, language, problemTitle }) {
-  const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
-  const GEMINI_MODEL = 'gemini-2.5-flash';
-  const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
-
   if (!GEMINI_API_KEY) {
     return {
       message: 'Gemini API key not configured. Please set VITE_GEMINI_API_KEY in your .env file.',
+    };
+  }
+
+  const limit = _checkRateLimit();
+  if (!limit.allowed) {
+    return {
+      message: `You've hit the hourly AI usage limit. Try again in ~${limit.minutes} minute(s).`,
     };
   }
 
@@ -105,6 +149,16 @@ export async function analyzeWithGemini({ transcript, conversationHistory = [], 
       level: 'neutral',
       title: 'API Key Missing',
       message: 'Set VITE_GEMINI_API_KEY in your .env file to enable AI coaching.',
+      progress: 0,
+    };
+  }
+
+  const limit = _checkRateLimit();
+  if (!limit.allowed) {
+    return {
+      level: 'warn',
+      title: 'Rate Limited',
+      message: `You've hit the hourly AI usage limit. Try again in ~${limit.minutes} minute(s).`,
       progress: 0,
     };
   }
